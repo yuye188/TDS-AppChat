@@ -12,6 +12,8 @@ import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
+import umu.tds.modelo.Contacto;
+import umu.tds.modelo.Estado;
 import umu.tds.modelo.Usuario;
 
 public class AdaptadorUsuarioDAO implements IUsuarioDAO{
@@ -90,7 +92,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 
 	public Usuario recuperarUsuario(int codigo) throws ParseException {
 
-		// Si la entidad est� en el pool la devuelve directamente
+		// Si la entidad está en el pool la devuelve directamente
 		if (PoolDAO.getUnicaInstancia().contiene(codigo))
 			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(codigo);
 
@@ -101,10 +103,14 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		String movil;
 		String usuario;
 		String contrasenia;
+		String msgSaludo;
 		boolean premium;
-		//**************************TODO***********************
+		
 		// y los campos de objetos
-
+		List<Contacto> contactos = new LinkedList<Contacto>();
+		Estado estado;
+		
+		
 		// recuperar entidad
 		eUsuario = servPersistencia.recuperarEntidad(codigo);
 
@@ -115,10 +121,16 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		contrasenia = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contrasenia");
 		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium").equals("true");
+		msgSaludo =  servPersistencia.recuperarPropiedadEntidad(eUsuario, "msgSaludo");
+		
+		// TODO falta recuperar Estado y contactos
 		
 
-		Usuario u = new Usuario(codigo,nombre,fechaNacimiento,movil,usuario,contrasenia,premium);
+		Usuario u = new Usuario(nombre, fechaNacimiento, movil, usuario, contrasenia, msgSaludo);
 		u.setCodigo(codigo);
+		u.setPathImg( servPersistencia.recuperarPropiedadEntidad(eUsuario, "pathImg"));
+		u.setPremium(premium);
+		u.setListaContacto(contactos);
 
 		// IMPORTANTE:añadir el usuario al pool antes de llamar a otros
 		// adaptadores
