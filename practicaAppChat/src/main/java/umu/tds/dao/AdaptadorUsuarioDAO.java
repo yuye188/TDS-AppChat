@@ -1,0 +1,144 @@
+package umu.tds.dao;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import beans.Entidad;
+import beans.Propiedad;
+import tds.driver.FactoriaServicioPersistencia;
+import tds.driver.ServicioPersistencia;
+import umu.tds.modelo.Usuario;
+
+public class AdaptadorUsuarioDAO implements IUsuarioDAO{
+	
+	private ServicioPersistencia servPersistencia;
+	private static AdaptadorUsuarioDAO unicaInstancia = null;
+	private SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	
+	public static AdaptadorUsuarioDAO getUnicaInstancia() { // patron singleton
+		if (unicaInstancia == null)
+			return new AdaptadorUsuarioDAO();
+		else
+			return unicaInstancia;
+	}
+	
+	public AdaptadorUsuarioDAO() {
+		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia(); 
+	}
+	
+	public boolean registrarUsuario(Usuario usuario) {
+		Entidad eUsuario;
+		boolean existe = true; 
+		
+		// Si la entidad está registrada no la registra de nuevo
+		try {
+			eUsuario = servPersistencia.recuperarEntidad(usuario.getCodigo());
+		} catch (NullPointerException e) {
+			existe = false;
+		}
+		if (existe) return false;
+
+		// ******************** TODO *********************** 
+		//registrar primero los atributos que son objetos
+
+		// crear entidad Usuario
+		eUsuario = new Entidad();
+		eUsuario.setNombre("Usuario"); 
+	
+		eUsuario.setPropiedades(
+				new ArrayList<Propiedad>(Arrays.asList(
+						new Propiedad("nombre", usuario.getNombre()), 
+						new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString()),
+						new Propiedad("movil", usuario.getMovil()),
+						new Propiedad("usuario",usuario.getUsuario()),
+						new Propiedad("contrasenia", usuario.getContrasenia()),
+						//new Propiedad("imagen", usuario.getImagen),
+						new Propiedad("premium",Boolean.toString(usuario.isPremium()))
+						//TODO listContacto, administrador
+						))
+				);
+		
+		// registrar entidad usuario
+		eUsuario = servPersistencia.registrarEntidad(eUsuario);
+		// asignar identificador unico
+		// Se aprovecha el que genera el servicio de persistencia
+		usuario.setCodigo(eUsuario.getId()); 
+		return true;
+	}
+
+	public void borrarUsuario(Usuario usuario) {
+		// No se comprueban restricciones de integridad 
+		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getCodigo());
+		
+		servPersistencia.borrarEntidad(eUsuario);
+	}
+
+	public void modificarUsuario(Usuario usuario) {
+		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getCodigo());
+
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "nombre");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "nombre", usuario.getNombre());
+		//**************************TODO***********************
+		// modificar el resto de los campos
+		
+	}
+
+	public Usuario recuperarUsuario(int codigo) throws ParseException {
+
+		// Si la entidad est� en el pool la devuelve directamente
+		if (PoolDAO.getUnicaInstancia().contiene(codigo))
+			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(codigo);
+
+		// si no, la recupera de la base de datos
+		Entidad eUsuario;
+		String nombre;
+		Date fechaNacimiento;
+		String movil;
+		String usuario;
+		String contrasenia;
+		boolean premium;
+		//**************************TODO***********************
+		// y los campos de objetos
+
+		// recuperar entidad
+		eUsuario = servPersistencia.recuperarEntidad(codigo);
+
+		// recuperar propiedades que no son objetos
+		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
+		fechaNacimiento = sdf.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
+		movil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "movil");
+		usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
+		contrasenia = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contrasenia");
+		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium").equals("true");
+		
+
+		Usuario u = new Usuario(codigo,nombre,fechaNacimiento,movil,usuario,contrasenia,premium);
+		u.setCodigo(codigo);
+
+		// IMPORTANTE:añadir el usuario al pool antes de llamar a otros
+		// adaptadores
+		PoolDAO.getUnicaInstancia().addObjeto(codigo, u);
+
+		//**************************TODO***********************
+		// recuperar propiedades que son objetos llamando a adaptadores
+		// ventas
+
+		return u;
+	}
+
+	public List<Usuario> recuperarTodosoUsuarios() throws ParseException {
+		List<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
+		List<Usuario> usuarios = new LinkedList<Usuario>();
+
+		for (Entidad eUsuario : eUsuarios) {
+			usuarios.add(recuperarUsuario(eUsuario.getId()));
+		}
+		return usuarios;
+	}
+	
+}
