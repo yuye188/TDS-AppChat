@@ -90,7 +90,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		
 	}
 
-	public Usuario recuperarUsuario(int codigo) throws ParseException {
+	public Usuario recuperarUsuario(int codigo) {
 
 		// Si la entidad está en el pool la devuelve directamente
 		if (PoolDAO.getUnicaInstancia().contiene(codigo))
@@ -99,7 +99,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		// si no, la recupera de la base de datos
 		Entidad eUsuario;
 		String nombre;
-		Date fechaNacimiento;
+		Date fechaNacimiento = null;
 		String movil;
 		String usuario;
 		String contrasenia;
@@ -116,7 +116,13 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 
 		// recuperar propiedades que no son objetos
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
-		fechaNacimiento = sdf.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
+		
+		try {
+			fechaNacimiento = sdf.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
 		movil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "movil");
 		usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		contrasenia = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contrasenia");
@@ -143,8 +149,8 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		return u;
 	}
 
-	public List<Usuario> recuperarTodosoUsuarios() throws ParseException {
-		List<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
+	public List<Usuario> recuperarTodosoUsuarios() {
+		List<Entidad> eUsuarios = servPersistencia.recuperarEntidades("Usuario");
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 
 		for (Entidad eUsuario : eUsuarios) {
@@ -152,5 +158,6 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		}
 		return usuarios;
 	}
+
 	
 }
