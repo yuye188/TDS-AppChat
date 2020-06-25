@@ -101,6 +101,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		String nombre;
 		Date fechaNacimiento = null;
 		String movil;
+		String email;
 		String usuario;
 		String contrasenia;
 		String msgSaludo;
@@ -124,6 +125,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		}
 		
 		movil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "movil");
+		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
 		usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		contrasenia = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contrasenia");
 		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium").equals("true");
@@ -132,7 +134,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		// TODO falta recuperar Estado y contactos
 		
 
-		Usuario u = new Usuario(nombre, fechaNacimiento, movil, usuario, contrasenia, msgSaludo);
+		Usuario u = new Usuario(nombre, fechaNacimiento, movil, email ,usuario, contrasenia, msgSaludo);
 		u.setCodigo(codigo);
 		u.setPathImg( servPersistencia.recuperarPropiedadEntidad(eUsuario, "pathImg"));
 		u.setPremium(premium);

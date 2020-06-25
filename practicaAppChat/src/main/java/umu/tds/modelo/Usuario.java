@@ -23,7 +23,7 @@ public class Usuario {
 	private String msgSaludo;
 	private Estado estado;
 
-	public Usuario(String nombre, Date fechaNacimiento, String movil, String usuario, String contrasenia,
+	public Usuario(String nombre, Date fechaNacimiento, String movil, String email ,String usuario, String contrasenia,
 			String msgSaludo) {
 		super();
 		this.nombre = nombre;
@@ -32,6 +32,7 @@ public class Usuario {
 		this.usuario = usuario;
 		this.contrasenia = contrasenia;
 		this.premium = false;
+		this.email = email;
 		this.msgSaludo = msgSaludo;
 		this.listaContacto = new LinkedList<Contacto>();
 		this.pathImg = PROFILE;

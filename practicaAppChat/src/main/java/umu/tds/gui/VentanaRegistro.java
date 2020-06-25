@@ -13,6 +13,9 @@ import java.awt.event.ActionEvent;
 
 import com.toedter.calendar.JDateChooser;
 
+import umu.tds.controlador.ControladorAppChat;
+import umu.tds.modelo.Usuario;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -35,18 +38,24 @@ public class VentanaRegistro extends Ventana {
 	private JPasswordField clave1, clave2;
 	private JLabel wNombre, wTelefono, wFecha, wEmail, wUsuario, wClave, wCampos;
 	private JButton btnRegistrar, btnCancelar;
+	private JLabel lblMensajeSaludo;
+	private JTextField mSaludo;
 
+	/*Recuperar ventana
+	private JFrame ventana;
+	private JPanel jpanel;*/
+	
 	public VentanaRegistro(VentanaPrincipal v){
-		ventana=v; 
+		ventana = v;
 		crearPantalla();
-		jframe.setVisible(true);
+		mostrarVentana(true);
 	}
 
 	protected void crearPantalla() {
-
+			
 		jframe = new JFrame();
 		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jframe.setSize(480, 360);
+		jframe.setSize(500, 380);
 		jframe.setTitle("Registro Usuario");
 		jframe.getContentPane().setLayout(new BorderLayout());
 		
@@ -66,10 +75,10 @@ public class VentanaRegistro extends Ventana {
 		JPanel panel_central = new JPanel();
 		jframe.getContentPane().add(panel_central, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_central = new GridBagLayout();
-		gbl_panel_central.columnWidths = new int[] {0, 100, 90, 50, 90, 24, 0, 0, 1};
-		gbl_panel_central.rowHeights = new int[] {0, 0, 25, 25, 25, 25, 25, 25, 25, 1};
-		gbl_panel_central.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_central.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_central.columnWidths = new int[] {0, 100, 73, 50, 90, 24, 0, 1};
+		gbl_panel_central.rowHeights = new int[] {0, 0, 25, 25, 25, 25, 25, 0, 25, 25, 1};
+		gbl_panel_central.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_central.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_central.setLayout(gbl_panel_central);
 		
 		JLabel lblNombre = new JLabel("Nombre:");
@@ -241,12 +250,30 @@ public class VentanaRegistro extends Ventana {
 		gbc_warningClave.gridy = 6;
 		panel_central.add(wClave, gbc_warningClave);
 		
+		lblMensajeSaludo = new JLabel("Mensaje Saludo:");
+		GridBagConstraints gbc_lblMensajeSaludo = new GridBagConstraints();
+		gbc_lblMensajeSaludo.anchor = GridBagConstraints.EAST;
+		gbc_lblMensajeSaludo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblMensajeSaludo.gridx = 1;
+		gbc_lblMensajeSaludo.gridy = 7;
+		panel_central.add(lblMensajeSaludo, gbc_lblMensajeSaludo);
+		
+		mSaludo = new JTextField();
+		GridBagConstraints gbc_mSaludo = new GridBagConstraints();
+		gbc_mSaludo.gridwidth = 3;
+		gbc_mSaludo.insets = new Insets(0, 0, 5, 5);
+		gbc_mSaludo.fill = GridBagConstraints.HORIZONTAL;
+		gbc_mSaludo.gridx = 2;
+		gbc_mSaludo.gridy = 7;
+		panel_central.add(mSaludo, gbc_mSaludo);
+		mSaludo.setColumns(10);
+		
 		btnRegistrar = new JButton("Registrar");
 		GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
 		gbc_btnRegistrar.fill = GridBagConstraints.BOTH;
 		gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnRegistrar.gridx = 2;
-		gbc_btnRegistrar.gridy = 7;
+		gbc_btnRegistrar.gridy = 8;
 		panel_central.add(btnRegistrar, gbc_btnRegistrar);
 		
 		btnCancelar = new JButton("Cancelar");
@@ -254,7 +281,7 @@ public class VentanaRegistro extends Ventana {
 		gbc_btnCancelar.fill = GridBagConstraints.BOTH;
 		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCancelar.gridx = 4;
-		gbc_btnCancelar.gridy = 7;
+		gbc_btnCancelar.gridy = 8;
 		panel_central.add(btnCancelar, gbc_btnCancelar);
 		
 		wCampos = new JLabel("Los campos * son obligatorios");
@@ -265,7 +292,7 @@ public class VentanaRegistro extends Ventana {
 		gbc_lblLosCampos.gridwidth = 4;
 		gbc_lblLosCampos.insets = new Insets(0, 0, 0, 5);
 		gbc_lblLosCampos.gridx = 2;
-		gbc_lblLosCampos.gridy = 8;
+		gbc_lblLosCampos.gridy = 9;
 		panel_central.add(wCampos, gbc_lblLosCampos);
 		
 		JPanel panel_oeste = new JPanel();
@@ -280,11 +307,14 @@ public class VentanaRegistro extends Ventana {
 		Component rigidArea_sur = Box.createRigidArea(new Dimension(20, 20));
 		panel_sur.add(rigidArea_sur);
 		
+		//AÑADIR MANEJADORES
+		btnRegistrar.addActionListener(this);
+		btnCancelar.addActionListener(this);
+		
 		ocultarErrores();
 		
-		ventana.revalidate(); /*redibujar con el nuevo JPanel*/
-		ventana.repaint();
-		
+		jframe.revalidate(); /*redibujar con el nuevo JPanel*/
+		jframe.repaint();
 	}
 
 	@Override
@@ -294,11 +324,19 @@ public class VentanaRegistro extends Ventana {
 		//Analizar tipo de evento 
 		if(e.getSource() == btnRegistrar) {
 			
-		}
-		else if(e.getSource() == btnCancelar) {
-			
+			Usuario u = null;
+			boolean registrado = false;
+			if(checkFields()) {
+				registrado = ControladorAppChat.getUnicaInstancia().registrarUsuario(
+						nombre.getText(), dateChooser.getDate(), telefono.getText() , 
+						email.getText(), usuario.getText(), new String(clave1.getPassword()), mSaludo.getText());
+			}
 		}
 		
+		if(e.getSource() == btnCancelar) {
+			mostrarVentana(false);
+			ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
+		}
 	}
 	
 	
@@ -332,7 +370,7 @@ public class VentanaRegistro extends Ventana {
 			ok=false;
 		}
 		
-		if (dateChooser.getDate().toString().isEmpty()) {
+		if (dateChooser.getDate() == null) {
 			wFecha.setVisible(true);
 			ok = false;
 		}
@@ -346,8 +384,8 @@ public class VentanaRegistro extends Ventana {
 		} 
 		
 		if (!ok) wCampos.setVisible(true);
-		
-		if (ok && !password.equals(password2)) {
+	
+		if (!password.equals(password2)) {
 			wClave.setVisible(true);
 			ok=false;
 		}
@@ -372,6 +410,12 @@ public class VentanaRegistro extends Ventana {
 		wEmail.setVisible(false);
 		wUsuario.setVisible(false);
 		wClave.setVisible(false);
+	}
+
+	@Override
+	public void mostrarVentana(boolean b) {
+		// TODO Auto-generated method stub
+		jframe.setVisible(b);
 	}
 
 }

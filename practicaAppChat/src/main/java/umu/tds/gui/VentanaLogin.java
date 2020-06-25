@@ -29,7 +29,7 @@ public class VentanaLogin extends Ventana {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Ventana ventana;
+	private VentanaPrincipal ventana;
 	private JFrame frmLoginAppChat;
 	private JTextField textLogin;
 	private JPasswordField textPassword;
@@ -38,11 +38,10 @@ public class VentanaLogin extends Ventana {
 	/**
 	 * Create the panel.
 	 */
-	public VentanaLogin(Ventana v) {
-		ventana=v; 
+	public VentanaLogin(VentanaPrincipal v) {
+		ventana = v;
 		crearPantalla();
-		frmLoginAppChat.setVisible(true);
-
+		mostrarVentana(true);
 	}
 
 	@Override
@@ -122,11 +121,15 @@ public class VentanaLogin extends Ventana {
 		btnSalir = new JButton("Salir");
 		btnSalir.setVerticalAlignment(SwingConstants.BOTTOM);
 		panel_Sur.add(btnSalir);
-
+		
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		rigidArea_1.setPreferredSize(new Dimension(40, 40));
 		panel_Sur.add(rigidArea_1);
 		
+		//AÑADIR MANEJADORES 
+		btnLogin.addActionListener(this);
+		btnRegistro.addActionListener(this);
+		btnSalir.addActionListener(this);
 
 	}
 
@@ -138,14 +141,20 @@ public class VentanaLogin extends Ventana {
 			
 		}
 
-		if(e.getSource() == btnLogin) {
-			
+		if(e.getSource() == btnRegistro) {
+			mostrarVentana(false);
+			ventana.mostrarVentana(VentanaPrincipal.VENTANA_REGISTRO);
 		}
 
 		if(e.getSource() == btnSalir) {
 			frmLoginAppChat.dispose();
 			System.exit(0);
 		}
+	}
+
+	@Override
+	public void mostrarVentana(boolean b) {
+		frmLoginAppChat.setVisible(b);
 	}
 
 }
