@@ -5,7 +5,7 @@ import java.util.Date;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dao.IUsuarioDAO;
-import umu.tds.modelo.CatalogoUsuario;
+import umu.tds.persistencia.CatalogoUsuario;
 
 public class ControladorAppChat {
 
