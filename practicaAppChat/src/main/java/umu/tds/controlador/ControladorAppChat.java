@@ -6,6 +6,7 @@ import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dao.IUsuarioDAO;
 import umu.tds.modelo.CatalogoUsuario;
+import umu.tds.modelo.Usuario;
 
 public class ControladorAppChat {
 
@@ -43,13 +44,13 @@ public class ControladorAppChat {
 	}
 
 	//TODO
-	public boolean registrarUsuario(String nombre, Date fechaNacimiento, String movil, String email, String usuario, String contrasenia,
+	public Usuario registrarUsuario(String nombre, Date fechaNacimiento, String movil, String email, String usuario, String contrasenia,
 			String msgSaludo) {
-		return false;
+		return null;
 	}
 
-	public boolean loginUsuario(String usuario, String clave) {
-		return false;
+	public Usuario loginUsuario(String usuario, String clave) {
+		return null;
 	}
 	
 	//TODO

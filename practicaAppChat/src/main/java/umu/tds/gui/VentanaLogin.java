@@ -13,6 +13,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import umu.tds.controlador.ControladorAppChat;
+import umu.tds.modelo.Usuario;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -51,6 +54,7 @@ public class VentanaLogin extends Ventana {
 		frmLoginAppChat = new JFrame();
 		frmLoginAppChat.setTitle("Login AppChat");
 		frmLoginAppChat.setSize(450, 320);
+		frmLoginAppChat.setLocationRelativeTo(null);
 		frmLoginAppChat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLoginAppChat.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -138,7 +142,18 @@ public class VentanaLogin extends Ventana {
 		// TODO Auto-generated method stub
 		
 		if(e.getSource() == btnLogin) {
-			
+			//Usuario u = ControladorAppChat.getUnicaInstancia().loginUsuario(textLogin.getText(), new String(textPassword.getPassword()));
+			Usuario u= null;
+			if(u != null) {
+				JOptionPane.showMessageDialog(frmLoginAppChat, "Login User: " + textLogin.getText() + "!", "User Login",
+						JOptionPane.INFORMATION_MESSAGE);
+				
+				ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
+			}
+			else {
+				JOptionPane.showMessageDialog(frmLoginAppChat, "Nombre de usuario o contrase\u00F1a no valido", "User Login",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
 
 		if(e.getSource() == btnRegistro) {
