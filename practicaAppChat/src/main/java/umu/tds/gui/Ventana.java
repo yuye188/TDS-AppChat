@@ -20,7 +20,7 @@ public abstract class Ventana extends JPanel implements ActionListener {
 	public abstract void actionPerformed(ActionEvent evento);
 	
 	public abstract void mostrarVentana(boolean b) ;
-	
+
 	// Para configurar las dimensiones de la ventana
 	protected void setSize(JComponent componente, int x, int y) {
 		componente.setMinimumSize(new Dimension(x, y));

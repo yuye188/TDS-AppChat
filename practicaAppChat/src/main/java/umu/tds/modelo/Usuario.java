@@ -20,11 +20,12 @@ public class Usuario {
 	private boolean premium;
 	private RolUsuario rol;
 	private List<Contacto> listaContacto;
+	//private List<Grupo> gruposAdmin;
 	private String msgSaludo;
 	private Estado estado;
 
-	public Usuario(String nombre, Date fechaNacimiento, String movil, String email ,String usuario, String contrasenia,
-			String msgSaludo) {
+	public Usuario(String nombre, Date fechaNacimiento, String movil, String email ,String usuario, 
+			String contrasenia, String msgSaludo) {
 		super();
 		this.nombre = nombre;
 		this.fechaNacimiento = fechaNacimiento;
