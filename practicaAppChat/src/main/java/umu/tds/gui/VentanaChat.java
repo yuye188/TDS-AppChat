@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class VentanaChat extends Ventana {
 
@@ -17,7 +18,7 @@ public class VentanaChat extends Ventana {
 
 	public VentanaChat() {
 		// TODO Auto-generated constructor stub
-		crearPantalla();
+		crearPantalla();	
 		mostrarVentana(true);
 	}
 	
@@ -32,8 +33,11 @@ public class VentanaChat extends Ventana {
 		frameChat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameChat.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblBienvenidoAlChat = new JLabel("Bienvenido Al chat Principal");
-		frameChat.getContentPane().add(lblBienvenidoAlChat, BorderLayout.NORTH);
+		JPanel panel = new JPanel();
+		frameChat.getContentPane().add(panel, BorderLayout.NORTH);
+		
+		JLabel lblBienvenidoAlChat = new JLabel("Bienvenido al Chat");
+		panel.add(lblBienvenidoAlChat);
 		
 	}
 
@@ -46,8 +50,11 @@ public class VentanaChat extends Ventana {
 	@Override
 	public void mostrarVentana(boolean b) {
 		// TODO Auto-generated method stub
+		frameChat.setVisible(b);
 		
 	}
-
+	/*public static void main(String[] args) {
+		VentanaChat ventana = new VentanaChat();
+	}*/
 
 }

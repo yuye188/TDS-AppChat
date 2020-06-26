@@ -34,12 +34,12 @@ public abstract class Ventana extends JPanel implements ActionListener {
 		Image imgSacled = img.getScaledInstance(x, y, Image.SCALE_SMOOTH);
 		return new ImageIcon(imgSacled);
 	}
-/*
+
 	//Funci髇 que devuelve la imagen especificada con tama駉 x * x
-	protected ImageIcon mostrarImagen(Image image, int x) {
+	protected ImageIcon getImagenIcon(Image image, int x) {
 		Image newimg = image.getScaledInstance(x, x, Image.SCALE_SMOOTH);
 		return (new ImageIcon(newimg));
 	}
-*/
+
 	
 }
