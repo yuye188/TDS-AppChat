@@ -1,7 +1,6 @@
 package umu.tds.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -142,13 +141,14 @@ public class VentanaLogin extends Ventana {
 		// TODO Auto-generated method stub
 		
 		if(e.getSource() == btnLogin) {
-			//Usuario u = ControladorAppChat.getUnicaInstancia().loginUsuario(textLogin.getText(), new String(textPassword.getPassword()));
-			Usuario u= null;
+			
+			Usuario u = ControladorAppChat.getUnicaInstancia().loginUsuario(textLogin.getText(), new String(textPassword.getPassword()));
 			if(u != null) {
 				JOptionPane.showMessageDialog(frmLoginAppChat, "Login User: " + textLogin.getText() + "!", "User Login",
 						JOptionPane.INFORMATION_MESSAGE);
 				
-				ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
+				mostrarVentana(false);
+				ventana.mostrarVentana(VentanaPrincipal.VENTANA_CHAT_PRINCIPAL);
 			}
 			else {
 				JOptionPane.showMessageDialog(frmLoginAppChat, "Nombre de usuario o contrase\u00F1a no valido", "User Login",

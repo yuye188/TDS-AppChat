@@ -325,12 +325,9 @@ public class VentanaRegistro extends Ventana {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		// Analizar tipo de evento
 		if (e.getSource() == btnRegistrar) {
-
 			Usuario u = null;
-
 			if (checkFields()) {
 				u = ControladorAppChat.getUnicaInstancia().registrarUsuario(nombre.getText(), dateChooser.getDate(),
 						telefono.getText(), email.getText(), usuario.getText(), new String(clave1.getPassword()),
@@ -340,6 +337,7 @@ public class VentanaRegistro extends Ventana {
 			if (u != null) {
 				JOptionPane.showMessageDialog(jframe, "Usuario registrado correctamente!", "Registrar Usuario",
 						JOptionPane.INFORMATION_MESSAGE);
+				jframe.dispose();
 				ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
 			} else {
 				JOptionPane.showMessageDialog(jframe, "Error al registrar usuario!", "Registrar Usuario",

@@ -1,8 +1,6 @@
 package umu.tds.gui;
 
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import javax.swing.SpringLayout;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -39,7 +37,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		
 		if(valor == VENTANA_CHAT_PRINCIPAL) {
-			
+			new VentanaChat();
 		}
 
 	}

@@ -47,16 +47,32 @@ public class ControladorAppChat {
 	//TODO
 	public Usuario registrarUsuario(String nombre, Date fechaNacimiento, String movil, String email, String usuario, String contrasenia,
 			String msgSaludo) {
+		
+		if(esUsuarioRegisrado(movil)) {
+			System.out.println("Telefono Registrado");
+			return null;
+		}
+		
+		Usuario u = new Usuario(nombre, fechaNacimiento, movil, email, usuario, contrasenia, msgSaludo);
+		
+		if(adaptadorUsuario.registrarUsuario(u)) {
+			catalogoUsuarios.addUsuario(u);
+			return u;
+		}
+		
 		return null;
 	}
 
 	public Usuario loginUsuario(String usuario, String clave) {
+		
+		Usuario u = CatalogoUsuario.getUnicaInstancia().getUsuarioPorNombre(usuario);	
+		if(u!= null && u.getContrasenia().equals(clave)) return u;
 		return null;
 	}
 	
 	//TODO
-	public boolean esUsuarioRegisrado(String usuario) {
-		return false;
+	public boolean esUsuarioRegisrado(String movil) {
+		return CatalogoUsuario.getUnicaInstancia().getUsuario(movil) != null;
 	}
 
 }
