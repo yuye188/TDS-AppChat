@@ -43,7 +43,7 @@ public class VentanaLogin extends Ventana {
 	public VentanaLogin(VentanaPrincipal v) {
 		ventana = v;
 		crearPantalla();
-		mostrarVentana(true);
+		mostrarVentana(frmLoginAppChat);
 	}
 
 	@Override
@@ -144,11 +144,11 @@ public class VentanaLogin extends Ventana {
 			
 			Usuario u = ControladorAppChat.getUnicaInstancia().loginUsuario(textLogin.getText(), new String(textPassword.getPassword()));
 			if(u != null) {
-				JOptionPane.showMessageDialog(frmLoginAppChat, "Login User: " + textLogin.getText() + "!", "User Login",
+				JOptionPane.showMessageDialog(frmLoginAppChat, "Login User: " + textLogin.getText() + "!", "User Login",
 						JOptionPane.INFORMATION_MESSAGE);
 				
-				mostrarVentana(false);
-				ventana.mostrarVentana(VentanaPrincipal.VENTANA_CHAT_PRINCIPAL);
+				liberarVentana(frmLoginAppChat);
+				ventana.mostrarVentanaChat(ventana, u);
 			}
 			else {
 				JOptionPane.showMessageDialog(frmLoginAppChat, "Nombre de usuario o contrase\u00F1a no valido", "User Login",
@@ -157,19 +157,14 @@ public class VentanaLogin extends Ventana {
 		}
 
 		if(e.getSource() == btnRegistro) {
-			mostrarVentana(false);
+			liberarVentana(frmLoginAppChat);
 			ventana.mostrarVentana(VentanaPrincipal.VENTANA_REGISTRO);
 		}
 
 		if(e.getSource() == btnSalir) {
-			frmLoginAppChat.dispose();
+			liberarVentana(frmLoginAppChat);
 			System.exit(0);
 		}
 	}
-
-	@Override
-	public void mostrarVentana(boolean b) {
-		frmLoginAppChat.setVisible(b);
-	}
-
+	
 }

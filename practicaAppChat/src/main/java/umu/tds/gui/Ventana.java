@@ -7,18 +7,26 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public abstract class Ventana extends JPanel implements ActionListener {
 	
+	public static final int SIZE_X = 350;
+	public static final int SIZE_Y = 580;
+	
 	// Para la configuración del panel
 	protected abstract void crearPantalla();
 
 	// Para tratamiento de los eventos
-	public abstract void actionPerformed(ActionEvent evento);
+	public abstract void actionPerformed(ActionEvent e);
 	
-	public abstract void mostrarVentana(boolean b) ;
+	//
+	public void mostrarVentana(JFrame frame) {frame.setVisible(true);}
+	
+	//Para liberar Ventana Actual
+	public void liberarVentana(JFrame frame) {frame.dispose();};
 
 	// Para configurar las dimensiones de la ventana
 	protected void setSize(JComponent componente, int x, int y) {

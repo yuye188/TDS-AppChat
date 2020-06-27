@@ -46,7 +46,7 @@ public class VentanaConversacion extends Ventana{
 	
 	public VentanaConversacion() {
 		crearPantalla();
-		mostrarVentana(true);
+		mostrarVentana(contentPane);
 	}	
 	
 	@Override
@@ -117,7 +117,7 @@ public class VentanaConversacion extends Ventana{
 		btnEmoji.addActionListener(this);
 		btnEnviar.addActionListener(this);
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -157,15 +157,7 @@ public class VentanaConversacion extends Ventana{
 		}
 	}
 
-	@Override
-	public void mostrarVentana(boolean b) {
-		// TODO Auto-generated method stub
-		contentPane.setVisible(b);
-	}
-	
-
 	public static void main(String[] args) {
 		VentanaConversacion v = new VentanaConversacion();
 	}
-
 }

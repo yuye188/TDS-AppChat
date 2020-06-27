@@ -18,6 +18,7 @@ import java.awt.ScrollPane;
 import java.awt.TextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextField;
+import java.awt.Font;
 
 public class VentanaBuscarMensaje extends Ventana{
 
@@ -32,7 +33,7 @@ public class VentanaBuscarMensaje extends Ventana{
 	
 	public VentanaBuscarMensaje() {
 		crearPantalla();
-		mostrarVentana(true);
+		mostrarVentana(fBuscar);
 	}
 	
 	@Override
@@ -47,6 +48,7 @@ public class VentanaBuscarMensaje extends Ventana{
 		fBuscar.getContentPane().add(panel_Norte, BorderLayout.NORTH);
 		
 		JLabel lblBuscadorMensajeAppchat = new JLabel("Buscador Mensaje AppChat");
+		lblBuscadorMensajeAppchat.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panel_Norte.add(lblBuscadorMensajeAppchat);
 		
 		JPanel panel_Central = new JPanel();
@@ -162,15 +164,7 @@ public class VentanaBuscarMensaje extends Ventana{
 		
 	}
 
-	@Override
-	public void mostrarVentana(boolean b) {
-		// TODO Auto-generated method stub
-		fBuscar.setVisible(b);
-	}
-	
 	public static void main(String[] args) {
 		VentanaBuscarMensaje s = new VentanaBuscarMensaje();
 	}
-	
-
 }

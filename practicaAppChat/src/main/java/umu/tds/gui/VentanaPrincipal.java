@@ -2,6 +2,8 @@ package umu.tds.gui;
 
 import javax.swing.JFrame;
 
+import umu.tds.modelo.Usuario;
+
 public class VentanaPrincipal extends JFrame {
 
 	/**
@@ -12,7 +14,7 @@ public class VentanaPrincipal extends JFrame {
 	public static final int VENTANA_LOGIN = 1;
 	public static final int VENTANA_REGISTRO = 2;
 	public static final int VENTANA_CHAT_PRINCIPAL = 3;
-
+	
 	private VentanaLogin vLogin;
 	private VentanaRegistro vRegistro;
 
@@ -29,16 +31,17 @@ public class VentanaPrincipal extends JFrame {
 		System.out.println("Aqui llego mostrar pantalla " + valor);
 
 		if (valor == VENTANA_LOGIN) {
-			vLogin.mostrarVentana(true);
+			vLogin = new VentanaLogin(this);
 		}
 
 		if (valor == VENTANA_REGISTRO) {
 			new VentanaRegistro(this);
 		}
 		
-		if(valor == VENTANA_CHAT_PRINCIPAL) {
-			new VentanaChat();
-		}
-
+	}
+	
+	public void mostrarVentanaChat(VentanaPrincipal v, Usuario u) {
+		Ventana vChat = new VentanaChat(v, u);
+		
 	}
 }
