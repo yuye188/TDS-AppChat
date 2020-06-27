@@ -20,7 +20,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 	
 	private ServicioPersistencia servPersistencia;
 	private static AdaptadorUsuarioDAO unicaInstancia = null;
-	private SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	private SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
 	
 	public static AdaptadorUsuarioDAO getUnicaInstancia() { // patron singleton
 		if (unicaInstancia == null)
@@ -52,10 +52,13 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		eUsuario = new Entidad();
 		eUsuario.setNombre("Usuario"); 
 	
+		String f = sdf.format(usuario.getFechaNacimiento().getTime());
+		System.out.println(f);
+		
 		eUsuario.setPropiedades(
 				new ArrayList<Propiedad>(Arrays.asList(
 						new Propiedad("nombre", usuario.getNombre()), 
-						new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString()),
+						new Propiedad("fechaNacimiento", f),
 						new Propiedad("movil", usuario.getMovil()),
 						new Propiedad("usuario",usuario.getUsuario()),
 						new Propiedad("contrasenia", usuario.getContrasenia()),
@@ -120,9 +123,11 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		
 		try {
 			fechaNacimiento = sdf.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
+			System.out.println(fechaNacimiento.toString());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
 		
 		movil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "movil");
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");

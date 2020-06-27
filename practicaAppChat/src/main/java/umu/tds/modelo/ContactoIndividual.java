@@ -2,16 +2,16 @@ package umu.tds.modelo;
 
 public class ContactoIndividual extends Contacto{
 	
-	private int movil;
+	private String movil;
 	private Usuario usuario;
 
-	public ContactoIndividual(String nombre, int movil, Usuario usuario) {
+	public ContactoIndividual(String nombre, String movil, Usuario usuario) {
 		super(nombre);
 		this.movil = movil;
 		this.usuario = usuario;
 	}
 
-	public int getMovil() {
+	public String getMovil() {
 		return movil;
 	}
 
@@ -19,7 +19,7 @@ public class ContactoIndividual extends Contacto{
 		return usuario;
 	}
 
-	public void setMovil(int movil) {
+	public void setMovil(String movil) {
 		this.movil = movil;
 	}
 
