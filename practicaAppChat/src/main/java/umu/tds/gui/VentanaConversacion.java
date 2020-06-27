@@ -77,8 +77,9 @@ public class VentanaConversacion extends Ventana{
 		
 		popupMenu = new JPopupMenu();
 		
-		eliminarContacto = new JMenuItem("Eliminar Contacto");
-
+		
+		eliminarContacto = new JMenuItem("Borrar Contacto");
+		
 		popupMenu.add(eliminarContacto);
 		
 		JScrollPane panel_Centro = new JScrollPane();
@@ -131,14 +132,15 @@ public class VentanaConversacion extends Ventana{
 		
 		if(e.getSource() == btnMore) {
 			System.out.println("Pulsado MenuMore");
-			popupMenu.show(btnMore, 0, 20);
+			popupMenu.show(btnMore, 0, 45);
 		}
 		
 		if(e.getSource() == btnEmoji) {
 			System.out.println("Pulsado Emoji");
-			menuEmoji.pack(); //.pack para ocupar el tamaño minimo ncesario
-			System.out.println(menuEmoji.getWidth());
-			menuEmoji.show(btnEmoji, 0, 0);
+			menuEmoji.pack(); //.pack para ocupar el tamaño minimo necesario
+			//MOSTRAR EMOTICONOS AL LADO DE SU BOTON
+			menuEmoji.show(btnEmoji, btnEmoji.getX()-335, btnEmoji.getY()-218);
+		
 		}
 		
 		if(e.getSource() == btnEnviar) {
