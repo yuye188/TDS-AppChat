@@ -9,8 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import umu.tds.modelo.Usuario;
 
 
 public class VentanaSur extends Ventana implements ActionListener {
@@ -20,14 +23,21 @@ public class VentanaSur extends Ventana implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private JFrame fActual;
 	//PANEL SUR
 	private JButton btnEstado, btnFoto, btnContacto, btnChat, btnSetting;
 	
 	private int size = 45;
+	private Usuario actual;
 	/**
 	 * Create the panel.
 	 */
-	public VentanaSur() {
+	public VentanaSur(JFrame frame, Usuario u) {
+		
+		actual = u;
+		
+		fActual = frame;
+		
 		setLayout(new BorderLayout(0, 0));
 		setSize(Ventana.SIZE_X, 25);
 		JPanel panel_Sur = new JPanel();
@@ -84,7 +94,6 @@ public class VentanaSur extends Ventana implements ActionListener {
 		panel_Sur.add(btnSetting, gbc_btnNewButton_3);
 		
 		btnChat.addActionListener(this);
-		btnChat.addActionListener(this);
 		btnEstado.addActionListener(this);
 		btnFoto.addActionListener(this);
 		btnContacto.addActionListener(this);
@@ -95,28 +104,33 @@ public class VentanaSur extends Ventana implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		System.out.println("Ventana Sur Action");
 		if(e.getSource() == btnChat) {
-			System.out.println("Pulsado Chat");
+			System.out.println("Pulsado Chat Sur");
+			liberarVentana(fActual);
 			new VentanaConversacion();
 		}
 		
 		if(e.getSource() == btnEstado) {
-			System.out.println("Pulsado Estado");
+			System.out.println("Pulsado Estado Sur");
+			liberarVentana(fActual);
+			new VentanaEstado();
 		}
 		
 		if(e.getSource() == btnFoto) {
-			System.out.println("Pulsado Foto");
-			JOptionPane.showMessageDialog(this, "NO SE PUEDE HACER FOTO AUN", "AppChat Foto",
+			System.out.println("Pulsado Foto Sur");
+			JOptionPane.showMessageDialog(fActual, "NO SE PUEDE HACER FOTO AUN", "AppChat Foto",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		if(e.getSource() == btnContacto) {
-			System.out.println("Pulsado Agenda Contacto");
+			System.out.println("Pulsado Agenda Contacto Sur");
+			liberarVentana(fActual);
+			new VentanaContacto(actual);
 		}
 		
 		if(e.getSource() == btnSetting) {
-			System.out.println("Pulsado Setting");
+			System.out.println("Pulsado Setting Sur");
+			liberarVentana(fActual);
 			VentanaSettings s = new VentanaSettings();
 		}
 	}

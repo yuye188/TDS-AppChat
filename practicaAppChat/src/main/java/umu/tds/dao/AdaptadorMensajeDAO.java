@@ -47,7 +47,7 @@ public class AdaptadorMensajeDAO implements IMensajeDAO {
 		if (existe) {
 			return false;
 		}
-
+		
 		eMensaje = new Entidad();
 		eMensaje.setNombre("Mensaje");
 		eMensaje.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("texto", mensaje.getTexto()),

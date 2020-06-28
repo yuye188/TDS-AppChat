@@ -4,17 +4,24 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import umu.tds.modelo.Usuario;
+import umu.tds.persistencia.CatalogoUsuario;
+
 @SuppressWarnings("serial")
 public abstract class Ventana extends JPanel implements ActionListener {
 	
 	public static final int SIZE_X = 350;
 	public static final int SIZE_Y = 580;
+	
+	//public static Usuario actual = new Usuario("Ruiqing", new Date(), "111", "nombre1@um.es", "Rui", "qq", "Hola");
+	public static Usuario actual = CatalogoUsuario.getUnicaInstancia().getUsuario("11");
 	
 	// Para la configuración del panel
 	protected abstract void crearPantalla();

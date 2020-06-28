@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Usuario {
 
-	public static final String PROFILE = "/imgs/profile.png";
+	public static final String PROFILE = "imgs/profile.png";
 
 	private int codigo; // id
 

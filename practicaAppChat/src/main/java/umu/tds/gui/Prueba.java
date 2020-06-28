@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -22,8 +23,10 @@ import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Usuario;
 
 import javax.swing.JTextField;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
 
-public class VentanaAddContacto extends Ventana {
+public class Prueba extends Ventana {
 	
 	/**
 	 * 
@@ -36,19 +39,18 @@ public class VentanaAddContacto extends Ventana {
 
 	private JButton btnAceptar;
 	private JButton btnCancelar;
+	private JMenuItem mntmNewMenuItem;
+	
+	public Prueba(VentanaPrincipal v) {
 
-	ControladorAppChat controlador;
-	VentanaPrincipal ventana;
-	
-	private Usuario actual;
-	
-	public VentanaAddContacto(VentanaPrincipal v) {
-		ventana = v;
 		crearPantalla();
 		frameAdd.setVisible(true);
 	}
 
-	public VentanaAddContacto(Usuario u) {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public Prueba(Usuario u) {
 		// TODO Auto-generated constructor stub
 		actual = u;
 		crearPantalla();
@@ -67,21 +69,15 @@ public class VentanaAddContacto extends Ventana {
 		
 		JPanel panel_Norte = new JPanel();
 		frameAdd.getContentPane().add(panel_Norte, BorderLayout.NORTH);
-		GridBagLayout gbl_panel_Norte = new GridBagLayout();
-		gbl_panel_Norte.columnWidths = new int[]{155, 0};
-		gbl_panel_Norte.rowHeights = new int[]{50, 0};
-		gbl_panel_Norte.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel_Norte.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		panel_Norte.setLayout(gbl_panel_Norte);
+		panel_Norte.setLayout(new BoxLayout(panel_Norte, BoxLayout.Y_AXIS));
 		
 		JLabel lblAdd = new JLabel("Añadir Contacto");
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdd.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		GridBagConstraints gbc_lblAdd = new GridBagConstraints();
-		gbc_lblAdd.fill = GridBagConstraints.BOTH;
-		gbc_lblAdd.gridx = 0;
-		gbc_lblAdd.gridy = 0;
-		panel_Norte.add(lblAdd, gbc_lblAdd);
+		panel_Norte.add(lblAdd);
+
+		mntmNewMenuItem = new JMenuItem("New menu item",getImagenIcon("imgs/profile.png", 45, 45));
+		panel_Norte.add(mntmNewMenuItem);
 		
 		JPanel panel_Central = new JPanel();
 		frameAdd.getContentPane().add(panel_Central, BorderLayout.CENTER);
@@ -139,6 +135,7 @@ public class VentanaAddContacto extends Ventana {
 		panel_Central.add(btnAceptar, gbc_btnAceptar);
 		
 		btnCancelar = new JButton("Cancelar");
+		
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
 		gbc_btnCancelar.fill = GridBagConstraints.BOTH;
 		gbc_btnCancelar.insets = new Insets(0, 0, 0, 5);
@@ -174,13 +171,10 @@ public class VentanaAddContacto extends Ventana {
 			}
 		}
 		
-		if(e.getSource() == btnCancelar) {
-			liberarVentana(frameAdd);
-			ventana.mostrarContacto(ventana, null);
-		}	
+		
 	}
 
 	public static void main(String[] args) {
-		VentanaAddContacto v = new VentanaAddContacto(Ventana.actual);
+		Prueba v = new Prueba(Ventana.actual);
 	}
 }

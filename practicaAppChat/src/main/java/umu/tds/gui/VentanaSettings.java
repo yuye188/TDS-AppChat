@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import umu.tds.modelo.Usuario;
+
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -24,25 +27,26 @@ public class VentanaSettings extends Ventana{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JFrame frameChat;
+	private JFrame fSet;
+	private Usuario actual;
 
 	public VentanaSettings() {
 		crearPantalla();
-		frameChat.setVisible(true);
+		fSet.setVisible(true);
 	}
 
 	@Override
 	protected void crearPantalla() {
 		// TODO Auto-generated method stub
-		frameChat = new JFrame();
-		frameChat.setTitle("AppChat");
-		frameChat.setSize(Ventana.SIZE_X, Ventana.SIZE_Y);
-		frameChat.setLocationRelativeTo(null);
-		frameChat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frameChat.getContentPane().setLayout(new BorderLayout(0, 0));
+		fSet = new JFrame();
+		fSet.setTitle("AppChat");
+		fSet.setSize(Ventana.SIZE_X, Ventana.SIZE_Y);
+		fSet.setLocationRelativeTo(null);
+		fSet.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		fSet.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_Norte = new JPanel();
-		frameChat.getContentPane().add(panel_Norte, BorderLayout.NORTH);
+		fSet.getContentPane().add(panel_Norte, BorderLayout.NORTH);
 		GridBagLayout gbl_panel_Norte = new GridBagLayout();
 		gbl_panel_Norte.columnWidths = new int[]{155, 0};
 		gbl_panel_Norte.rowHeights = new int[]{50, 0};
@@ -60,7 +64,7 @@ public class VentanaSettings extends Ventana{
 		panel_Norte.add(lblSetting, gbc_lblSetting);
 		
 		JPanel panel_Central = new JPanel();
-		frameChat.getContentPane().add(panel_Central, BorderLayout.CENTER);
+		fSet.getContentPane().add(panel_Central, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_Central = new GridBagLayout();
 		gbl_panel_Central.columnWidths = new int[]{0, 0, 0, 0, 0};
 		gbl_panel_Central.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -108,8 +112,8 @@ public class VentanaSettings extends Ventana{
 		gbc_btnBorrarCuenta.gridy = 13;
 		panel_Central.add(btnBorrarCuenta, gbc_btnBorrarCuenta);
 		
-		JPanel panel_Sur = new VentanaSur();
-		frameChat.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
+		JPanel panel_Sur = new VentanaSur(fSet,actual);
+		fSet.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
 
 	}
 

@@ -53,6 +53,11 @@ public class VentanaRegistro extends Ventana {
 		crearPantalla();
 		mostrarVentana(jframe);
 	}
+	
+	public VentanaRegistro() {
+		crearPantalla();
+		mostrarVentana(jframe);
+	}
 
 	protected void crearPantalla() {
 
@@ -338,7 +343,8 @@ public class VentanaRegistro extends Ventana {
 				JOptionPane.showMessageDialog(jframe, "Usuario registrado correctamente!", "Registrar Usuario",
 						JOptionPane.INFORMATION_MESSAGE);
 				liberarVentana(jframe);
-				ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
+				//ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
+				new VentanaLogin();
 			} else {
 				JOptionPane.showMessageDialog(jframe, "Error al registrar usuario!", "Registrar Usuario",
 						JOptionPane.ERROR_MESSAGE);
@@ -347,7 +353,8 @@ public class VentanaRegistro extends Ventana {
 
 		if (e.getSource() == btnCancelar) {
 			liberarVentana(jframe);
-			ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
+			//ventana.mostrarVentana(VentanaPrincipal.VENTANA_LOGIN);
+			new VentanaLogin();
 		}
 	}
 

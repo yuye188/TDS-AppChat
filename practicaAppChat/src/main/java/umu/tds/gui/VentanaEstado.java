@@ -80,7 +80,7 @@ frameEstado.getContentPane().setLayout(new BorderLayout(0, 0));
 		gbc_lblPanelEstadoNuevo.gridy = 4;
 		panel_Central.add(lblPanelEstadoNuevo, gbc_lblPanelEstadoNuevo);
 		
-		JPanel panel_Sur = new VentanaSur();
+		JPanel panel_Sur = new VentanaSur(frameEstado, actual);
 		frameEstado.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
 	}
 

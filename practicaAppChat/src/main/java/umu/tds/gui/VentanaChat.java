@@ -53,8 +53,9 @@ public class VentanaChat extends Ventana {
 		mostrarVentana(frameChat);
 	}
 	
-	public VentanaChat() {
+	public VentanaChat(Usuario u) {
 		// TODO Auto-generated constructor stub
+		actual = u;
 		crearPantalla();	
 		mostrarVentana(frameChat);
 	}
@@ -79,8 +80,9 @@ public class VentanaChat extends Ventana {
 		gbl_panel_Norte.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		panel_Norte.setLayout(gbl_panel_Norte);
 		
-		btnInfoUser = new JButton("Nombre Usuario",getImagenIcon("imgs/profile.png", size, size));
-		//btnInfoUser = new JButton(actual.getNombre(),getImagenIcon("imgs/profile.png", size, size));
+		//btnInfoUser = new JButton("Nombre Usuario",getImagenIcon("imgs/profile.png", size, size));
+		btnInfoUser = new JButton(actual.getNombre(),getImagenIcon("imgs/profile.png", size, size));
+		//btnInfoUser = new JButton(actual.getNombre(),getImagenIcon(actual.getPathImg(), size, size));
 		btnInfoUser.setHorizontalTextPosition(JButton.RIGHT);
 		setSize(btnInfoUser, size, size);
 		GridBagConstraints gbc_btnInfoUser = new GridBagConstraints();
@@ -129,9 +131,9 @@ public class VentanaChat extends Ventana {
 		/*System.out.println(panel_Centro.getWidth() + panel_Centro.getHeight());
 		System.out.println(panel_Contactos.getWidth() + panel_Contactos.getHeight());*/
 		
-		JPanel panel_Sur = new JPanel();
+		JPanel panel_Sur = new VentanaSur(frameChat, actual);
 		frameChat.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
-		GridBagLayout gbl_panel_Sur = new GridBagLayout();
+		/*GridBagLayout gbl_panel_Sur = new GridBagLayout();
 		gbl_panel_Sur.columnWidths = new int[]{65, 65, 65, 65, 65, 0};
 		gbl_panel_Sur.rowHeights = new int[]{25, 0};
 		gbl_panel_Sur.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
@@ -180,17 +182,17 @@ public class VentanaChat extends Ventana {
 		gbc_btnNewButton_3.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton_3.gridx = 4;
 		gbc_btnNewButton_3.gridy = 0;
-		panel_Sur.add(btnSetting, gbc_btnNewButton_3);
+		panel_Sur.add(btnSetting, gbc_btnNewButton_3);*/
 		
 		//AÑADIR MANEJADORES
 		btnBuscar.addActionListener(this);
-		btnChat.addActionListener(this);
+		/*btnChat.addActionListener(this);
 		btnEstado.addActionListener(this);
-		btnFoto.addActionListener(this);
+		btnFoto.addActionListener(this);*/
 		btnJavaBean.addActionListener(this);
-		btnContacto.addActionListener(this);
+		//btnContacto.addActionListener(this);
 		btnInfoUser.addActionListener(this);
-		btnSetting.addActionListener(this);
+		//btnSetting.addActionListener(this);
 	}
 
 	@Override
@@ -225,7 +227,9 @@ public class VentanaChat extends Ventana {
 		
 		if(e.getSource() == btnContacto) {
 			System.out.println("Pulsado Agenda Contacto");
-			//VentanaContacto c = new VentanaContacto();
+			liberarVentana(frameChat);
+			VentanaContacto c = new VentanaContacto();
+			
 		}
 		
 		if(e.getSource() == btnSetting) {
@@ -235,7 +239,8 @@ public class VentanaChat extends Ventana {
 	}
 	
 	public static void main(String[] args) {
-		VentanaChat ventana = new VentanaChat();
+		System.out.println("Prueba Ventana Chat");
+		VentanaChat ventana = new VentanaChat(Ventana.actual);
 	}
 
 }

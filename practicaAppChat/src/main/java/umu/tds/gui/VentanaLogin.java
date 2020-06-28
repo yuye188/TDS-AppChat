@@ -37,15 +37,18 @@ public class VentanaLogin extends Ventana {
 	private JPasswordField textPassword;
 	
 	private JButton btnLogin, btnRegistro, btnSalir;
-	/**
-	 * Create the panel.
-	 */
+
 	public VentanaLogin(VentanaPrincipal v) {
 		ventana = v;
 		crearPantalla();
 		mostrarVentana(frmLoginAppChat);
 	}
 
+	public VentanaLogin() {
+		crearPantalla();
+		mostrarVentana(frmLoginAppChat);
+	}
+	
 	@Override
 	protected void crearPantalla() {
 		setSize(ancho, alto );
@@ -148,7 +151,8 @@ public class VentanaLogin extends Ventana {
 						JOptionPane.INFORMATION_MESSAGE);
 				
 				liberarVentana(frmLoginAppChat);
-				ventana.mostrarVentanaChat(ventana, u);
+				//ventana.mostrarVentanaChat(ventana, u);
+				new VentanaChat(u);
 			}
 			else {
 				JOptionPane.showMessageDialog(frmLoginAppChat, "Nombre de usuario o contrase\u00F1a no valido", "User Login",
