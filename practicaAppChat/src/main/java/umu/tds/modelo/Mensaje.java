@@ -13,6 +13,7 @@ public class Mensaje {
 	private String tlfEmisor;
 	private Contacto receptor;
 	
+	
 	private Mensaje(MsgBuilder builder) {
 		this.texto = builder.texto;
 		this.hora = builder.hora;
@@ -48,6 +49,11 @@ public class Mensaje {
 		
 		public MsgBuilder setEmoticon(int emoticon) {
 			this.emoticon = emoticon;
+			return this;
+		}
+		
+		public MsgBuilder setHora(Date hora) {
+			this.hora = hora;
 			return this;
 		}
 		

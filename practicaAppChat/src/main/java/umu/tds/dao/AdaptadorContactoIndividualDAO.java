@@ -89,14 +89,16 @@ public class AdaptadorContactoIndividualDAO implements IContactoDAO{
 		nombre = servPersistencia.recuperarPropiedadEntidad(eContactoIndividual, "nombre");
 		movil = servPersistencia.recuperarPropiedadEntidad(eContactoIndividual, "movil");
 		
-		AdaptadorUsuarioDAO adaptadorUsuario = AdaptadorUsuarioDAO.getUnicaInstancia();
-		usuario = adaptadorUsuario.recuperarUsuario(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eContactoIndividual, "usuario")));
-		
-		ContactoIndividual contacto = new ContactoIndividual(nombre, movil, usuario);
+		ContactoIndividual contacto = new ContactoIndividual(nombre, movil, null);
 		contacto.setCodigo(codigo);
 		
 		// añadir ContactoIndividual al pool
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, contacto);
+		
+		AdaptadorUsuarioDAO adaptadorUsuario = AdaptadorUsuarioDAO.getUnicaInstancia();
+		usuario = adaptadorUsuario.recuperarUsuario(Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eContactoIndividual, "usuario")));
+		
+		contacto.setUsuario(usuario);
 		
 		return contacto;
 		

@@ -225,12 +225,12 @@ public class VentanaChat extends Ventana {
 		
 		if(e.getSource() == btnContacto) {
 			System.out.println("Pulsado Agenda Contacto");
-			VentanaContacto c = new VentanaContacto();
+			//VentanaContacto c = new VentanaContacto();
 		}
 		
 		if(e.getSource() == btnSetting) {
 			System.out.println("Pulsado Setting");
-			VentanaSettings s = new VentanaSettings();
+			//VentanaSettings s = new VentanaSettings();
 		}
 	}
 	
