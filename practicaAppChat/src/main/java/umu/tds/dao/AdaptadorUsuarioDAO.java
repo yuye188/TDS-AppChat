@@ -7,13 +7,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import umu.tds.modelo.Contacto;
-import umu.tds.modelo.Estado;
+
 import umu.tds.modelo.Usuario;
 
 public class AdaptadorUsuarioDAO implements IUsuarioDAO{
@@ -45,9 +46,23 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		}
 		if (existe) return false;
 
-		// ******************** TODO *********************** 
 		//registrar primero los atributos que son objetos
-
+		if (usuario.getListaContacto().size() > 0 ) {
+			AdaptadorContactoIndividualDAO adaptadorCI = AdaptadorContactoIndividualDAO.getUnicaInstancia();
+			for (Contacto contacto : usuario.getListaContacto()) {
+				adaptadorCI.registrarContacto(contacto);
+			}
+		}
+		
+		if (usuario.getGruposAdmin().size() > 0 ) {
+			AdaptadorGrupoDAO adaptadorG = AdaptadorGrupoDAO.getUnicaInstancia();
+			for (Contacto contacto : usuario.getListaContacto()) {
+				adaptadorG.registrarContacto(contacto);
+			}
+		}
+		
+		AdaptadorEstadoDAO.getUnicaInstancia().registrarEstado(usuario.getEstado());
+		
 		// crear entidad Usuario
 		eUsuario = new Entidad();
 		eUsuario.setNombre("Usuario"); 
@@ -62,9 +77,13 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 						new Propiedad("movil", usuario.getMovil()),
 						new Propiedad("usuario",usuario.getUsuario()),
 						new Propiedad("contrasenia", usuario.getContrasenia()),
-						//new Propiedad("imagen", usuario.getImagen),
-						new Propiedad("premium",Boolean.toString(usuario.isPremium()))
-						//TODO listContacto, administrador
+						new Propiedad("pathImg", usuario.getPathImg()),
+						new Propiedad("email", usuario.getEmail()),
+						new Propiedad("premium",Boolean.toString(usuario.isPremium())),
+						new Propiedad("estado", String.valueOf(usuario.getEstado().getCodigo())),
+						new Propiedad("msgSaludo", usuario.getMsgSaludo()),
+						new Propiedad("listaContacto", this.obtenerCodigoContactos(usuario.getListaContacto())),
+						new Propiedad("gruposAdmin", this.obtenerCodigoContactos(usuario.getGruposAdmin()))
 						))
 				);
 		
@@ -79,18 +98,39 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 	public void borrarUsuario(Usuario usuario) {
 		// No se comprueban restricciones de integridad 
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getCodigo());
-		
 		servPersistencia.borrarEntidad(eUsuario);
 	}
 
 	public void modificarUsuario(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getCodigo());
 
+		// NO se puede modificar los campos fechaNacimiento, movil, usuario
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "nombre");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "nombre", usuario.getNombre());
-		//**************************TODO***********************
-		// modificar el resto de los campos
 		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "contrasenia");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "contrasenia", usuario.getContrasenia());
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "pathImg");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "pathImg", usuario.getPathImg());
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "premium");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "premium", String.valueOf(usuario.isPremium()));
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "estado");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "estado", String.valueOf(usuario.getEstado().getCodigo()));
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "msgSaludo");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "msgSaludo", usuario.getMsgSaludo());
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "email");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "email", usuario.getEmail());
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "listaContacto");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "listaContacto", this.obtenerCodigoContactos(usuario.getListaContacto()));
+		
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "gruposAdmin");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "gruposAdmin", this.obtenerCodigoContactos(usuario.getGruposAdmin()));
 	}
 
 	public Usuario recuperarUsuario(int codigo) {
@@ -109,11 +149,11 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		String contrasenia;
 		String msgSaludo;
 		boolean premium;
+		String pathImg;
 		
 		// y los campos de objetos
-		List<Contacto> contactos = new LinkedList<Contacto>();
-		Estado estado;
-		
+		//List<Contacto> contactos = new LinkedList<Contacto>();
+		//List<Contacto> gruposAdmin = new LinkedList<Contacto>();
 		
 		// recuperar entidad
 		eUsuario = servPersistencia.recuperarEntidad(codigo);
@@ -128,31 +168,33 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 			e.printStackTrace();
 		}
 		
-		
 		movil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "movil");
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
 		usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		contrasenia = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contrasenia");
 		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium").equals("true");
 		msgSaludo =  servPersistencia.recuperarPropiedadEntidad(eUsuario, "msgSaludo");
-		
-		// TODO falta recuperar Estado y contactos
-		
-
+		pathImg = servPersistencia.recuperarPropiedadEntidad(eUsuario, "pathImg");
+	
 		Usuario u = new Usuario(nombre, fechaNacimiento, movil, email ,usuario, contrasenia, msgSaludo);
 		u.setCodigo(codigo);
-		u.setPathImg( servPersistencia.recuperarPropiedadEntidad(eUsuario, "pathImg"));
+		u.setPathImg(pathImg);
 		u.setPremium(premium);
-		u.setListaContacto(contactos);
 
 		// IMPORTANTE:añadir el usuario al pool antes de llamar a otros
 		// adaptadores
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, u);
 
-		//**************************TODO***********************
 		// recuperar propiedades que son objetos llamando a adaptadores
-		// ventas
-
+		int codigoEstado = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUsuario, "estado"));
+		u.setEstado(AdaptadorEstadoDAO.getUnicaInstancia().recuperarEstado(codigoEstado));
+		
+		String contactosIndividuales = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaContacto");
+		u.setListaContacto(this.obtenerContactosIndividualesDesdeCodigos(contactosIndividuales));
+		
+		String gruposAdmin = servPersistencia.recuperarPropiedadEntidad(eUsuario, "gruposAdmin");
+		u.setGruposAdmin(this.obtenerGruposDesdeCodigos(gruposAdmin));
+		
 		return u;
 	}
 
@@ -166,5 +208,39 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		return usuarios;
 	}
 
+	// -------------------Funciones auxiliares-----------------------------
+	private String obtenerCodigoContactos(List<Contacto> listaContactos){
+		String aux = "";
+		for (Contacto c : listaContactos) {
+			aux += c.getCodigo() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Contacto> obtenerGruposDesdeCodigos(String contactos) {
+
+		List<Contacto> listaContactos = new LinkedList<Contacto>();
+		StringTokenizer strTok = new StringTokenizer(contactos, " ");
+		AdaptadorGrupoDAO adaptadorG = AdaptadorGrupoDAO.getUnicaInstancia();
+		
+		while (strTok.hasMoreTokens()) {
+			listaContactos.add(adaptadorG.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+		}
+		
+		return listaContactos;
+	}
+	
+	private List<Contacto> obtenerContactosIndividualesDesdeCodigos(String contactos) {
+
+		List<Contacto> listaContactos = new LinkedList<Contacto>();
+		StringTokenizer strTok = new StringTokenizer(contactos, " ");
+		AdaptadorContactoIndividualDAO adaptadorCI = AdaptadorContactoIndividualDAO.getUnicaInstancia();
+		
+		while (strTok.hasMoreTokens()) {
+			listaContactos.add(adaptadorCI.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+		}
+		
+		return listaContactos;
+	}
 	
 }

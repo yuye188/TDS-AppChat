@@ -1,5 +1,6 @@
 package umu.tds.modelo;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Grupo extends Contacto {
@@ -14,6 +15,7 @@ public class Grupo extends Contacto {
 		super(nombre);
 		this.admin = admin;
 		this.pathImg = GroupProfile;
+		this.miembros = new LinkedList<Usuario>();
 	}
 
 	public List<Usuario> getMiembros() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
@@ -31,11 +32,10 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 
 	@Override
 	public boolean registrarContacto(Contacto contacto) {
+		
+		// comprobar si ya existe el Contacto
 		Entidad eGrupo;
 		boolean existe = true; 
-		if(!(contacto instanceof Grupo)) {
-			throw new ClassCastException ();
-		}
 
 		Grupo grupo = (Grupo) contacto;
 		
@@ -47,7 +47,8 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		if (existe) {
 			return false;
 		}
-
+		
+		// registrar mensajes 
 		AdaptadorMensajeDAO adaptadorMensaje = AdaptadorMensajeDAO.getUnicaInstancia();
 		for (Mensaje mensaje: grupo.getMensajes()) {
 			adaptadorMensaje.registrarMensaje(mensaje);
@@ -57,8 +58,8 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		eGrupo.setNombre("Grupo");
 		eGrupo.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(
 						new Propiedad("nombre", grupo.getNombre()),
-						//TODO Mensaje
-						//TODO Miembros
+						new Propiedad("mensajes", this.obtenerCodigosMensajes(grupo.getMensajes())),
+						new Propiedad("miembros", this.obtenerCodigosMiembros(grupo.getMiembros())),
 						new Propiedad("pathImg", grupo.getPathImg()),
 						new Propiedad("admin", String.valueOf(grupo.getAdmin().getCodigo())))));
 		
@@ -85,8 +86,12 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		servPersistencia.eliminarPropiedadEntidad(eGrupo, "nombre");
 		servPersistencia.anadirPropiedadEntidad(eGrupo, "nombre", grupo.getNombre());
 		
-		//TODO MENSAJE
-		//TODO MIEMBRO
+		servPersistencia.eliminarPropiedadEntidad(eGrupo, "mensajes");
+		servPersistencia.anadirPropiedadEntidad(eGrupo, "mensajes", this.obtenerCodigosMensajes(grupo.getMensajes()));
+		
+		servPersistencia.eliminarPropiedadEntidad(eGrupo, "miembros");
+		servPersistencia.anadirPropiedadEntidad(eGrupo, "miembros", this.obtenerCodigosMiembros(grupo.getMiembros()));
+		
 		servPersistencia.eliminarPropiedadEntidad(eGrupo, "pathImg");
 		servPersistencia.anadirPropiedadEntidad(eGrupo, "pathImg", grupo.getPathImg());
 		servPersistencia.eliminarPropiedadEntidad(eGrupo, "admin");
@@ -103,26 +108,27 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		// si no, la recupera de la base de datos
 		Entidad eGrupo;
 		String nombre;
-		List<Mensaje> mensajes = new LinkedList<>();
-		List<Usuario> miembros = new LinkedList<>();
+		//List<Mensaje> mensajes = new LinkedList<>();
+		//List<Usuario> miembros = new LinkedList<>();
 		String pathImg;
 		
 		eGrupo = servPersistencia.recuperarEntidad(codigo);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eGrupo, "nombre");
-		//TODO MENSAJES
-		//TODO MIEMBROS
+		//mensajes.addAll(this.obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes")));
+		//miembros.addAll(this.obtenerMiembrosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGrupo, "miembros")));
 		pathImg = servPersistencia.recuperarPropiedadEntidad(eGrupo, "pathImg");
 		
 		Grupo grupo = new Grupo(nombre, null);
 		grupo.setCodigo(codigo);
 		grupo.setPathImg(pathImg);
 		
+		// añadir Grupo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, grupo);
 		
 		int codigoAdmin = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eGrupo, "admin"));
 		grupo.setAdmin(AdaptadorUsuarioDAO.getUnicaInstancia().recuperarUsuario(codigoAdmin));
-		grupo.setMensajes(mensajes);
-		grupo.setMiembros(miembros);
+		grupo.setMensajes(this.obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes")));
+		grupo.setMiembros(this.obtenerMiembrosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGrupo, "miembros")));
 		
 		return grupo;
 	}
@@ -137,5 +143,43 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		}
 		return grupos;
 	}
+	
+	// -------------------Funciones auxiliares-----------------------------
+	private String obtenerCodigosMensajes(List<Mensaje> mensajes){
+		String aux = "";
+		for (Mensaje m : mensajes) {
+			aux += m.getCodigo() + " ";
+		}
+		return aux.trim();
+	}
 
+	private String obtenerCodigosMiembros(List<Usuario> usuarios){
+		String aux = "";
+		for (Usuario m : usuarios) {
+			aux += m.getCodigo() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Mensaje> obtenerMensajesDesdeCodigos(String mensajes) {
+
+		List<Mensaje> listaContactos = new LinkedList<Mensaje>();
+		StringTokenizer strTok = new StringTokenizer(mensajes, " ");
+		AdaptadorMensajeDAO adaptadorM = AdaptadorMensajeDAO.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			listaContactos.add(adaptadorM.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listaContactos;
+	}
+	
+	private List<Usuario> obtenerMiembrosDesdeCodigos(String usuarios) {
+
+		List<Usuario> listaContactos = new LinkedList<Usuario>();
+		StringTokenizer strTok = new StringTokenizer(usuarios, " ");
+		AdaptadorUsuarioDAO adaptadorU = AdaptadorUsuarioDAO.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			listaContactos.add(adaptadorU.recuperarUsuario(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listaContactos;
+	}
 }

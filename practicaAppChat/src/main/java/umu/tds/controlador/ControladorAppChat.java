@@ -91,8 +91,9 @@ public class ControladorAppChat {
 		if (contacto == null)
 			return false;
 		
-		adaptadorUsuario.modificarUsuario(usuarioActual);
 		adaptadorContactoIndividual.registrarContacto(contacto);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+		
 		return true;
 	}
 

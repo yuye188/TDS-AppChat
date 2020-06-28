@@ -212,9 +212,9 @@ public class VentanaContacto extends Ventana{
 		System.out.println("El contacto actual " + actual.getUsuario() +" tiene "+  
 		actual.getListaContacto().size() + " contactos");
 		
-		/*for(Contacto c: actual.getListaContacto()) {
+		for(Contacto c: actual.getListaContacto()) {
 			ContactoIndividual s = (ContactoIndividual) c;
-			String texto = s.getNombre(); //+ s.getUsuario().getMsgSaludo();
+			String texto = s.getNombre() + s.getUsuario().getMsgSaludo();
 			Icon icono = getImagenIcon("img/profile.png", size, size);
 			Icon ic = getImagenIcon(s.getUsuario().getPathImg(), size, size);
 			Icon i = new ImageIcon("img/profile.png");
@@ -227,9 +227,9 @@ public class VentanaContacto extends Ventana{
 			item.addActionListener(this);
 			menuContacto.add(item);
 			panel_ListaContacto.add(item);
-			panel_ListaContacto.add(separator);
+			//panel_ListaContacto.add(separator);
 			panel_ListaContacto.add(item2);
-		}*/
+		}
 	
 		JMenuItem item = new JMenuItem("Hola",getImagenIcon("imgs/profile.png", 45, 45));
 	

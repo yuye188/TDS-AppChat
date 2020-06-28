@@ -21,7 +21,7 @@ public class Usuario {
 	private RolUsuario rol;
 	private List<Contacto> listaContacto;
 	private Descuento descuento;
-	//private List<Grupo> gruposAdmin;
+	private List<Contacto> gruposAdmin;
 	private String msgSaludo;
 	private Estado estado;
 
@@ -36,7 +36,9 @@ public class Usuario {
 		this.premium = false;
 		this.email = email;
 		this.msgSaludo = msgSaludo;
+		this.estado = new Estado(" ", Estado.ImgDefecto);
 		this.listaContacto = new LinkedList<Contacto>();
+		this.gruposAdmin = new LinkedList<Contacto>();
 		this.descuento = new DescuentoCompuesto();
 		this.pathImg = PROFILE;
 	}
@@ -44,7 +46,6 @@ public class Usuario {
 
 	public ContactoIndividual addContactoIndividual(String nombre, String movil, Usuario usuario) {
 		boolean existe = this.listaContacto.stream()
-							 .filter(c -> c.getClass() == ContactoIndividual.class)
 							 .map(ContactoIndividual.class::cast)
 							 .anyMatch(c -> c.getNombre().equals(nombre) || c.getMovil().equals(movil));
 		if (existe)	return null;
@@ -162,6 +163,16 @@ public class Usuario {
 
 	public void setDescuento(Descuento descuento) {
 		this.descuento = descuento;
+	}
+
+
+	public List<Contacto> getGruposAdmin() {
+		return gruposAdmin;
+	}
+
+
+	public void setGruposAdmin(List<Contacto> gruposAdmin) {
+		this.gruposAdmin = gruposAdmin;
 	}
 
 	

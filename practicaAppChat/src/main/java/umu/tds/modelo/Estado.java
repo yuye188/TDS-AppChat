@@ -5,6 +5,8 @@ public class Estado {
 	private String frase;
 	private String pathImg;
 	private int codigo; // id
+	
+	public static final String ImgDefecto = "imgs/estado.png";
 
 	public Estado(String frase, String pathImg) {
 		super();
