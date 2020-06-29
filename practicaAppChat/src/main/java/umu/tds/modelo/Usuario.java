@@ -1,8 +1,14 @@
 package umu.tds.modelo;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import umu.tds.dao.AdaptadorContactoIndividualDAO;
+import umu.tds.dao.AdaptadorUsuarioDAO;
+import umu.tds.modelo.Mensaje.MsgBuilder;
+import umu.tds.persistencia.CatalogoUsuario;
 
 public class Usuario {
 
@@ -21,7 +27,7 @@ public class Usuario {
 	private RolUsuario rol;
 	private List<Contacto> listaContacto;
 	private Descuento descuento;
-	private List<Contacto> gruposAdmin;
+	private List<Contacto> listaGrupo;
 	private String msgSaludo;
 	private Estado estado;
 
@@ -38,7 +44,7 @@ public class Usuario {
 		this.msgSaludo = msgSaludo;
 		this.estado = new Estado(" ", Estado.ImgDefecto);
 		this.listaContacto = new LinkedList<Contacto>();
-		this.gruposAdmin = new LinkedList<Contacto>();
+		this.listaGrupo = new LinkedList<Contacto>();
 		this.descuento = new DescuentoCompuesto();
 		this.pathImg = PROFILE;
 	}
@@ -52,6 +58,60 @@ public class Usuario {
 		ContactoIndividual contacto = new ContactoIndividual(nombre, movil, usuario);
 		this.listaContacto.add(contacto);
 		return contacto;
+	}
+	
+	
+	public List<Contacto> getContactosOrdenadosPorHora(){
+		
+		List<Contacto> contactos = new LinkedList<Contacto>();
+		contactos.addAll(this.getListaContacto());
+		contactos.addAll(this.getListaGrupo());
+		
+		
+		Collections.sort(contactos, (c1, c2) -> {
+			if (c2.getMensajes().isEmpty() && c1.getMensajes().isEmpty()) 
+				return 0;
+			if (c2.getMensajes().isEmpty()) 
+				return -1;
+			if (c1.getMensajes().isEmpty()) 
+				return 1;
+			return Contacto.compararContactosPorHora(c1, c2);
+		});
+
+		return contactos;
+	}
+	
+	// enviar un mensaje a un receptor
+	public void enviarMensaje(Contacto receptor, String texto, int emoticono) {
+		receptor.enviarMensaje(MsgBuilder.createBuilder(this.getMovil(), receptor)
+										 .setTexto(texto)
+										 .setEmoticon(emoticono)
+										 .build());
+	}
+	
+	
+	public void recibirMensaje(Usuario emisor, Mensaje mensaje) {
+		
+		ContactoIndividual contactoIndividual;
+		
+		// buscar si el mensaje viene de un contacto existente
+		for (Contacto c: this.listaContacto) {
+			contactoIndividual = (ContactoIndividual) c;
+			if (contactoIndividual.getMovil().equals(emisor.getMovil())) {
+				contactoIndividual.addNuevoMensaje(mensaje);
+				return;
+			}
+		}
+		
+		// si no existe el contacto se crea (cuyo nombre será el tlf del emisor) y se añade a la lista de contactos individuales
+		String tlf = mensaje.getTlfEmisor();
+		contactoIndividual = new ContactoIndividual(tlf, tlf, CatalogoUsuario.getUnicaInstancia().getUsuario(tlf));
+		this.listaContacto.add(contactoIndividual);
+		
+		AdaptadorContactoIndividualDAO.getUnicaInstancia().registrarContacto(contactoIndividual);
+		AdaptadorUsuarioDAO.getUnicaInstancia().registrarUsuario(this);
+		
+		contactoIndividual.addNuevoMensaje(mensaje);
 	}
 
 	public int getCodigo() {
@@ -166,13 +226,13 @@ public class Usuario {
 	}
 
 
-	public List<Contacto> getGruposAdmin() {
-		return gruposAdmin;
+	public List<Contacto> getListaGrupo() {
+		return listaGrupo;
 	}
 
 
-	public void setGruposAdmin(List<Contacto> gruposAdmin) {
-		this.gruposAdmin = gruposAdmin;
+	public void setListaGrupo(List<Contacto> gruposAdmin) {
+		this.listaGrupo = gruposAdmin;
 	}
 
 	

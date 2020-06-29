@@ -3,6 +3,8 @@ package umu.tds.modelo;
 import java.util.LinkedList;
 import java.util.List;
 
+import umu.tds.dao.AdaptadorGrupoDAO;
+
 public class Grupo extends Contacto {
 
 	private List<Usuario> miembros;
@@ -44,6 +46,11 @@ public class Grupo extends Contacto {
 
 	public void setPathImg(String pathImg) {
 		this.pathImg = pathImg;
+	}
+
+	@Override
+	public void modificarContacto() {
+		AdaptadorGrupoDAO.getUnicaInstancia().modificarContacto(this);
 	}
 
 }

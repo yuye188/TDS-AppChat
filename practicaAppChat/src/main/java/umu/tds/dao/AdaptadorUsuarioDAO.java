@@ -54,7 +54,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 			}
 		}
 		
-		if (usuario.getGruposAdmin().size() > 0 ) {
+		if (usuario.getListaGrupo().size() > 0 ) {
 			AdaptadorGrupoDAO adaptadorG = AdaptadorGrupoDAO.getUnicaInstancia();
 			for (Contacto contacto : usuario.getListaContacto()) {
 				adaptadorG.registrarContacto(contacto);
@@ -83,7 +83,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 						new Propiedad("estado", String.valueOf(usuario.getEstado().getCodigo())),
 						new Propiedad("msgSaludo", usuario.getMsgSaludo()),
 						new Propiedad("listaContacto", this.obtenerCodigoContactos(usuario.getListaContacto())),
-						new Propiedad("gruposAdmin", this.obtenerCodigoContactos(usuario.getGruposAdmin()))
+						new Propiedad("listaGrupo", this.obtenerCodigoContactos(usuario.getListaGrupo()))
 						))
 				);
 		
@@ -129,8 +129,8 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "listaContacto");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "listaContacto", this.obtenerCodigoContactos(usuario.getListaContacto()));
 		
-		servPersistencia.eliminarPropiedadEntidad(eUsuario, "gruposAdmin");
-		servPersistencia.anadirPropiedadEntidad(eUsuario, "gruposAdmin", this.obtenerCodigoContactos(usuario.getGruposAdmin()));
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, "listaGrupo");
+		servPersistencia.anadirPropiedadEntidad(eUsuario, "listaGrupo", this.obtenerCodigoContactos(usuario.getListaGrupo()));
 	}
 
 	public Usuario recuperarUsuario(int codigo) {
@@ -153,7 +153,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		
 		// y los campos de objetos
 		//List<Contacto> contactos = new LinkedList<Contacto>();
-		//List<Contacto> gruposAdmin = new LinkedList<Contacto>();
+		//List<Contacto> listaGrupo = new LinkedList<Contacto>();
 		
 		// recuperar entidad
 		eUsuario = servPersistencia.recuperarEntidad(codigo);
@@ -192,8 +192,8 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		String contactosIndividuales = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaContacto");
 		u.setListaContacto(this.obtenerContactosIndividualesDesdeCodigos(contactosIndividuales));
 		
-		String gruposAdmin = servPersistencia.recuperarPropiedadEntidad(eUsuario, "gruposAdmin");
-		u.setGruposAdmin(this.obtenerGruposDesdeCodigos(gruposAdmin));
+		String listaGrupo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaGrupo");
+		u.setListaGrupo(this.obtenerGruposDesdeCodigos(listaGrupo));
 		
 		return u;
 	}

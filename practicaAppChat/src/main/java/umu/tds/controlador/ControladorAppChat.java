@@ -1,11 +1,15 @@
 package umu.tds.controlador;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dao.IContactoDAO;
 import umu.tds.dao.IUsuarioDAO;
+import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.CatalogoUsuario;
@@ -86,15 +90,29 @@ public class ControladorAppChat {
 		Usuario usuario = CatalogoUsuario.getUnicaInstancia().getUsuario(movil);
 		if (usuario == null || usuarioActual.getCodigo() == usuario.getCodigo())
 			return false;
-		
-		ContactoIndividual contacto = usuarioActual.addContactoIndividual(nombre,movil, usuario);
+
+		ContactoIndividual contacto = usuarioActual.addContactoIndividual(nombre, movil, usuario);
 		if (contacto == null)
 			return false;
-		
+
 		adaptadorContactoIndividual.registrarContacto(contacto);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
-		
+
 		return true;
 	}
 
+	public List<String> getNombreContactos(List<Contacto> contactos) {
+		return contactos.stream()
+				.map(c -> c.getNombre())
+				.collect(Collectors.toList());
+	}
+
+	public List<Contacto> getContactosOrdenadosPorHora() {
+		return usuarioActual.getContactosOrdenadosPorHora();
+	}
+	
+	public void enviarMensaje(Contacto receptor, String texto, int emoticono) {
+		usuarioActual.enviarMensaje(receptor, texto, emoticono);
+	}
+	
 }

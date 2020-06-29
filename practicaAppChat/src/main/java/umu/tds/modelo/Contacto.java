@@ -3,8 +3,11 @@ package umu.tds.modelo;
 import java.util.LinkedList;
 import java.util.List;
 
+import umu.tds.dao.AdaptadorMensajeDAO;
 
-public class Contacto {
+
+
+public abstract class Contacto {
 	
 	private int codigo;
 	private String nombre;
@@ -16,6 +19,27 @@ public class Contacto {
 		mensajes = new LinkedList<Mensaje>();
 	}
 
+	public static int compararContactosPorHora(Contacto c1, Contacto c2) {
+		return c2.mensajes.get(c2.mensajes.size()-1).getHora()
+				.compareTo(c1.mensajes.get(c1.mensajes.size()-1).getHora());
+	}
+	
+	// enviar el mensaje y grabarlo en bd
+	public void enviarMensaje(Mensaje mensaje) {
+		this.mensajes.add(mensaje);
+		AdaptadorMensajeDAO.getUnicaInstancia().registrarMensaje(mensaje);
+		this.modificarContacto();
+	}
+	
+	public void addNuevoMensaje(Mensaje mensaje) {
+		this.mensajes.add(mensaje);
+		this.mensajes.sort((m1, m2)-> m1.getHora().before(m2.getHora()) ? -1 : 1);
+		modificarContacto();
+	}
+	
+	
+	public abstract void modificarContacto();
+	
 	public int getCodigo() {
 		return codigo;
 	}
@@ -40,5 +64,4 @@ public class Contacto {
 		this.mensajes = mensajes;
 	}
 	
-
 }
