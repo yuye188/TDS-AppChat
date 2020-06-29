@@ -20,6 +20,15 @@ public class Grupo extends Contacto {
 		this.miembros = new LinkedList<Usuario>();
 	}
 
+	public boolean addMiembros(Usuario admin, Usuario usuario) {
+		if (admin.getCodigo() == this.admin.getCodigo()) {
+			this.miembros.add(usuario);
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public List<Usuario> getMiembros() {
 		return miembros;
 	}

@@ -113,6 +113,8 @@ public class Usuario {
 		
 		contactoIndividual.addNuevoMensaje(mensaje);
 	}
+	
+	
 
 	public int getCodigo() {
 		return codigo;
