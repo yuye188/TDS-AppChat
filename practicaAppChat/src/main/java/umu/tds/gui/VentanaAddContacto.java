@@ -37,8 +37,7 @@ public class VentanaAddContacto extends Ventana {
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 
-	ControladorAppChat controlador;
-	VentanaPrincipal ventana;
+	private VentanaPrincipal ventana;
 	
 	private Usuario actual;
 	
@@ -50,7 +49,12 @@ public class VentanaAddContacto extends Ventana {
 
 	public VentanaAddContacto(Usuario u) {
 		// TODO Auto-generated constructor stub
+		System.out.println("Creando Ventana Add Contacto");
+		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
+		Ventana.unica.setUsuarioActual(actual);
+		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
+		
 		crearPantalla();
 		mostrarVentana(frameAdd);
 	}
@@ -60,7 +64,7 @@ public class VentanaAddContacto extends Ventana {
 		// TODO Auto-generated method stub
 		frameAdd = new JFrame();
 		frameAdd.setTitle("AppChat");
-		frameAdd.setSize(300, 254);
+		frameAdd.setSize(300, 255);
 		frameAdd.setLocationRelativeTo(null);
 		frameAdd.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameAdd.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -166,6 +170,7 @@ public class VentanaAddContacto extends Ventana {
 					JOptionPane.showMessageDialog(frameAdd, "Contacto añadido", "User Add",
 							JOptionPane.INFORMATION_MESSAGE);
 					//ventana.mostrarContacto(ventana, null);
+					liberarVentana(frameAdd);
 					VentanaContacto v = new VentanaContacto(actual);
 				}else {
 					JOptionPane.showMessageDialog(frameAdd, "Contacto añadido o Telefono no registrado", "User Add",
@@ -176,7 +181,7 @@ public class VentanaAddContacto extends Ventana {
 		
 		if(e.getSource() == btnCancelar) {
 			liberarVentana(frameAdd);
-			ventana.mostrarContacto(ventana, null);
+			VentanaContacto v= new VentanaContacto(actual);
 		}	
 	}
 

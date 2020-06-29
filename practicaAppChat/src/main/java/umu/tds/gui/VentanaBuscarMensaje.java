@@ -13,6 +13,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import com.toedter.calendar.JDateChooser;
+
+import umu.tds.controlador.ControladorAppChat;
+import umu.tds.modelo.Usuario;
+
 import javax.swing.JButton;
 import java.awt.ScrollPane;
 import java.awt.TextArea;
@@ -27,11 +31,19 @@ public class VentanaBuscarMensaje extends Ventana{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel contentPane;
 	private JFrame fBuscar;
 	private JTextField textField;
 	
-	public VentanaBuscarMensaje() {
+	private Usuario actual;
+	
+	public VentanaBuscarMensaje(Usuario u) {
+		
+		System.out.println("Creando Ventana Busqueda");
+		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
+		actual = u;
+		Ventana.unica.setUsuarioActual(actual);
+		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
+		
 		crearPantalla();
 		mostrarVentana(fBuscar);
 	}
@@ -165,6 +177,6 @@ public class VentanaBuscarMensaje extends Ventana{
 	}
 
 	public static void main(String[] args) {
-		VentanaBuscarMensaje s = new VentanaBuscarMensaje();
+		VentanaBuscarMensaje s = new VentanaBuscarMensaje(null);
 	}
 }

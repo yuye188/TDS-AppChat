@@ -22,6 +22,7 @@ public class ControladorAppChat {
 	private IContactoDAO adaptadorContactoIndividual;
 	private CatalogoUsuario catalogoUsuarios;
 	private Usuario usuarioActual = null;
+	private Contacto contactoActual = null;
 
 	private ControladorAppChat() {
 		inicializarAdaptadores(); // debe ser la primera linea para evitar error
@@ -51,7 +52,25 @@ public class ControladorAppChat {
 		adaptadorUsuario = factoria.getUsuarioDAO();
 		adaptadorContactoIndividual = factoria.getContactoIndividualDAO();
 	}
+	
+	public Usuario getUsuarioActual() {
+		return usuarioActual;
+	}
+	
+	public void setUsuarioActual(Usuario u) {
+			usuarioActual = u;
+			System.out.println("El usuario actual para controlador es: "+ usuarioActual.getNombre());
+	}
 
+	public Contacto getContactoActual() {
+		return contactoActual;
+	}
+	
+	public void setContactoActual(Contacto u) {
+			contactoActual = u;
+			System.out.println("El contacto actual para controlador es: "+ contactoActual.getNombre());
+	}
+	
 	// TODO
 	public Usuario registrarUsuario(String nombre, Date fechaNacimiento, String movil, String email, String usuario,
 			String contrasenia, String msgSaludo) {

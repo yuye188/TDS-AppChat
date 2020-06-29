@@ -11,6 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.CatalogoUsuario;
 
@@ -20,8 +21,10 @@ public abstract class Ventana extends JPanel implements ActionListener {
 	public static final int SIZE_X = 350;
 	public static final int SIZE_Y = 580;
 	
+	public static ControladorAppChat unica = ControladorAppChat.getUnicaInstancia();
 	//public static Usuario actual = new Usuario("Ruiqing", new Date(), "111", "nombre1@um.es", "Rui", "qq", "Hola");
-	public static Usuario actual = CatalogoUsuario.getUnicaInstancia().getUsuario("11");
+	//public static Usuario actual = CatalogoUsuario.getUnicaInstancia().getUsuario("11");
+	public static Usuario actual = null;
 	
 	// Para la configuración del panel
 	protected abstract void crearPantalla();

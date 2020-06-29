@@ -2,18 +2,14 @@ package umu.tds.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,20 +19,20 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
-import com.lowagie.text.pdf.AcroFields.Item;
-
+import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Usuario;
 
-import java.awt.FlowLayout;
+
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import java.awt.GridLayout;
+import javax.swing.BoxLayout;
+import javax.swing.JTextField;
+import java.awt.FlowLayout;
 
 
 public class VentanaContacto extends Ventana{
@@ -52,10 +48,11 @@ public class VentanaContacto extends Ventana{
 	private JPanel panel_ListaContacto;
 
 	private VentanaPrincipal v;
-	
 	private Usuario actual;
 	private int size = 45;
-	List<JMenuItem> menuContacto ;
+	
+	private List<JMenuItem> menuContacto ;
+	private List<JButton> menuContactoBoton;
 	
 	public VentanaContacto() {
 		crearPantalla();
@@ -64,7 +61,12 @@ public class VentanaContacto extends Ventana{
 
 	public VentanaContacto(Usuario u) {
 		// TODO Auto-generated constructor stub
+		System.out.println("Creando Ventana Contacto");
+		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
+		Ventana.unica.setUsuarioActual(actual);
+		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
+		
 		crearPantalla();
 		actualizarPantalla();
 		mostrarVentana(frameContacto);
@@ -100,7 +102,6 @@ public class VentanaContacto extends Ventana{
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		frameContacto.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
 		JPanel panel_ComandaHeader = new JPanel();
@@ -138,43 +139,8 @@ public class VentanaContacto extends Ventana{
 		
 		panel_ListaContacto = new JPanel();
 		scrollPane.setViewportView(panel_ListaContacto);
-		panel_ListaContacto.setLayout(new GridLayout(0, 1, 0, 15));
-		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_2);
-		
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_5);
-		
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_4);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_1);
-		
-		JMenuItem mntmNewMenuItem_6 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_6);
-		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_3);
-		
-		/*JMenuItem mntmNewMenuItem = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setForeground(Color.ORANGE);
-		separator_1.setBackground(Color.GREEN);
-		panel_ListaContacto.add(separator_1);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_1);*/
-		
-		/*JMenuItem mntmNewMenuItem = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New menu item");
-		panel_ListaContacto.add(mntmNewMenuItem_1);*/
-		
+		panel_ListaContacto.setLayout(new BoxLayout(panel_ListaContacto, BoxLayout.Y_AXIS));
+			
 		JPanel panel_Sur = new VentanaSur(frameContacto, actual);
 		frameContacto.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
 
@@ -190,7 +156,6 @@ public class VentanaContacto extends Ventana{
 		if(e.getSource() == btnAñadirContacto) {
 			System.out.println("Pulsado Añadir Contacto");
 			liberarVentana(frameContacto);
-			//VentanaAddContacto v = new VentanaAddContacto(Ventana.actual);
 			VentanaAddContacto v = new VentanaAddContacto(actual);
 		}
 		
@@ -201,62 +166,140 @@ public class VentanaContacto extends Ventana{
 		
 		if(menuContacto.contains(e.getSource())) {
 			System.out.println("Seleccionado Contacto");
+			
+			int i=0;
+			while(!menuContacto.get(i).equals(e.getSource())) {
+				i++;
+			}
+			System.out.println("Seleccionado Contacto de la posicion :" + i);
+			Contacto m = actual.getListaContacto().get(i);
+			System.out.println("El contacto actual a mandar mensaje: "+ m.getNombre());
+			
+			liberarVentana(frameContacto);
+			new VentanaConversacion(actual,m);
+		}
+		
+		if(menuContactoBoton.contains(e.getSource())) {
+			System.out.println("Seleccionado Contacto");
+			
+			int i=0;
+			while(!menuContactoBoton.get(i).equals(e.getSource())) {
+				i++;
+			}
+			System.out.println("Seleccionado Contacto de la posicion :" + i);
+			Contacto m = actual.getListaContacto().get(i);
+			System.out.println("El contacto actual a mandar mensaje: "+ m.getNombre());
+			
+			liberarVentana(frameContacto);
+			new VentanaConversacion(actual,m);
 		}
 	}
 	
 	public void actualizarPantalla() {
-		//panel_ListaContacto.removeAll();
+		System.out.println("Cargando Lista Contacto" );
+		System.out.println("El usuario actual " + actual.getUsuario() +" tiene "+  
+				actual.getListaContacto().size() + " contactos");
 		
+		panel_ListaContacto.removeAll();
 		menuContacto = new ArrayList<JMenuItem>();
-	
-		System.out.println("El contacto actual " + actual.getUsuario() +" tiene "+  
-		actual.getListaContacto().size() + " contactos");
-		
+		menuContactoBoton = new ArrayList<JButton>();
+
 		for(Contacto c: actual.getListaContacto()) {
+		
 			ContactoIndividual s = (ContactoIndividual) c;
-			String texto = s.getNombre() + s.getUsuario().getMsgSaludo();
-			Icon icono = getImagenIcon("img/profile.png", size, size);
-			Icon ic = getImagenIcon(s.getUsuario().getPathImg(), size, size);
-			Icon i = new ImageIcon("img/profile.png");
-			JMenuItem item = new JMenuItem("Hola",getImagenIcon("imgs/profile.png", 45, 45));
-			JMenuItem item2 = new JMenuItem("dasdas", i);
+			
+			Icon user = getImagenIcon(s.getUsuario().getPathImg(), size, size);
+			String nombre = s.getNombre();
+			String saludo = "";
+			if(s.getUsuario().getMsgSaludo()!=null) saludo = s.getUsuario().getMsgSaludo();
+			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
+			
+			crearContactoPanel(user, nombre, saludo, boton);
+			crearContactoPanel(user, nombre, saludo, boton);
+			crearContactoPanel(user, nombre, saludo, boton);
+			crearContactoPanel(user, nombre, saludo, boton);
+			crearContactoPanel(user, nombre, saludo, boton);
+			crearContactoPanel(user, nombre, saludo, boton);
+			crearContactoPanel(user, nombre, saludo, boton);
+			crearContactoPanel(user, nombre, saludo, boton);
+			/*Icon ic = getImagenIcon(s.getUsuario().getPathImg(), size, size);
+			//Icon i = new ImageIcon("img/profile.png");
+			JMenuItem item = new JMenuItem(texto, ic);
 			setSize(item, size+10, size+10);
-			setSize(item2, size+10, size+10);
+			
+			JSeparator separator = new JSeparator();
+			separator.setForeground(Color.DARK_GRAY);
+			//setSize(item2, size+10, size+10);
 			item.setAlignmentX(LEFT_ALIGNMENT);
 			item.setVerticalTextPosition(SwingConstants.CENTER);
 			item.addActionListener(this);
 			menuContacto.add(item);
 			panel_ListaContacto.add(item);
+			panel_ListaContacto.add(separator);*/
 			//panel_ListaContacto.add(separator);
-			panel_ListaContacto.add(item2);
+			//panel_ListaContacto.add(item2);
 		}
 	
-		JMenuItem item = new JMenuItem("Hola",getImagenIcon("imgs/profile.png", 45, 45));
-	
+		/*JMenuItem item = new JMenuItem("Hola",getImagenIcon("imgs/profile.png", 45, 45));
 		JMenuItem item2 = new JMenuItem("dasdas", getImagenIcon("imgs/profile.png", 45, 45));
 		JMenuItem item3= new JMenuItem("Hola",getImagenIcon("imgs/profile.png", 45, 45));
-		JMenuItem item4 = new JMenuItem("dasdas", getImagenIcon("imgs/profile.png", 45, 45));
+		JMenuItem item4 = new JMenuItem("dasdas", getImagenIcon("imgs/profile.png", 45, 45));*/
+
+	}
+	
+	public void crearContactoPanel(Icon icono, String nombre, String saludo, Icon iconoenvio) {
 		
-		//setSize(item, size, size);
-		//setSize(item2, size, size);
-		JSeparator s1 = new JSeparator();
-		s1.setBackground(Color.GREEN);
-		JSeparator s2 = new JSeparator();
-		s2.setBackground(Color.GREEN);
-		JSeparator s3 = new JSeparator();
-		s3.setBackground(Color.GREEN);
-		JSeparator s4 = new JSeparator();
-		s4.setBackground(Color.GREEN);
-		item.addActionListener(this);
-		menuContacto.add(item);
-		panel_ListaContacto.add(item);
-		//panel_ListaContacto.add(s1);
-		panel_ListaContacto.add(item2);
-		//panel_ListaContacto.add(s2);
-		panel_ListaContacto.add(item3);
-		//panel_ListaContacto.add(s3);
-		panel_ListaContacto.add(item4);
-		//panel_ListaContacto.add(s4);
+		JPanel panel = new JPanel();
+		panel_ListaContacto.add(panel);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{25, 25, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+		
+		JLabel iconoUser = new JLabel(icono);
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.fill = GridBagConstraints.VERTICAL;
+		gbc_lblNewLabel.gridwidth = 2;
+		gbc_lblNewLabel.gridheight = 2;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 0;
+		panel.add(iconoUser, gbc_lblNewLabel);
+		
+		JLabel nombreUser = new JLabel(nombre);
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel_1.gridwidth = 5;
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_1.gridx = 3;
+		gbc_lblNewLabel_1.gridy = 0;
+		panel.add(nombreUser, gbc_lblNewLabel_1);
+		
+		JLabel mSaludo = new JLabel(saludo);
+		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+		gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel_2.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel_2.gridwidth = 5;
+		gbc_lblNewLabel_2.gridx = 3;
+		gbc_lblNewLabel_2.gridy = 1;
+		panel.add(mSaludo, gbc_lblNewLabel_2);
+		
+		JButton btnMensaje = new JButton(iconoenvio);
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton.gridheight = 2;
+		gbc_btnNewButton.gridx = 9;
+		gbc_btnNewButton.gridy = 0;
+		panel.add(btnMensaje, gbc_btnNewButton);
+		
+		btnMensaje.addActionListener(this);
+		menuContactoBoton.add(btnMensaje);
+		
+		JSeparator separator = new JSeparator();
+		separator.setForeground(Color.DARK_GRAY);
+		panel_ListaContacto.add(separator);
 	}
 	
 	public static void main(String[] args) {

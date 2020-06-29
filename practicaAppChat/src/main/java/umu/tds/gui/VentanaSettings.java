@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Usuario;
 
 import javax.swing.JButton;
@@ -28,11 +29,19 @@ public class VentanaSettings extends Ventana{
 	private static final long serialVersionUID = 1L;
 	
 	private JFrame fSet;
+	private ControladorAppChat unica = ControladorAppChat.getUnicaInstancia();
 	private Usuario actual;
 
-	public VentanaSettings() {
+	public VentanaSettings(Usuario u) {
+	
+		System.out.println("Creando Ventana Setting");
+		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
+		actual = u;
+		unica.setUsuarioActual(actual);
+		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
+		
 		crearPantalla();
-		fSet.setVisible(true);
+		mostrarVentana(fSet);
 	}
 
 	@Override

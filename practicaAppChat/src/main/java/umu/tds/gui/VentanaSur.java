@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Usuario;
 
 
@@ -28,13 +29,19 @@ public class VentanaSur extends Ventana implements ActionListener {
 	private JButton btnEstado, btnFoto, btnContacto, btnChat, btnSetting;
 	
 	private int size = 45;
+	private ControladorAppChat unica = ControladorAppChat.getUnicaInstancia();
 	private Usuario actual;
+	
 	/**
 	 * Create the panel.
 	 */
 	public VentanaSur(JFrame frame, Usuario u) {
 		
+		System.out.println("Creando Ventana Sur");
+		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
+		unica.setUsuarioActual(actual);
+		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
 		fActual = frame;
 		
@@ -107,13 +114,13 @@ public class VentanaSur extends Ventana implements ActionListener {
 		if(e.getSource() == btnChat) {
 			System.out.println("Pulsado Chat Sur");
 			liberarVentana(fActual);
-			new VentanaConversacion();
+			new VentanaChat(actual);
 		}
 		
 		if(e.getSource() == btnEstado) {
 			System.out.println("Pulsado Estado Sur");
 			liberarVentana(fActual);
-			new VentanaEstado();
+			new VentanaEstado(actual);
 		}
 		
 		if(e.getSource() == btnFoto) {
@@ -131,7 +138,7 @@ public class VentanaSur extends Ventana implements ActionListener {
 		if(e.getSource() == btnSetting) {
 			System.out.println("Pulsado Setting Sur");
 			liberarVentana(fActual);
-			VentanaSettings s = new VentanaSettings();
+			VentanaSettings s = new VentanaSettings(actual);
 		}
 	}
 
