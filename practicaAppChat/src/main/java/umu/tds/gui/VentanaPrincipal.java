@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import umu.tds.modelo.Usuario;
 
-public class VentanaPrincipal extends JFrame {
+public class VentanaPrincipal{
 
 	/**
 	 * 
@@ -20,7 +20,7 @@ public class VentanaPrincipal extends JFrame {
 
 	public VentanaPrincipal() {
 		/* crear pantallas */
-		vLogin = new VentanaLogin(this);
+		vLogin = new VentanaLogin();
 	}
 
 	public static void main(String[] args) {
@@ -31,7 +31,8 @@ public class VentanaPrincipal extends JFrame {
 		System.out.println("Aqui llego mostrar pantalla " + valor);
 
 		if (valor == VENTANA_LOGIN) {
-			vLogin = new VentanaLogin(this);
+			//vLogin = new VentanaLogin(this);
+			vLogin = new VentanaLogin();
 		}
 
 		if (valor == VENTANA_REGISTRO) {

@@ -45,13 +45,14 @@ public class VentanaLogin extends Ventana {
 	}
 
 	public VentanaLogin() {
+		System.out.println("Pantalla login");
 		crearPantalla();
 		mostrarVentana(frmLoginAppChat);
 	}
 	
 	@Override
 	protected void crearPantalla() {
-		setSize(ancho, alto );
+		//setSize(ancho, alto );
 		
 		frmLoginAppChat = new JFrame();
 		frmLoginAppChat.setTitle("Login AppChat");
@@ -162,13 +163,14 @@ public class VentanaLogin extends Ventana {
 
 		if(e.getSource() == btnRegistro) {
 			liberarVentana(frmLoginAppChat);
-			ventana.mostrarVentana(VentanaPrincipal.VENTANA_REGISTRO);
+			new VentanaRegistro();
+			//ventana.mostrarVentana(VentanaPrincipal.VENTANA_REGISTRO);
 		}
 
 		if(e.getSource() == btnSalir) {
 			liberarVentana(frmLoginAppChat);
+			System.out.println("Cerrando AppChat");
 			System.exit(0);
 		}
-	}
-	
+	}	
 }
