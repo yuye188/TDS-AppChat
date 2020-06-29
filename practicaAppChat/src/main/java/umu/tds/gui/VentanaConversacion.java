@@ -58,10 +58,12 @@ public class VentanaConversacion extends Ventana {
 
 	private JPanel panel_Chat;
 
-	public VentanaConversacion() {
+	private JScrollPane panel_Centro;
+
+	/*public VentanaConversacion() {
 		crearPantalla();
 		mostrarVentana(contentPane);
-	}
+	}*/
 
 	public VentanaConversacion(Usuario u, Contacto m) {
 
@@ -74,14 +76,13 @@ public class VentanaConversacion extends Ventana {
 		System.out.println("El contacto actual a enviar mensaje: " + cActual.getUsuario().getNombre());
 		System.out.println("Tamaño de lista mensaje: "+cActual.getMensajes().size());
 		crearPantalla();
-		//actualizarPantalla();
-		panel_Chat.repaint();
-		panel_Chat.revalidate();
+		actualizarPantalla();
 		mostrarVentana(contentPane);
 	}
 
 	@Override
 	protected void crearPantalla() {
+		
 		// TODO Auto-generated method stub
 		contentPane = new JFrame();
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,14 +115,14 @@ public class VentanaConversacion extends Ventana {
 
 		popupMenu.add(eliminarContacto);
 
-		JScrollPane panel_Centro = new JScrollPane();
+		panel_Centro = new JScrollPane();
 		panel_Centro.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		contentPane.getContentPane().add(panel_Centro, BorderLayout.CENTER);
 
 		panel_Chat = new JPanel();
 		panel_Centro.setViewportView(panel_Chat);
-		panel_Chat.setLayout(new BoxLayout(panel_Chat, BoxLayout.PAGE_AXIS));
-
+		panel_Chat.setLayout(new GridLayout(0, 1, 0, 0));
+				
 		JPanel panel_Sur = new JPanel();
 		contentPane.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
 		panel_Sur.setLayout(new BorderLayout(0, 0));
@@ -150,8 +151,6 @@ public class VentanaConversacion extends Ventana {
 		btnMore.addActionListener(this);
 		btnEmoji.addActionListener(this);
 		btnEnviar.addActionListener(this);
-		
-		actualizarPantalla();
 	}
 
 	@Override
@@ -210,8 +209,9 @@ public class VentanaConversacion extends Ventana {
 
 	public void actualizarPantalla() {
 		panel_Chat.removeAll();
+		System.out.println("Repintando Pantalla");
 		System.out.println("Contacto actual a mostrar mensaje: " + cActual.getNombre());
-
+		
 		int sentOrecive;
 		Color colorMensaje;
 		String nombre = "";
@@ -235,17 +235,22 @@ public class VentanaConversacion extends Ventana {
 				}
 				// }
 			}
-
+			BubbleText b = null;
 			if (m.getEmoticon() != -1) {
+				//b = new BubbleText(panel_Chat, m.getEmoticon(), colorMensaje, nombre, sentOrecive, 12);
 				panel_Chat.add(new BubbleText(panel_Chat, m.getEmoticon(), colorMensaje, nombre, sentOrecive, 12));
 			} else {
+				//b = new BubbleText(panel_Chat, m.getTexto(), colorMensaje, nombre, sentOrecive);
 				panel_Chat.add(new BubbleText(panel_Chat, m.getTexto(), colorMensaje, nombre, sentOrecive));
 			}
 		}
 		//ACTUALIZAR Y REVALIDAR PANEL POR CAMBIOS
-		System.out.println("Repintando Pantalla");
-		panel_Chat.revalidate();
+		/*panel_Chat.revalidate();
 		panel_Chat.repaint();
+		panel_Centro.revalidate();
+		panel_Centro.repaint();
+		contentPane.revalidate();
+		contentPane.repaint();*/
 	}
 
 	private void cargarEmoji() {
@@ -259,6 +264,6 @@ public class VentanaConversacion extends Ventana {
 	}
 
 	public static void main(String[] args) {
-		VentanaConversacion v = new VentanaConversacion();
+		//VentanaConversacion v = new VentanaConversacion();
 	}
 }
