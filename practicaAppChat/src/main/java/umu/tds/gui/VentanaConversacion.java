@@ -77,6 +77,7 @@ public class VentanaConversacion extends Ventana {
 		System.out.println("Tamaño de lista mensaje: "+cActual.getMensajes().size());
 		crearPantalla();
 		actualizarPantalla();
+		//contentPane.setResizable(false);
 		mostrarVentana(contentPane);
 	}
 
@@ -215,7 +216,7 @@ public class VentanaConversacion extends Ventana {
 		int sentOrecive;
 		Color colorMensaje;
 		String nombre = "";
-
+		String t = "";
 		for (Mensaje m : cActual.getMensajes()) {
 			if (m.getTlfEmisor().equals(actual.getMovil())) {
 				sentOrecive = BubbleText.SENT;
@@ -242,15 +243,20 @@ public class VentanaConversacion extends Ventana {
 			} else {
 				//b = new BubbleText(panel_Chat, m.getTexto(), colorMensaje, nombre, sentOrecive);
 				panel_Chat.add(new BubbleText(panel_Chat, m.getTexto(), colorMensaje, nombre, sentOrecive));
+				t = m.getTexto();
 			}
+			
 		}
 		//ACTUALIZAR Y REVALIDAR PANEL POR CAMBIOS
-		/*panel_Chat.revalidate();
+		
+		/*panel_Chat.add(new BubbleText(panel_Chat, t, Color.CYAN, "envio", BubbleText.SENT));
+		panel_Chat.add(new BubbleText(panel_Chat, t, Color.CYAN, "revibo", BubbleText.SENT));
+	
+		panel_Chat.add(new BubbleText(panel_Chat, t, Color.CYAN, "envio", BubbleText.RECEIVED));
+		panel_Chat.add(new BubbleText(panel_Chat, "t", Color.CYAN, "revibo", BubbleText.RECEIVED));*/
+	
+		panel_Chat.revalidate();
 		panel_Chat.repaint();
-		panel_Centro.revalidate();
-		panel_Centro.repaint();
-		contentPane.revalidate();
-		contentPane.repaint();*/
 	}
 
 	private void cargarEmoji() {

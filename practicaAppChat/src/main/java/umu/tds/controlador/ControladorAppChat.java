@@ -61,7 +61,10 @@ public class ControladorAppChat {
 	
 	public void setUsuarioActual(Usuario u) {
 			usuarioActual = u;
+			if(usuarioActual!=null)
 			System.out.println("El usuario actual para controlador es: "+ usuarioActual.getNombre());
+			else 
+			System.out.println("Has salido de sesion AppChat");
 	}
 
 	public Contacto getContactoActual() {
