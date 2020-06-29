@@ -12,5 +12,10 @@ public class AppChatFactoriaDAO extends FactoriaDAO{
 		return AdaptadorContactoIndividualDAO.getUnicaInstancia();
 	}
 
+	@Override
+	public IContactoDAO getGrupoDAO() {
+		return AdaptadorGrupoDAO.getUnicaInstancia();
+	}
+
 	
 }
