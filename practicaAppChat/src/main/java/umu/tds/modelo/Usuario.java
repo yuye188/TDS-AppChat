@@ -1,11 +1,13 @@
 package umu.tds.modelo;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
+import umu.tds.dao.AdaptadorEstadoDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.modelo.Mensaje.MsgBuilder;
 import umu.tds.persistencia.CatalogoUsuario;
@@ -50,14 +52,40 @@ public class Usuario {
 	}
 	
 
-	public ContactoIndividual addContactoIndividual(String nombre, String movil, Usuario usuario) {
-		boolean existe = this.listaContacto.stream()
-							 .map(ContactoIndividual.class::cast)
-							 .anyMatch(c -> c.getNombre().equals(nombre) || c.getMovil().equals(movil));
-		if (existe)	return null;
+	// se añadirá el contacto si no hay ninguno que tiene el mismo num.tlf
+	// si coincide con un num.tlf y el nombre es diferente, se actualizará el nombre
+	public boolean addContactoIndividual(String nombre, String movil, Usuario usuario) {
+		for(Contacto contacto :this.listaContacto) {
+			ContactoIndividual individual = (ContactoIndividual) contacto;
+			if (individual.getMovil().equals(movil)) {
+				if (!individual.getNombre().equals(nombre)) {
+					individual.setNombre(nombre);
+					AdaptadorContactoIndividualDAO.getUnicaInstancia().modificarContacto(contacto);
+					AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(this);
+					return true;
+				}
+				return false;
+			}
+		}
 		ContactoIndividual contacto = new ContactoIndividual(nombre, movil, usuario);
 		this.listaContacto.add(contacto);
-		return contacto;
+		
+		AdaptadorContactoIndividualDAO.getUnicaInstancia().registrarContacto(contacto);
+		AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(this);
+		return true;
+	}
+	
+	public boolean deleteContactoIndividual(String nombre, String movil) {
+		for (Contacto contacto: this.getListaContacto()) {
+			ContactoIndividual individual = (ContactoIndividual) contacto;
+			if (individual.getNombre().equals(nombre) && individual.getMovil().equals(movil)) {
+				this.listaContacto.remove(contacto);
+				AdaptadorContactoIndividualDAO.getUnicaInstancia().borrarContacto(contacto);
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	
@@ -109,11 +137,22 @@ public class Usuario {
 		this.listaContacto.add(contactoIndividual);
 		
 		AdaptadorContactoIndividualDAO.getUnicaInstancia().registrarContacto(contactoIndividual);
-		AdaptadorUsuarioDAO.getUnicaInstancia().registrarUsuario(this);
+		AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(this);
 		
 		contactoIndividual.addNuevoMensaje(mensaje);
 	}
 	
+	// comprueba si pathImg es un fichero y si lo es, crea el nuevo estado elimiando el anterior
+	public Estado crearEstado(String frase, String pathImg) {
+		
+		File f = new File(pathImg);
+		if (!f.exists() || !f.isFile())
+			return null;
+		
+		AdaptadorEstadoDAO.getUnicaInstancia().borrarEstado(estado);
+		estado = new Estado(frase, pathImg);
+		return estado;
+	}
 	
 
 	public int getCodigo() {

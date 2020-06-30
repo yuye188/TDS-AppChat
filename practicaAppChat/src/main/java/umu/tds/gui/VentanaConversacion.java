@@ -12,6 +12,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import tds.BubbleText;
+import umu.tds.controlador.ControladorAppChat;
+import umu.tds.dao.AdaptadorContactoIndividualDAO;
+import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Mensaje;
@@ -24,7 +27,8 @@ import javax.swing.ScrollPaneConstants;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Timer;
+import java.util.TimerTask;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 
@@ -59,6 +63,8 @@ public class VentanaConversacion extends Ventana {
 	private JPanel panel_Chat;
 
 	private JScrollPane panel_Centro;
+	
+	private Timer timer = new Timer();
 
 	/*public VentanaConversacion() {
 		crearPantalla();
@@ -66,7 +72,7 @@ public class VentanaConversacion extends Ventana {
 	}*/
 
 	public VentanaConversacion(Usuario u, Contacto m) {
-
+		
 		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
@@ -79,6 +85,19 @@ public class VentanaConversacion extends Ventana {
 		actualizarPantalla();
 		//contentPane.setResizable(false);
 		mostrarVentana(contentPane);
+		
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				
+				int numMsg = cActual.getMensajes().size();
+				//System.out.println(numMsg);
+				cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
+				if (numMsg != cActual.getMensajes().size())
+					actualizarPantalla();
+			}
+		}, 0, 1000);
 	}
 
 	@Override
@@ -88,6 +107,7 @@ public class VentanaConversacion extends Ventana {
 		contentPane = new JFrame();
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setSize(355, 565);
+		contentPane.setResizable(false);
 		contentPane.setTitle("Conversacion");
 		contentPane.setLocationRelativeTo(null);
 		contentPane.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -152,15 +172,29 @@ public class VentanaConversacion extends Ventana {
 		btnMore.addActionListener(this);
 		btnEmoji.addActionListener(this);
 		btnEnviar.addActionListener(this);
+		eliminarContacto.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
+		if (e.getSource() == eliminarContacto) {
+			timer.cancel();
+			timer.purge();
+			if (unica.deleteContactoIndividual(cActual.getNombre(), cActual.getMovil())) {
+				JOptionPane.showMessageDialog(contentPane, "Se ha elimiando el contacto "+cActual.getNombre(), "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+				liberarVentana(contentPane);
+				new VentanaChat(actual);
+			} else 
+				JOptionPane.showMessageDialog(contentPane, "No se ha podido eliminar el contacto "+cActual.getNombre(), "Mensaje", JOptionPane.ERROR_MESSAGE);
+		} 
+		
 		if (e.getSource() == btnVolver) {
 			System.out.println("Pulsado Volver");
 			liberarVentana(contentPane);
+			timer.cancel();
+			timer.purge();
 			new VentanaChat(actual);
 		}
 
@@ -268,8 +302,9 @@ public class VentanaConversacion extends Ventana {
 			emojiSeleccionado.add(jmi);
 		}
 	}
-
+/*
 	public static void main(String[] args) {
-		//VentanaConversacion v = new VentanaConversacion();
+		VentanaConversacion v = new VentanaConversacion();
 	}
+	*/
 }

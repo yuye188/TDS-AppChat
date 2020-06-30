@@ -69,6 +69,9 @@ public class AdaptadorContactoIndividualDAO implements IContactoDAO{
 
 	@Override
 	public void borrarContacto(Contacto contacto) {
+		for (Mensaje m:contacto.getMensajes())
+			AdaptadorMensajeDAO.getUnicaInstancia().borrarMensaje(m);
+		
 		Entidad eContactoIndividual = servPersistencia.recuperarEntidad(contacto.getCodigo());
 		servPersistencia.borrarEntidad(eContactoIndividual);
 	}
@@ -91,6 +94,20 @@ public class AdaptadorContactoIndividualDAO implements IContactoDAO{
 		servPersistencia.eliminarPropiedadEntidad(eContactoIndividual, "usuario");
 		servPersistencia.anadirPropiedadEntidad(eContactoIndividual, "usuario", String.valueOf(contactoIndividual.getUsuario().getCodigo()));
 	}
+	
+	public Contacto actualizarMensajes(Contacto c) {
+		Entidad eContactoIndividual = servPersistencia.recuperarEntidad(c.getCodigo());
+		
+		// añadir ContactoIndividual al pool
+		PoolDAO.getUnicaInstancia().addObjeto(c.getCodigo(), c);
+		
+		String mensajes = servPersistencia.recuperarPropiedadEntidad(eContactoIndividual, "mensajes");
+		c.setMensajes(this.obtenerMensajesDesdeCodigos(mensajes));
+		
+		return c;
+	}
+	
+	
 
 	@Override
 	public Contacto recuperarContacto(int codigo) {

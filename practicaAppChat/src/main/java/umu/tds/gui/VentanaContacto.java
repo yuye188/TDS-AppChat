@@ -215,6 +215,7 @@ public class VentanaContacto extends Ventana{
 			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
 			
 			crearContactoPanel(user, nombre, saludo, boton);
+			/*
 			crearContactoPanel(user, nombre, saludo, boton);
 			crearContactoPanel(user, nombre, saludo, boton);
 			crearContactoPanel(user, nombre, saludo, boton);
@@ -222,7 +223,7 @@ public class VentanaContacto extends Ventana{
 			crearContactoPanel(user, nombre, saludo, boton);
 			crearContactoPanel(user, nombre, saludo, boton);
 			crearContactoPanel(user, nombre, saludo, boton);
-			/*Icon ic = getImagenIcon(s.getUsuario().getPathImg(), size, size);
+			Icon ic = getImagenIcon(s.getUsuario().getPathImg(), size, size);
 			//Icon i = new ImageIcon("img/profile.png");
 			JMenuItem item = new JMenuItem(texto, ic);
 			setSize(item, size+10, size+10);

@@ -4,12 +4,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import umu.tds.dao.AdaptadorEstadoDAO;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dao.IContactoDAO;
+import umu.tds.dao.IEstadoDAO;
 import umu.tds.dao.IUsuarioDAO;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
+import umu.tds.modelo.Estado;
 import umu.tds.modelo.Grupo;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.CatalogoUsuario;
@@ -21,6 +24,7 @@ public class ControladorAppChat {
 	private IUsuarioDAO adaptadorUsuario;
 	private IContactoDAO adaptadorContactoIndividual;
 	private IContactoDAO adaptadorGrupo;
+	private IEstadoDAO adaptadorEstado;
 	private CatalogoUsuario catalogoUsuarios;
 	private Usuario usuarioActual = null;
 	private Contacto contactoActual = null;
@@ -53,6 +57,7 @@ public class ControladorAppChat {
 		adaptadorUsuario = factoria.getUsuarioDAO();
 		adaptadorContactoIndividual = factoria.getContactoIndividualDAO();
 		adaptadorGrupo = factoria.getGrupoDAO();
+		adaptadorEstado = factoria.getEstadoDAO();
 	}
 	
 	public Usuario getUsuarioActual() {
@@ -115,14 +120,17 @@ public class ControladorAppChat {
 		if (usuario == null || usuarioActual.getCodigo() == usuario.getCodigo())
 			return false;
 
-		ContactoIndividual contacto = usuarioActual.addContactoIndividual(nombre, movil, usuario);
-		if (contacto == null)
-			return false;
-
-		adaptadorContactoIndividual.registrarContacto(contacto);
-		adaptadorUsuario.modificarUsuario(usuarioActual);
-
-		return true;
+		return usuarioActual.addContactoIndividual(nombre, movil, usuario);
+	}
+	
+	// eliminar un contacto individual
+	public boolean deleteContactoIndividual(String nombre, String movil) {
+		if( usuarioActual.deleteContactoIndividual(nombre, movil)) {
+			adaptadorUsuario.modificarUsuario(usuarioActual);
+			return true;
+		}
+		
+		return false;
 	}
 
 	public List<String> getNombreContactos(List<Contacto> contactos) {
@@ -153,5 +161,17 @@ public class ControladorAppChat {
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		return grupo;
 	}
+	
+	
+	public boolean crearEstado(String frase, String pathImg) {
+		Estado nuevoEstado = usuarioActual.crearEstado(frase, pathImg);
+		if (nuevoEstado == null)
+			return false;
+		
+		adaptadorEstado.registrarEstado(nuevoEstado);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+		return true;
+	}
+	
 	
 }

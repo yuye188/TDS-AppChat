@@ -14,7 +14,7 @@ import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import umu.tds.modelo.Contacto;
-
+import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Usuario;
 
 public class AdaptadorUsuarioDAO implements IUsuarioDAO{
@@ -132,6 +132,8 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, "listaGrupo");
 		servPersistencia.anadirPropiedadEntidad(eUsuario, "listaGrupo", this.obtenerCodigoContactos(usuario.getListaGrupo()));
 	}
+	
+	
 
 	public Usuario recuperarUsuario(int codigo) {
 
@@ -190,7 +192,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		u.setEstado(AdaptadorEstadoDAO.getUnicaInstancia().recuperarEstado(codigoEstado));
 		
 		String contactosIndividuales = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaContacto");
-		u.setListaContacto(this.obtenerContactosIndividualesDesdeCodigos(contactosIndividuales));
+		u.setListaContacto(this.obtenerContactosIndividualesDesdeCodigos(contactosIndividuales,false));
 		
 		String listaGrupo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaGrupo");
 		u.setListaGrupo(this.obtenerGruposDesdeCodigos(listaGrupo));
@@ -230,17 +232,35 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		return listaContactos;
 	}
 	
-	private List<Contacto> obtenerContactosIndividualesDesdeCodigos(String contactos) {
+	private List<Contacto> obtenerContactosIndividualesDesdeCodigos(String contactos, boolean actualizar) {
 
 		List<Contacto> listaContactos = new LinkedList<Contacto>();
 		StringTokenizer strTok = new StringTokenizer(contactos, " ");
 		AdaptadorContactoIndividualDAO adaptadorCI = AdaptadorContactoIndividualDAO.getUnicaInstancia();
 		
-		while (strTok.hasMoreTokens()) {
-			listaContactos.add(adaptadorCI.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+		if (actualizar) {
+			while (strTok.hasMoreTokens()) {
+				Contacto c = adaptadorCI.recuperarContacto(Integer.valueOf((String) strTok.nextElement()));
+				AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(c);
+				listaContactos.add(c);
+			}
 		}
-		
+		else {
+			while (strTok.hasMoreTokens()) {
+				listaContactos.add(adaptadorCI.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+			}
+		}
 		return listaContactos;
 	}
 	
+	
+	// solo actualizará los mensajes de cada contactoIndividual
+	public Usuario actualizarMensajes(Usuario u) {
+		Entidad eUsuario = servPersistencia.recuperarEntidad(u.getCodigo());
+		
+		String contactosIndividuales = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaContacto");
+		u.setListaContacto(this.obtenerContactosIndividualesDesdeCodigos(contactosIndividuales,true));
+		
+		return u;
+	}
 }
