@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import umu.tds.controlador.ControladorAppChat;
@@ -222,30 +223,8 @@ public class VentanaContacto extends Ventana{
 			crearContactoPanel(user, nombre, saludo, boton);
 			crearContactoPanel(user, nombre, saludo, boton);
 			crearContactoPanel(user, nombre, saludo, boton);
-			crearContactoPanel(user, nombre, saludo, boton);
-			Icon ic = getImagenIcon(s.getUsuario().getPathImg(), size, size);
-			//Icon i = new ImageIcon("img/profile.png");
-			JMenuItem item = new JMenuItem(texto, ic);
-			setSize(item, size+10, size+10);
-			
-			JSeparator separator = new JSeparator();
-			separator.setForeground(Color.DARK_GRAY);
-			//setSize(item2, size+10, size+10);
-			item.setAlignmentX(LEFT_ALIGNMENT);
-			item.setVerticalTextPosition(SwingConstants.CENTER);
-			item.addActionListener(this);
-			menuContacto.add(item);
-			panel_ListaContacto.add(item);
-			panel_ListaContacto.add(separator);*/
-			//panel_ListaContacto.add(separator);
-			//panel_ListaContacto.add(item2);
+			crearContactoPanel(user, nombre, saludo, boton);*/
 		}
-	
-		/*JMenuItem item = new JMenuItem("Hola",getImagenIcon("imgs/profile.png", 45, 45));
-		JMenuItem item2 = new JMenuItem("dasdas", getImagenIcon("imgs/profile.png", 45, 45));
-		JMenuItem item3= new JMenuItem("Hola",getImagenIcon("imgs/profile.png", 45, 45));
-		JMenuItem item4 = new JMenuItem("dasdas", getImagenIcon("imgs/profile.png", 45, 45));*/
-
 	}
 	
 	public void crearContactoPanel(Icon icono, String nombre, String saludo, Icon iconoenvio) {
@@ -278,7 +257,10 @@ public class VentanaContacto extends Ventana{
 		gbc_lblNewLabel_1.gridy = 0;
 		panel.add(nombreUser, gbc_lblNewLabel_1);
 		
-		JLabel mSaludo = new JLabel(saludo);
+		JTextArea mSaludo = new JTextArea(saludo);
+		mSaludo.setLineWrap(true);
+		mSaludo.setEditable(false);
+		mSaludo.setBackground(nombreUser.getBackground());
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNewLabel_2.fill = GridBagConstraints.BOTH;

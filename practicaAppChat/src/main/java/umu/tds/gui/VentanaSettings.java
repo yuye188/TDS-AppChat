@@ -16,6 +16,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import javax.swing.JSeparator;
 import java.awt.Font;
@@ -92,7 +94,8 @@ public class VentanaSettings extends Ventana{
 		gbl_panel_Central.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_Central.setLayout(gbl_panel_Central);
 		
-		btnNombreUsuario = new JButton(actual.getNombre(),getImagenIcon("imgs/profile.png", size, size));
+		btnNombreUsuario = new JButton(actual.getNombre(), getImagenIcon(actual.getPathImg(), size, size));
+		btnNombreUsuario.setBackground(Color.CYAN);
 		GridBagConstraints gbc_btnNombreUsuario = new GridBagConstraints();
 		gbc_btnNombreUsuario.fill = GridBagConstraints.BOTH;
 		gbc_btnNombreUsuario.insets = new Insets(0, 0, 5, 5);
@@ -212,10 +215,14 @@ public class VentanaSettings extends Ventana{
 		
 		if(e.getSource() == btnCambiarSaludo) {
 			System.out.println("Pulsado cambiar saludo");
+			String saludo = JOptionPane.showInputDialog(fSet, "Modifica tu mensaje de saludo", "Moficacion" ,JOptionPane.QUESTION_MESSAGE);
+			System.out.println("El nuevo saludo para Usario: " +actual.getNombre() + "es: "+ saludo);
 		}
+		
 		if(e.getSource() == btnEsta) {
 			System.out.println("Pulsado estadistica ");
 		}
+		
 		if(e.getSource() == btnPremium) {
 			System.out.println("Pulsado premium");
 		}
