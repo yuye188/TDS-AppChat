@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JButton;
+
 import umu.tds.dao.AdaptadorEstadoDAO;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
@@ -14,6 +16,7 @@ import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Estado;
 import umu.tds.modelo.Grupo;
+import umu.tds.modelo.Mensaje;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.CatalogoUsuario;
 
@@ -171,6 +174,22 @@ public class ControladorAppChat {
 		adaptadorEstado.registrarEstado(nuevoEstado);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		return true;
+	}
+	
+	//OBTENER IMAGEN DE CONTACTO
+	public String getImageContacto(Contacto c) {
+		if (c instanceof ContactoIndividual) {
+			return ((ContactoIndividual) c).getUsuario().getPathImg();
+		} else {
+			return ((Grupo) c).getPathImg();
+		}
+	}
+	
+	//RETORNAR EL ULTIMO MENSAJE DE CONTACTO 
+	public Mensaje getUltimoMensaje(Contacto c) {
+		// TODO Auto-generated method stub
+		if(c.getLastMensaje() == null) return null;
+		return c.getLastMensaje();
 	}
 	
 	

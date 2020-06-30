@@ -107,7 +107,7 @@ public class VentanaConversacion extends Ventana {
 		contentPane = new JFrame();
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setSize(355, 565);
-		contentPane.setResizable(false);
+		//contentPane.setResizable(false);
 		contentPane.setTitle("Conversacion");
 		contentPane.setLocationRelativeTo(null);
 		contentPane.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -137,12 +137,12 @@ public class VentanaConversacion extends Ventana {
 		popupMenu.add(eliminarContacto);
 
 		panel_Centro = new JScrollPane();
-		panel_Centro.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		panel_Centro.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		contentPane.getContentPane().add(panel_Centro, BorderLayout.CENTER);
 
 		panel_Chat = new JPanel();
 		panel_Centro.setViewportView(panel_Chat);
-		panel_Chat.setLayout(new GridLayout(0, 1, 0, 0));
+		panel_Chat.setLayout(new BoxLayout(panel_Chat, BoxLayout.Y_AXIS));
 				
 		JPanel panel_Sur = new JPanel();
 		contentPane.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
@@ -244,7 +244,7 @@ public class VentanaConversacion extends Ventana {
 
 	public void actualizarPantalla() {
 		panel_Chat.removeAll();
-		System.out.println("Repintando Pantalla");
+		System.out.println("Repintando Pantalla Conversacion");
 		System.out.println("Contacto actual a mostrar mensaje: " + cActual.getNombre());
 		
 		int sentOrecive;
@@ -278,17 +278,10 @@ public class VentanaConversacion extends Ventana {
 				//b = new BubbleText(panel_Chat, m.getTexto(), colorMensaje, nombre, sentOrecive);
 				panel_Chat.add(new BubbleText(panel_Chat, m.getTexto(), colorMensaje, nombre, sentOrecive));
 				t = m.getTexto();
-			}
-			
+			}	
 		}
 		//ACTUALIZAR Y REVALIDAR PANEL POR CAMBIOS
-		
-		/*panel_Chat.add(new BubbleText(panel_Chat, t, Color.CYAN, "envio", BubbleText.SENT));
-		panel_Chat.add(new BubbleText(panel_Chat, t, Color.CYAN, "revibo", BubbleText.SENT));
-	
-		panel_Chat.add(new BubbleText(panel_Chat, t, Color.CYAN, "envio", BubbleText.RECEIVED));
-		panel_Chat.add(new BubbleText(panel_Chat, "t", Color.CYAN, "revibo", BubbleText.RECEIVED));*/
-	
+
 		panel_Chat.revalidate();
 		panel_Chat.repaint();
 	}

@@ -165,7 +165,7 @@ public class VentanaContacto extends Ventana{
 			//liberarVentana(frameContacto);
 		}
 		
-		if(menuContacto.contains(e.getSource())) {
+		/*if(menuContacto.contains(e.getSource())) {
 			System.out.println("Seleccionado Contacto");
 			
 			int i=0;
@@ -178,7 +178,7 @@ public class VentanaContacto extends Ventana{
 			
 			liberarVentana(frameContacto);
 			new VentanaConversacion(actual,m);
-		}
+		}*/
 		
 		if(menuContactoBoton.contains(e.getSource())) {
 			System.out.println("Seleccionado Contacto");
@@ -197,12 +197,13 @@ public class VentanaContacto extends Ventana{
 	}
 	
 	public void actualizarPantalla() {
+		
 		System.out.println("Cargando Lista Contacto" );
 		System.out.println("El usuario actual " + actual.getUsuario() +" tiene "+  
 				actual.getListaContacto().size() + " contactos");
 		
 		panel_ListaContacto.removeAll();
-		menuContacto = new ArrayList<JMenuItem>();
+		//menuContacto = new ArrayList<JMenuItem>();
 		menuContactoBoton = new ArrayList<JButton>();
 
 		for(Contacto c: actual.getListaContacto()) {
@@ -215,15 +216,7 @@ public class VentanaContacto extends Ventana{
 			if(s.getUsuario().getMsgSaludo()!=null) saludo = s.getUsuario().getMsgSaludo();
 			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
 			
-			crearContactoPanel(user, nombre, saludo, boton);
-			/*
-			crearContactoPanel(user, nombre, saludo, boton);
-			crearContactoPanel(user, nombre, saludo, boton);
-			crearContactoPanel(user, nombre, saludo, boton);
-			crearContactoPanel(user, nombre, saludo, boton);
-			crearContactoPanel(user, nombre, saludo, boton);
-			crearContactoPanel(user, nombre, saludo, boton);
-			crearContactoPanel(user, nombre, saludo, boton);*/
+			crearContactoPanel(user, nombre, saludo, boton);		
 		}
 	}
 	

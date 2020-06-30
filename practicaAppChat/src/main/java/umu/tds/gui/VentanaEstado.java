@@ -177,7 +177,7 @@ public class VentanaEstado extends Ventana {
 			System.out.println("El usuario actual tiene: " +actual.getNombre() +" tiene contactos: " +c.size());
  			if(c.size() != 0) {
 				for(Contacto cont: actual.getListaContacto()) {
-					if(c instanceof ContactoIndividual) {
+					if(cont instanceof ContactoIndividual) {
 						ContactoIndividual con = ((ContactoIndividual) cont);
 						crearEstadoPanel(con);
 					}

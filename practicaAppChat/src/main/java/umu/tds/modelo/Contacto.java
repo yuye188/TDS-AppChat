@@ -37,6 +37,12 @@ public abstract class Contacto {
 		modificarContacto();
 	}
 	
+	//RETORNAR ULTIMO MENSAJE
+	public Mensaje getLastMensaje() {
+		// TODO Auto-generated method stub
+		if(this.mensajes.isEmpty()) return null;
+		return this.mensajes.get(mensajes.size()-1);
+	}
 	
 	public abstract void modificarContacto();
 	

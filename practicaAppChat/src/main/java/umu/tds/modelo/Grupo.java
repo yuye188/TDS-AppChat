@@ -11,7 +11,7 @@ public class Grupo extends Contacto {
 	private Usuario admin;
 	private String pathImg;
 
-	public static final String GroupProfile = "/imgs/groupProfile.png";
+	public static final String GroupProfile = "imgs/groupProfile.png";
 
 	public Grupo(String nombre, Usuario admin) {
 		super(nombre);

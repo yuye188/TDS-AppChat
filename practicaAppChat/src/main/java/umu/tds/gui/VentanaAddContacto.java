@@ -47,6 +47,9 @@ public class VentanaAddContacto extends Ventana {
 		frameAdd.setVisible(true);
 	}
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public VentanaAddContacto(Usuario u) {
 		// TODO Auto-generated constructor stub
 		System.out.println("Creando Ventana Add Contacto");
