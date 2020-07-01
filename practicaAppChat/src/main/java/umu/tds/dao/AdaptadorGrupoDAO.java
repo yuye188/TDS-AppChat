@@ -182,4 +182,17 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		}
 		return listaContactos;
 	}
+
+	
+	public Contacto actualizarMensajes(Contacto c) {
+		Entidad eGrupo = servPersistencia.recuperarEntidad(c.getCodigo());
+		
+		// añadir ContactoIndividual al pool
+		PoolDAO.getUnicaInstancia().addObjeto(c.getCodigo(), c);
+		
+		String mensajes = servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes");
+		c.setMensajes(this.obtenerMensajesDesdeCodigos(mensajes));
+		
+		return c;
+	}
 }

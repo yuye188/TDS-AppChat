@@ -169,8 +169,8 @@ public class ControladorAppChat {
 	}
 	
 	// tambien se puede usar como para salir del grupo
-	public boolean deleteMiembro(ContactoIndividual contacto, Grupo grupo) {
-		return grupo.deleteMiemrbo(usuarioActual, contacto.getUsuario());
+	public boolean deleteMiembro(Usuario usuario, Grupo grupo) {
+		return grupo.deleteMiemrbo(usuarioActual, usuario);
 	}
 	
 	

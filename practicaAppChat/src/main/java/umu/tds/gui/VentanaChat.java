@@ -223,11 +223,14 @@ public class VentanaChat extends Ventana {
 			Icon user = getImagenIcon(unica.getImageContacto(c), size, size);
 			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
 			String nombre = "";
+			/*
 			if(c instanceof Grupo) {
 				nombre = ((ContactoIndividual)c).getNombre();
 			}else {
 				nombre = c.getNombre();
-			}
+			}*/
+			nombre = c.getNombre();
+			
 			String fecha = "";
 			String texto = "";
 			JLabel text = new JLabel(texto);

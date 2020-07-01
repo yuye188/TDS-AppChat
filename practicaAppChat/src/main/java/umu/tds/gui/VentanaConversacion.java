@@ -15,11 +15,15 @@ import javax.swing.JTextArea;
 import tds.BubbleText;
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
+import umu.tds.dao.AdaptadorGrupoDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
+import umu.tds.dao.PoolDAO;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
+import umu.tds.modelo.Grupo;
 import umu.tds.modelo.Mensaje;
 import umu.tds.modelo.Usuario;
+import umu.tds.persistencia.CatalogoUsuario;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -60,7 +64,7 @@ public class VentanaConversacion extends Ventana {
 
 	private Usuario actual;
 	// private Contacto cActual;
-	private ContactoIndividual cActual;
+	private Contacto cActual;
 
 	private JScrollPane scrollPane;
 	private JTextArea mensaje;
@@ -82,9 +86,12 @@ public class VentanaConversacion extends Ventana {
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
 		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
-		cActual = (ContactoIndividual) m;
 		
-		System.out.println("El contacto actual a enviar mensaje: " + cActual.getUsuario().getNombre());
+		if (m.getClass() == ContactoIndividual.class)
+			cActual = (ContactoIndividual) m;
+		else cActual = (Grupo) m;
+		
+		//System.out.println("El contacto actual a enviar mensaje: " + cActual.getUsuario().getNombre());
 		System.out.println("Tamaño de lista mensaje: "+cActual.getMensajes().size());
 		crearPantalla();
 		actualizarPantalla();
@@ -99,7 +106,11 @@ public class VentanaConversacion extends Ventana {
 				
 				int numMsg = cActual.getMensajes().size();
 				//System.out.println(numMsg);
-				cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
+				if (cActual.getClass() == ContactoIndividual.class)
+					cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
+				else
+					cActual = (Grupo) AdaptadorGrupoDAO.getUnicaInstancia().actualizarMensajes(cActual);
+				
 				if (numMsg != cActual.getMensajes().size()) {
 					actualizarPantalla();
 
@@ -132,7 +143,13 @@ public class VentanaConversacion extends Ventana {
 
 		// btnInfoUser = new JButton("Nombre Usuario", getImagenIcon("imgs/profile.png",
 		// size, size));
-		btnInfoUser = new JButton(cActual.getNombre(), getImagenIcon(cActual.getUsuario().getPathImg(), size, size));
+		String pathImg = null;
+		if (cActual.getClass() == ContactoIndividual.class)
+			pathImg = ((ContactoIndividual)cActual).getUsuario().getPathImg();
+		else
+			pathImg = ((Grupo)cActual).getPathImg();
+		
+		btnInfoUser = new JButton(cActual.getNombre(), getImagenIcon(pathImg, size, size));
 		btnInfoUser.setHorizontalTextPosition(JButton.RIGHT);
 		panel_Norte.add(btnInfoUser, BorderLayout.CENTER);
 
@@ -192,7 +209,13 @@ public class VentanaConversacion extends Ventana {
 		if (e.getSource() == eliminarContacto) {
 			timer.cancel();
 			timer.purge();
-			if (unica.deleteContactoIndividual(cActual.getNombre(), cActual.getMovil())) {
+			boolean eliminar = false;
+			if (cActual.getClass() == ContactoIndividual.class) 
+				eliminar = unica.deleteContactoIndividual(cActual.getNombre(), ((ContactoIndividual) cActual).getMovil());
+			else
+				eliminar = unica.deleteMiembro(actual, (Grupo) cActual);
+			
+			if (eliminar) {
 				JOptionPane.showMessageDialog(contentPane, "Se ha elimiando el contacto "+cActual.getNombre(), "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 				liberarVentana(contentPane);
 				new VentanaChat(actual);
@@ -254,7 +277,7 @@ public class VentanaConversacion extends Ventana {
 
 	public void actualizarPantalla() {
 		
-		cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
+		//cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
 		panel_Chat.removeAll();
 		System.out.println("Repintando Pantalla Conversacion");
 		System.out.println("Contacto actual a mostrar mensaje: " + cActual.getNombre());
@@ -275,11 +298,14 @@ public class VentanaConversacion extends Ventana {
 				// if(cActual instanceof Grupo) {
 
 				// }else {
+				/*
 				if (cActual.getNombre() == null) {
 					nombre = cActual.getMovil();
 				} else {
 					nombre = cActual.getNombre();
-				}
+				}*/
+				//nombre = cActual.getNombre();
+				nombre = CatalogoUsuario.getUnicaInstancia().getUsuario(m.getTlfEmisor()).getNombre();
 				// }
 			}
 			BubbleText b = null;
