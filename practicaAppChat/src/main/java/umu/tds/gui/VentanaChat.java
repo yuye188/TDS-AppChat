@@ -23,6 +23,7 @@ import tds.BubbleText;
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
+import umu.tds.modelo.Grupo;
 import umu.tds.modelo.Usuario;
 import umu.tds.persistencia.CatalogoUsuario;
 
@@ -221,7 +222,12 @@ public class VentanaChat extends Ventana {
 
 			Icon user = getImagenIcon(unica.getImageContacto(c), size, size);
 			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
-			String nombre = c.getNombre();
+			String nombre = "";
+			if(c instanceof Grupo) {
+				nombre = ((ContactoIndividual)c).getNombre();
+			}else {
+				nombre = c.getNombre();
+			}
 			String fecha = "";
 			String texto = "";
 			JLabel text = new JLabel(texto);
