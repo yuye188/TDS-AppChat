@@ -156,16 +156,25 @@ public class ControladorAppChat {
 		Grupo grupo = new Grupo(nombreGrupo, usuarioActual);
 		adaptadorGrupo.registrarContacto(grupo);
 		
-		grupo.addMiembros(usuarioActual, usuarioActual);
+		grupo.addMiembro(usuarioActual, usuarioActual);
 		for (ContactoIndividual c : miembros) {
-			grupo.addMiembros(usuarioActual, c.getUsuario());
+			grupo.addMiembro(usuarioActual, c.getUsuario());
 		}
 		
-		adaptadorUsuario.modificarUsuario(usuarioActual);
 		return grupo;
 	}
 	
+	public boolean addMiembroAlGrupo(ContactoIndividual contacto, Grupo grupo) {
+		return grupo.addMiembro(usuarioActual, contacto.getUsuario());
+	}
 	
+	// tambien se puede usar como para salir del grupo
+	public boolean deleteMiembro(ContactoIndividual contacto, Grupo grupo) {
+		return grupo.deleteMiemrbo(usuarioActual, contacto.getUsuario());
+	}
+	
+	
+	// crea un nuevo estado eliminando el anterior
 	public boolean crearEstado(String frase, String pathImg) {
 		Estado nuevoEstado = usuarioActual.crearEstado(frase, pathImg);
 		if (nuevoEstado == null)
@@ -192,5 +201,10 @@ public class ControladorAppChat {
 		return c.getLastMensaje();
 	}
 	
+	
+	public void cambiarFotoPerfil(String pathImg) {
+		usuarioActual.setPathImg(pathImg);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
 	
 }

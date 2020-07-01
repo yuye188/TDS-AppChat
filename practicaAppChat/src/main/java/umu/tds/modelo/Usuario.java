@@ -8,6 +8,7 @@ import java.util.List;
 
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorEstadoDAO;
+import umu.tds.dao.AdaptadorGrupoDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.modelo.Mensaje.MsgBuilder;
 import umu.tds.persistencia.CatalogoUsuario;
@@ -75,6 +76,15 @@ public class Usuario {
 		return true;
 	}
 	
+	
+	public boolean deleteContactoGrupo(Contacto contacto) {
+		if (this.listaGrupo.remove(contacto)) {
+			AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(this);
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean deleteContactoIndividual(String nombre, String movil) {
 		for (Contacto contacto: this.getListaContacto()) {
 			ContactoIndividual individual = (ContactoIndividual) contacto;
@@ -117,7 +127,6 @@ public class Usuario {
 										 .build());
 	}
 	
-	
 	public void recibirMensaje(Usuario emisor, Mensaje mensaje) {
 		
 		ContactoIndividual contactoIndividual;
@@ -127,6 +136,7 @@ public class Usuario {
 			contactoIndividual = (ContactoIndividual) c;
 			if (contactoIndividual.getMovil().equals(emisor.getMovil())) {
 				contactoIndividual.addNuevoMensaje(mensaje);
+				AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(this);
 				return;
 			}
 		}
@@ -252,6 +262,7 @@ public class Usuario {
 	}
 
 	public void setMsgSaludo(String msgSaludo) {
+		this.msgSaludo = msgSaludo;
 	}
 
 	public void setEstado(Estado estado) {

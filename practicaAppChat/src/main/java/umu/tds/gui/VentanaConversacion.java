@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -31,6 +32,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
+import java.awt.FlowLayout;
+import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import net.miginfocom.swing.MigLayout;
 
 public class VentanaConversacion extends Ventana {
 
@@ -64,7 +69,7 @@ public class VentanaConversacion extends Ventana {
 
 	private JScrollPane panel_Centro;
 	
-	private Timer timer = new Timer();
+	private Timer timer;
 
 	/*public VentanaConversacion() {
 		crearPantalla();
@@ -86,6 +91,7 @@ public class VentanaConversacion extends Ventana {
 		//contentPane.setResizable(false);
 		mostrarVentana(contentPane);
 		
+		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			
 			@Override
@@ -94,8 +100,12 @@ public class VentanaConversacion extends Ventana {
 				int numMsg = cActual.getMensajes().size();
 				//System.out.println(numMsg);
 				cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
-				if (numMsg != cActual.getMensajes().size())
+				if (numMsg != cActual.getMensajes().size()) {
 					actualizarPantalla();
+
+					JScrollBar vertical = panel_Centro.getVerticalScrollBar();
+					vertical.setValue( vertical.getMaximum()-1);
+				}
 			}
 		}, 0, 1000);
 	}
@@ -110,7 +120,7 @@ public class VentanaConversacion extends Ventana {
 		//contentPane.setResizable(false);
 		contentPane.setTitle("Conversacion");
 		contentPane.setLocationRelativeTo(null);
-		contentPane.getContentPane().setLayout(new BorderLayout(0, 0));
+		contentPane.getContentPane().setLayout(new BorderLayout());
 
 		JPanel panel_Norte = new JPanel();
 		contentPane.getContentPane().add(panel_Norte, BorderLayout.NORTH);
@@ -141,8 +151,9 @@ public class VentanaConversacion extends Ventana {
 		contentPane.getContentPane().add(panel_Centro, BorderLayout.CENTER);
 
 		panel_Chat = new JPanel();
+		panel_Chat.setLayout(new GridLayout(0, 1, 0, 0));
 		panel_Centro.setViewportView(panel_Chat);
-		panel_Chat.setLayout(new BoxLayout(panel_Chat, BoxLayout.Y_AXIS));
+		
 				
 		JPanel panel_Sur = new JPanel();
 		contentPane.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
@@ -191,10 +202,10 @@ public class VentanaConversacion extends Ventana {
 		} 
 		
 		if (e.getSource() == btnVolver) {
-			System.out.println("Pulsado Volver");
-			liberarVentana(contentPane);
 			timer.cancel();
 			timer.purge();
+			System.out.println("Pulsado Volver");
+			liberarVentana(contentPane);
 			new VentanaChat(actual);
 		}
 
@@ -243,6 +254,8 @@ public class VentanaConversacion extends Ventana {
 	}
 
 	public void actualizarPantalla() {
+		
+		cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
 		panel_Chat.removeAll();
 		System.out.println("Repintando Pantalla Conversacion");
 		System.out.println("Contacto actual a mostrar mensaje: " + cActual.getNombre());
@@ -281,9 +294,9 @@ public class VentanaConversacion extends Ventana {
 			}	
 		}
 		//ACTUALIZAR Y REVALIDAR PANEL POR CAMBIOS
-
 		panel_Chat.revalidate();
 		panel_Chat.repaint();
+		
 	}
 
 	private void cargarEmoji() {

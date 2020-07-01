@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import umu.tds.dao.AdaptadorGrupoDAO;
+import umu.tds.dao.AdaptadorUsuarioDAO;
 
 public class Grupo extends Contacto {
 
@@ -20,12 +21,41 @@ public class Grupo extends Contacto {
 		this.miembros = new LinkedList<Usuario>();
 	}
 
-	public boolean addMiembros(Usuario admin, Usuario usuario) {
+	public boolean addMiembro(Usuario admin, Usuario usuario) {
 		if (admin.getCodigo() == this.admin.getCodigo()) {
 			this.miembros.add(usuario);
+			usuario.getListaGrupo().add(this);
+			modificarContacto();
+			AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(usuario);
 			return true;
 		}
 		
+		return false;
+	}
+	
+	public boolean isMiembro(Usuario usuario){
+		return this.miembros.stream().anyMatch(u->u.getCodigo() == usuario.getCodigo());
+	}
+	
+	// eliminar un miembro del grupo
+	// si el miembro a eliminar es administrador, se establecerá el primer miembro de la lista como admin
+	// si la lista se queda vacio, se elimina el grupo
+	public boolean deleteMiemrbo(Usuario admin, Usuario usuario) {
+		if (admin.getCodigo() == this.admin.getCodigo() || isMiembro(usuario)) {
+			this.miembros.remove(usuario);
+			usuario.deleteContactoGrupo(this);
+			
+			if (this.miembros.size() == 0) {
+				AdaptadorGrupoDAO.getUnicaInstancia().borrarContacto(this);
+				return true;
+			}
+			
+			if (usuario.getCodigo() == admin.getCodigo())
+				admin = this.miembros.get(0);
+			
+			modificarContacto();
+			return true;
+		}
 		return false;
 	}
 	

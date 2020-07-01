@@ -1,6 +1,7 @@
 package umu.tds.modelo;
 
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
+import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.persistencia.CatalogoUsuario;
 
 public class ContactoIndividual extends Contacto{
@@ -18,9 +19,10 @@ public class ContactoIndividual extends Contacto{
 	@Override
 	public void enviarMensaje(Mensaje mensaje) {
 		super.enviarMensaje(mensaje);
-		ContactoIndividual receptor = (ContactoIndividual) mensaje.getReceptor();
+		//ContactoIndividual receptor = (ContactoIndividual) mensaje.getReceptor();
 		Usuario emisor = CatalogoUsuario.getUnicaInstancia().getUsuario(mensaje.getTlfEmisor());
-		receptor.getUsuario().recibirMensaje(emisor, mensaje);
+		AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(this.usuario);
+		this.usuario.recibirMensaje(emisor, mensaje);
 	}
 	
 	public String getMovil() {
