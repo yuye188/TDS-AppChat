@@ -54,6 +54,8 @@ public class VentanaContacto extends Ventana{
 	
 	private List<JMenuItem> menuContacto ;
 	private List<JButton> menuContactoBoton;
+
+	private JButton btnModificar;
 	
 	public VentanaContacto() {
 		crearPantalla();
@@ -109,9 +111,9 @@ public class VentanaContacto extends Ventana{
 		scrollPane.setColumnHeaderView(panel_ComandaHeader);
 		GridBagLayout gbl_panel_ComandaHeader = new GridBagLayout();
 		gbl_panel_ComandaHeader.columnWidths = new int[]{0, 0};
-		gbl_panel_ComandaHeader.rowHeights = new int[]{35, 35, 10, 0};
+		gbl_panel_ComandaHeader.rowHeights = new int[]{35, 35, 35, 10, 0};
 		gbl_panel_ComandaHeader.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel_ComandaHeader.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_ComandaHeader.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_ComandaHeader.setLayout(gbl_panel_ComandaHeader);
 		
 		btnAñadirContacto = new JButton("Añadir Contacto");
@@ -130,12 +132,20 @@ public class VentanaContacto extends Ventana{
 		gbc_btnAadirGrupo.gridy = 1;
 		panel_ComandaHeader.add(btnAadirGrupo, gbc_btnAadirGrupo);
 		
+		btnModificar = new JButton("Modificar Grupo");
+		GridBagConstraints gbc_btnModificar = new GridBagConstraints();
+		gbc_btnModificar.fill = GridBagConstraints.BOTH;
+		gbc_btnModificar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnModificar.gridx = 0;
+		gbc_btnModificar.gridy = 2;
+		panel_ComandaHeader.add(btnModificar, gbc_btnModificar);
+		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.DARK_GRAY);
 		GridBagConstraints gbc_separator = new GridBagConstraints();
 		gbc_separator.fill = GridBagConstraints.HORIZONTAL;
 		gbc_separator.gridx = 0;
-		gbc_separator.gridy = 2;
+		gbc_separator.gridy = 3;
 		panel_ComandaHeader.add(separator, gbc_separator);
 		
 		panel_ListaContacto = new JPanel();
@@ -148,6 +158,7 @@ public class VentanaContacto extends Ventana{
 		//AÑADIR MANEJADORES
 		btnAadirGrupo.addActionListener(this);
 		btnAñadirContacto.addActionListener(this);
+		btnModificar.addActionListener(this);
 		
 	}
 
@@ -163,23 +174,15 @@ public class VentanaContacto extends Ventana{
 		if(e.getSource() == btnAadirGrupo) {
 			System.out.println("Pulsado Añadir Grupo");
 			//liberarVentana(frameContacto);
+			new VentanaGrupo(actual, null);
+			actualizarPantalla();
 		}
 		
-		/*if(menuContacto.contains(e.getSource())) {
-			System.out.println("Seleccionado Contacto");
+		if(e.getSource() == btnModificar) {
+			System.out.println("Modificar Grupo");
 			
-			int i=0;
-			while(!menuContacto.get(i).equals(e.getSource())) {
-				i++;
-			}
-			System.out.println("Seleccionado Contacto de la posicion :" + i);
-			Contacto m = actual.getListaContacto().get(i);
-			System.out.println("El contacto actual a mandar mensaje: "+ m.getNombre());
-			
-			liberarVentana(frameContacto);
-			new VentanaConversacion(actual,m);
-		}*/
-		
+		}
+				
 		if(menuContactoBoton.contains(e.getSource())) {
 			System.out.println("Seleccionado Contacto");
 			
@@ -205,7 +208,6 @@ public class VentanaContacto extends Ventana{
 		panel_ListaContacto.removeAll();
 		//menuContacto = new ArrayList<JMenuItem>();
 		menuContactoBoton = new ArrayList<JButton>();
-
 		for(Contacto c: actual.getListaContacto()) {
 		
 			ContactoIndividual s = (ContactoIndividual) c;
@@ -218,6 +220,24 @@ public class VentanaContacto extends Ventana{
 			
 			crearContactoPanel(user, nombre, saludo, boton);		
 		}
+		
+		System.out.println("Cargando Lista Grupo" );
+		System.out.println("El usuario actual " + actual.getUsuario() +" tiene "+  
+				actual.getListaGrupo().size() + " grupos");
+		
+		/*for(Contacto c: actual.getListaGrupo()){
+			
+			ContactoIndividual s = (ContactoIndividual) c;
+			
+			Icon user = getImagenIcon(s.getUsuario().getPathImg(), size, size);
+			String nombre = s.getNombre();
+			String saludo = "";
+			if(s.getUsuario().getMsgSaludo()!=null) saludo = s.getUsuario().getMsgSaludo();
+			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
+			
+			crearContactoPanel(user, nombre, saludo, boton);		
+		}*/
+		
 	}
 	
 	public void crearContactoPanel(Icon icono, String nombre, String saludo, Icon iconoenvio) {

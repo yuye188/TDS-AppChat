@@ -133,7 +133,6 @@ public class VentanaConversacion extends Ventana {
 		popupMenu = new JPopupMenu();
 
 		eliminarContacto = new JMenuItem("Borrar Contacto");
-
 		popupMenu.add(eliminarContacto);
 
 		panel_Centro = new JScrollPane();
@@ -142,7 +141,7 @@ public class VentanaConversacion extends Ventana {
 
 		panel_Chat = new JPanel();
 		panel_Centro.setViewportView(panel_Chat);
-		panel_Chat.setLayout(new BoxLayout(panel_Chat, BoxLayout.Y_AXIS));
+		panel_Chat.setLayout(new GridLayout(0, 1, 0, 0));
 				
 		JPanel panel_Sur = new JPanel();
 		contentPane.getContentPane().add(panel_Sur, BorderLayout.SOUTH);
