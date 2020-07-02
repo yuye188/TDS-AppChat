@@ -29,6 +29,7 @@ public class VentanaPerfil extends Ventana{
 	private JTextField emailUser;
 	private JTextField nameUser;
 	private JTextField mSaludoUser;
+	private JTextField isPremium;
 	private int size = 100;
 
 	/**
@@ -157,6 +158,25 @@ public class VentanaPerfil extends Ventana{
 		panel.add(emailUser, gbc_emailUser);
 		emailUser.setColumns(10);
 		
+		JLabel IsPremium = new JLabel("isPremium:");
+		IsPremium.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_IsPremium = new GridBagConstraints();
+		gbc_IsPremium.fill = GridBagConstraints.VERTICAL;
+		gbc_IsPremium.anchor = GridBagConstraints.EAST;
+		gbc_IsPremium.insets = new Insets(0, 0, 5, 5);
+		gbc_IsPremium.gridx = 5;
+		gbc_IsPremium.gridy = 6;
+		panel.add(IsPremium, gbc_IsPremium);
+		
+		isPremium = new JTextField(String.valueOf(actual.isPremium()));
+		isPremium.setEditable(false);
+		GridBagConstraints gbc_premiumlUser = new GridBagConstraints();
+		gbc_premiumlUser.insets = new Insets(0, 0, 5, 5);
+		gbc_premiumlUser.fill = GridBagConstraints.BOTH;
+		gbc_premiumlUser.gridx = 6;
+		gbc_premiumlUser.gridy = 6;
+		panel.add(isPremium, gbc_premiumlUser);
+		isPremium.setColumns(10);
 	}
 
 

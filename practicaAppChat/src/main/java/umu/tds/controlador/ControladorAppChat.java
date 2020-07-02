@@ -17,7 +17,10 @@ import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Estado;
 import umu.tds.modelo.Grupo;
 import umu.tds.modelo.Mensaje;
+import umu.tds.modelo.RolUsuario;
 import umu.tds.modelo.Usuario;
+import umu.tds.modelo.UsuarioNormal;
+import umu.tds.modelo.UsuarioPremium;
 import umu.tds.persistencia.CatalogoUsuario;
 
 public class ControladorAppChat {
@@ -209,6 +212,26 @@ public class ControladorAppChat {
 	
 	public void cambiarFotoPerfil(String pathImg) {
 		usuarioActual.setPathImg(pathImg);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
+	
+	
+	public void cambiarMsgSaludo(String msgSaludo) {
+		usuarioActual.setMsgSaludo(msgSaludo);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
+	
+	public void cambiarRolUsuario() {
+		RolUsuario rol;
+		usuarioActual.calcularDescuento();
+		
+		if (usuarioActual.isPremium()) {
+			rol = new UsuarioNormal();
+			rol.volverEnNormal(usuarioActual);
+		} else {
+			rol= new UsuarioPremium();
+			rol.convertirseEnPremium(usuarioActual);
+		}
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 	

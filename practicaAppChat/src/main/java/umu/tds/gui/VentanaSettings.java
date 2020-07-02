@@ -3,6 +3,7 @@ package umu.tds.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,6 +13,8 @@ import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Usuario;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -95,14 +98,13 @@ public class VentanaSettings extends Ventana{
 		panel_Central.setLayout(gbl_panel_Central);
 		
 		btnNombreUsuario = new JButton(actual.getNombre(), getImagenIcon(actual.getPathImg(), size, size));
-		btnNombreUsuario.setBackground(Color.CYAN);
+		btnNombreUsuario.setBackground(Color.WHITE);
 		GridBagConstraints gbc_btnNombreUsuario = new GridBagConstraints();
 		gbc_btnNombreUsuario.fill = GridBagConstraints.BOTH;
 		gbc_btnNombreUsuario.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNombreUsuario.gridx = 1;
 		gbc_btnNombreUsuario.gridy = 1;
 		panel_Central.add(btnNombreUsuario, gbc_btnNombreUsuario);
-		btnNombreUsuario.setEnabled(false);
 		
 		
 		lblNewLabel = new JLabel(actual.getMsgSaludo());
@@ -142,7 +144,7 @@ public class VentanaSettings extends Ventana{
 		gbc_separator_1.gridy = 4;
 		panel_Central.add(separator_1, gbc_separator_1);
 		
-		btnPremium = new JButton("Convertir En Premium");
+		btnPremium = new JButton("Convertirse / Dejarse En Premium");
 		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
 		gbc_btnNewButton_2.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton_2.gridwidth = 2;
@@ -211,11 +213,26 @@ public class VentanaSettings extends Ventana{
 		
 		if(e.getSource() == btnCambairIcono) {
 			System.out.println("Pulsado cambiar icono");
+			JFileChooser file = new JFileChooser();
+			
+			file.showOpenDialog(fSet);
+			File archivo = file.getSelectedFile();
+			
+			if(archivo != null) {
+				unica.cambiarFotoPerfil(archivo.getPath());
+				JOptionPane.showMessageDialog(fSet, "Se ha cambiado su foto de perfil", "Resultado",JOptionPane.INFORMATION_MESSAGE);
+				fSet.revalidate();
+				fSet.repaint();
+			}else {
+				JOptionPane.showMessageDialog(fSet, "Selecciona una imagen", "Imagen",JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 		if(e.getSource() == btnCambiarSaludo) {
 			System.out.println("Pulsado cambiar saludo");
 			String saludo = JOptionPane.showInputDialog(fSet, "Modifica tu mensaje de saludo", "Moficacion" ,JOptionPane.QUESTION_MESSAGE);
+			unica.cambiarMsgSaludo(saludo);
+			JOptionPane.showMessageDialog(fSet, "Se ha cambiado su mensaje de saludo a:"+saludo, "Resultado",JOptionPane.INFORMATION_MESSAGE);
 			System.out.println("El nuevo saludo para Usario: " +actual.getNombre() + "es: "+ saludo);
 		}
 		
@@ -225,6 +242,7 @@ public class VentanaSettings extends Ventana{
 		
 		if(e.getSource() == btnPremium) {
 			System.out.println("Pulsado premium");
+			unica.cambiarRolUsuario();
 		}
 		if(e.getSource() == btnSalirSesion) {
 			System.out.println("Pulsado salir sesion");

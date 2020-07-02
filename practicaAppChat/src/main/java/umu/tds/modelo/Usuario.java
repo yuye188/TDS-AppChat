@@ -29,7 +29,7 @@ public class Usuario {
 	private boolean premium;
 	private RolUsuario rol;
 	private List<Contacto> listaContacto;
-	private Descuento descuento;
+	private DescuentoCompuesto descuento;
 	private List<Contacto> listaGrupo;
 	private String msgSaludo;
 	private Estado estado;
@@ -48,7 +48,6 @@ public class Usuario {
 		this.estado = new Estado(" ", Estado.ImgDefecto);
 		this.listaContacto = new LinkedList<Contacto>();
 		this.listaGrupo = new LinkedList<Contacto>();
-		this.descuento = new DescuentoCompuesto();
 		this.pathImg = PROFILE;
 	}
 	
@@ -164,6 +163,37 @@ public class Usuario {
 		return estado;
 	}
 	
+	
+	public void calcularDescuento() {
+		
+		this.descuento = new DescuentoCompuesto();
+		
+		if (DescuentoFechas.isEntreFechas()) {
+			DescuentoFechas desFechas = new DescuentoFechas();
+			this.descuento.addDescuento(desFechas);
+		}
+		
+		if(DescuentoJovenes.isMenor(this.getFechaNacimiento())) {
+			DescuentoJovenes desJoven = new DescuentoJovenes();
+			this.descuento.addDescuento(desJoven);
+		}
+		
+		if (DescuentoNumMsg.superaNumMensajes(this.calcularNumMsgTotal())) {
+			DescuentoNumMsg desNumMsg = new DescuentoNumMsg();
+			this.descuento.addDescuento(desNumMsg);
+		}
+	}
+	
+	
+	public int calcularNumMsgTotal() {
+		int total = this.getListaContacto().stream()
+											.mapToInt(c->c.getMensajes().size())
+											.sum();
+		total += this.getListaGrupo().stream()
+											.mapToInt(c->c.getMensajes().size())
+											.sum();
+		return total;
+	}
 
 	public int getCodigo() {
 		return codigo;
@@ -273,7 +303,7 @@ public class Usuario {
 		return descuento;
 	}
 
-	public void setDescuento(Descuento descuento) {
+	public void setDescuento(DescuentoCompuesto descuento) {
 		this.descuento = descuento;
 	}
 
