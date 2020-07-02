@@ -261,8 +261,15 @@ public class VentanaGrupo extends Ventana {
 				}
 				else {
 					System.out.println("Modificando Grupo");
-					//Grupo g = unica.crearGrupo(nombreGrupo.getText(),listaContactoDer);
-					//liberarVentana(fGrupo);
+					Grupo g = unica.modificarGrupo(gActual,listaContactoDer);
+					if (g != null)
+						JOptionPane.showMessageDialog(fGrupo, "Grupo modificado", "Resultado",
+								JOptionPane.INFORMATION_MESSAGE);
+					else
+						JOptionPane.showMessageDialog(fGrupo, "Error en modificar grupo", "Resultado",
+								JOptionPane.WARNING_MESSAGE);
+					liberarVentana(fGrupo);
+					
 				}
 			}
 		}

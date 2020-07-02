@@ -195,7 +195,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		u.setListaContacto(this.obtenerContactosIndividualesDesdeCodigos(contactosIndividuales,false));
 		
 		String listaGrupo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaGrupo");
-		u.setListaGrupo(this.obtenerGruposDesdeCodigos(listaGrupo));
+		u.setListaGrupo(this.obtenerGruposDesdeCodigos(listaGrupo,false));
 		
 		return u;
 	}
@@ -219,18 +219,26 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		return aux.trim();
 	}
 	
-	private List<Contacto> obtenerGruposDesdeCodigos(String contactos) {
+	private List<Contacto> obtenerGruposDesdeCodigos(String contactos, boolean actualizar) {
 
 		List<Contacto> listaContactos = new LinkedList<Contacto>();
 		StringTokenizer strTok = new StringTokenizer(contactos, " ");
 		AdaptadorGrupoDAO adaptadorG = AdaptadorGrupoDAO.getUnicaInstancia();
 		
-		while (strTok.hasMoreTokens()) {
-			listaContactos.add(adaptadorG.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+		if (actualizar) {
+			while (strTok.hasMoreTokens()) {
+				Contacto c = adaptadorG.recuperarContacto(Integer.valueOf((String) strTok.nextElement()));
+				AdaptadorGrupoDAO.getUnicaInstancia().actualizarMensajes(c);
+				listaContactos.add(c);
+			}
+		} else {
+			while (strTok.hasMoreTokens()) {
+				listaContactos.add(adaptadorG.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+			}
 		}
-		
 		return listaContactos;
 	}
+	
 	
 	private List<Contacto> obtenerContactosIndividualesDesdeCodigos(String contactos, boolean actualizar) {
 
@@ -254,12 +262,15 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 	}
 	
 	
-	// solo actualizará los mensajes de cada contactoIndividual
+	// solo actualizará el de los mensajes de cada contacto (Individual o grupo)
 	public Usuario actualizarMensajes(Usuario u) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(u.getCodigo());
 		
 		String contactosIndividuales = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaContacto");
 		u.setListaContacto(this.obtenerContactosIndividualesDesdeCodigos(contactosIndividuales,true));
+		
+		String listaGrupo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaGrupo");
+		u.setListaGrupo(this.obtenerGruposDesdeCodigos(listaGrupo,true));
 		
 		return u;
 	}

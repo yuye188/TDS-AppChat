@@ -113,12 +113,16 @@ public class VentanaSur extends Ventana implements ActionListener {
 		
 		if(e.getSource() == btnChat) {
 			System.out.println("Pulsado Chat Sur");
+			
+			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);
 			new VentanaChat(actual);
 		}
 		
 		if(e.getSource() == btnEstado) {
 			System.out.println("Pulsado Estado Sur");
+			
+			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);
 			new VentanaEstado(actual);
 		}
@@ -131,12 +135,16 @@ public class VentanaSur extends Ventana implements ActionListener {
 		
 		if(e.getSource() == btnContacto) {
 			System.out.println("Pulsado Agenda Contacto Sur");
+			
+			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);
 			new VentanaContacto(actual);
 		}
 		
 		if(e.getSource() == btnSetting) {
 			System.out.println("Pulsado Setting Sur");
+			
+			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);
 			VentanaSettings s = new VentanaSettings(actual);
 		}

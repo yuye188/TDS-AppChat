@@ -142,8 +142,8 @@ public class ControladorAppChat {
 				.collect(Collectors.toList());
 	}
 
-	public List<Contacto> getContactosOrdenadosPorHora() {
-		return usuarioActual.getContactosOrdenadosPorHora();
+	public List<Contacto> getContactosOrdenadosPorHora(Usuario usuario) {
+		return usuario.getContactosOrdenadosPorHora();
 	}
 	
 	// enviar un mensaje a un contacto (receptor)
@@ -162,6 +162,11 @@ public class ControladorAppChat {
 		}
 		
 		return grupo;
+	}
+	
+	
+	public Grupo modificarGrupo(Grupo grupo, List<ContactoIndividual> miembros) {
+		return grupo.modificarGrupo(usuarioActual, miembros);
 	}
 	
 	public boolean addMiembroAlGrupo(ContactoIndividual contacto, Grupo grupo) {
@@ -207,4 +212,8 @@ public class ControladorAppChat {
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 	
+	
+	public boolean isAdministrador(Usuario usuario, Grupo grupo) {
+		return usuario.getCodigo() == grupo.getAdmin().getCodigo();
+	}
 }

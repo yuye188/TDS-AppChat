@@ -22,8 +22,10 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import umu.tds.controlador.ControladorAppChat;
+import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
+import umu.tds.modelo.Grupo;
 import umu.tds.modelo.Usuario;
 
 
@@ -55,7 +57,7 @@ public class VentanaContacto extends Ventana{
 	private List<JMenuItem> menuContacto ;
 	private List<JButton> menuContactoBoton;
 
-	private JButton btnModificar;
+	//private JButton btnModificar;
 	
 	public VentanaContacto() {
 		crearPantalla();
@@ -66,7 +68,7 @@ public class VentanaContacto extends Ventana{
 		// TODO Auto-generated constructor stub
 		System.out.println("Creando Ventana Contacto");
 		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
-		actual = u;
+		actual = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(u);
 		Ventana.unica.setUsuarioActual(actual);
 		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
@@ -131,14 +133,14 @@ public class VentanaContacto extends Ventana{
 		gbc_btnAadirGrupo.gridx = 0;
 		gbc_btnAadirGrupo.gridy = 1;
 		panel_ComandaHeader.add(btnAadirGrupo, gbc_btnAadirGrupo);
-		
+		/*
 		btnModificar = new JButton("Modificar Grupo");
 		GridBagConstraints gbc_btnModificar = new GridBagConstraints();
 		gbc_btnModificar.fill = GridBagConstraints.BOTH;
 		gbc_btnModificar.insets = new Insets(0, 0, 5, 0);
 		gbc_btnModificar.gridx = 0;
 		gbc_btnModificar.gridy = 2;
-		panel_ComandaHeader.add(btnModificar, gbc_btnModificar);
+		panel_ComandaHeader.add(btnModificar, gbc_btnModificar);*/
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.DARK_GRAY);
@@ -158,7 +160,7 @@ public class VentanaContacto extends Ventana{
 		//AÑADIR MANEJADORES
 		btnAadirGrupo.addActionListener(this);
 		btnAñadirContacto.addActionListener(this);
-		btnModificar.addActionListener(this);
+		//btnModificar.addActionListener(this);
 		
 	}
 
@@ -177,11 +179,11 @@ public class VentanaContacto extends Ventana{
 			new VentanaGrupo(actual, null);
 			actualizarPantalla();
 		}
-		
+		/*
 		if(e.getSource() == btnModificar) {
 			System.out.println("Modificar Grupo");
 			
-		}
+		}*/
 				
 		if(menuContactoBoton.contains(e.getSource())) {
 			System.out.println("Seleccionado Contacto");
@@ -191,11 +193,18 @@ public class VentanaContacto extends Ventana{
 				i++;
 			}
 			System.out.println("Seleccionado Contacto de la posicion :" + i);
-			Contacto m = actual.getListaContacto().get(i);
-			System.out.println("El contacto actual a mandar mensaje: "+ m.getNombre());
+			
+			
+			Contacto contacto;
+			if (i < actual.getListaContacto().size())
+				 contacto = actual.getListaContacto().get(i);
+			else
+				contacto = actual.getListaGrupo().get(i-actual.getListaContacto().size());
+			
+			System.out.println("El contacto actual a mandar mensaje: "+ contacto.getNombre());
 			
 			liberarVentana(frameContacto);
-			new VentanaConversacion(actual,m);
+			new VentanaConversacion(actual,contacto);
 		}
 	}
 	
@@ -225,18 +234,18 @@ public class VentanaContacto extends Ventana{
 		System.out.println("El usuario actual " + actual.getUsuario() +" tiene "+  
 				actual.getListaGrupo().size() + " grupos");
 		
-		/*for(Contacto c: actual.getListaGrupo()){
+		for(Contacto c: actual.getListaGrupo()){
 			
-			ContactoIndividual s = (ContactoIndividual) c;
+			Grupo grupo = (Grupo) c;
 			
-			Icon user = getImagenIcon(s.getUsuario().getPathImg(), size, size);
-			String nombre = s.getNombre();
-			String saludo = "";
-			if(s.getUsuario().getMsgSaludo()!=null) saludo = s.getUsuario().getMsgSaludo();
+			Icon user = getImagenIcon(grupo.getPathImg(), size, size);
+			String nombre = grupo.getNombre();
+			//String saludo = "";
+			//if(grupo.getUsuario().getMsgSaludo()!=null) saludo = grupo.getUsuario().getMsgSaludo();
 			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
 			
-			crearContactoPanel(user, nombre, saludo, boton);		
-		}*/
+			crearContactoPanel(user, nombre, "", boton);		
+		}
 		
 	}
 	

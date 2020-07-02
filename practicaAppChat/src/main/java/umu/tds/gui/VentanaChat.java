@@ -4,13 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
@@ -21,6 +25,9 @@ import javax.swing.SwingConstants;
 import beans.Mensaje;
 import tds.BubbleText;
 import umu.tds.controlador.ControladorAppChat;
+import umu.tds.dao.AdaptadorContactoIndividualDAO;
+import umu.tds.dao.AdaptadorGrupoDAO;
+import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Grupo;
@@ -49,6 +56,8 @@ public class VentanaChat extends Ventana {
 	private JFrame frameChat;
 
 	private int size = 45;
+	
+	private static Timer timer = null;
 
 	// USUARIO Y VENTANA PRINCIPAL
 	private Usuario actual;
@@ -70,6 +79,7 @@ public class VentanaChat extends Ventana {
 
 		crearPantalla();
 		mostrarVentana(frameChat);
+	
 	}
 
 	public VentanaChat() {
@@ -89,6 +99,26 @@ public class VentanaChat extends Ventana {
 		crearPantalla();
 		actualizarPantalla();
 		mostrarVentana(frameChat);
+		
+		if (timer == null) {
+			timer = new Timer();
+			System.out.println("nuevo timer");
+			timer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					
+					actual = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(actual);
+					
+					actualizarPantalla();
+					//ACTUALIZAR Y REVALIDAR PANEL POR CAMBIOS
+					frameChat.revalidate();
+					frameChat.repaint();
+					//panel_Scroll_Contactos.revalidate();
+					//panel_Scroll_Contactos.repaint();
+				}
+			}, 0, 4000);
+		}
 	}
 
 	@Override
@@ -201,6 +231,8 @@ public class VentanaChat extends Ventana {
 			Contacto m = actual.getContactosOrdenadosPorHora().get(i);
 			System.out.println("El contacto actual a mandar mensaje: " + m.getNombre());
 
+			cancelarTimer();
+			
 			liberarVentana(frameChat);
 			new VentanaConversacion(actual, m);
 		}
@@ -208,9 +240,9 @@ public class VentanaChat extends Ventana {
 	}
 
 	public void actualizarPantalla() {
-		System.out.println("Cargando Lista Conversacion reciente");
-		System.out.println("El usuario actual " + actual.getUsuario() + " tiene " + actual.getListaContacto().size()
-				+ " contactos");
+		//System.out.println("Cargando Lista Conversacion reciente");
+		//System.out.println("El usuario actual " + actual.getUsuario() + " tiene " + actual.getListaContacto().size()
+		//		+ " contactos");
 
 		panel_Contactos.removeAll();
 		menuContactoBoton = new ArrayList<JButton>();
@@ -218,7 +250,7 @@ public class VentanaChat extends Ventana {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 		// OBTENER LISTA DE MENSAJE DEL CONTACTO ORDENADO POR TIEMPO
-		for (Contacto c : unica.getContactosOrdenadosPorHora()) {
+		for (Contacto c : unica.getContactosOrdenadosPorHora(actual)) {
 
 			Icon user = getImagenIcon(unica.getImageContacto(c), size, size);
 			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
@@ -317,4 +349,11 @@ public class VentanaChat extends Ventana {
 		VentanaChat ventana = new VentanaChat(Ventana.actual);
 	}
 
+	public static void cancelarTimer() {
+		if (timer!= null) {
+			timer.cancel();
+			timer.purge();
+			timer=null;
+		}
+	}
 }

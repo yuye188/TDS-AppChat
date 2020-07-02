@@ -193,6 +193,9 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		String mensajes = servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes");
 		c.setMensajes(this.obtenerMensajesDesdeCodigos(mensajes));
 		
+		String miembros = servPersistencia.recuperarPropiedadEntidad(eGrupo, "miembros");
+		((Grupo)c).setMiembros(this.obtenerMiembrosDesdeCodigos(miembros));
+		
 		return c;
 	}
 }

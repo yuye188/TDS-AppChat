@@ -2,6 +2,7 @@ package umu.tds.modelo;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import umu.tds.dao.AdaptadorGrupoDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
@@ -24,6 +25,7 @@ public class Grupo extends Contacto {
 	public boolean addMiembro(Usuario admin, Usuario usuario) {
 		if (admin.getCodigo() == this.admin.getCodigo()) {
 			this.miembros.add(usuario);
+			usuario = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(usuario);
 			usuario.getListaGrupo().add(this);
 			modificarContacto();
 			AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(usuario);
@@ -57,6 +59,30 @@ public class Grupo extends Contacto {
 			return true;
 		}
 		return false;
+	}
+	
+	public Grupo modificarGrupo(Usuario admin, List<ContactoIndividual> miembros) {
+		if (admin.getCodigo() == admin.getCodigo()) {
+			List<Usuario> nuevoMiembros = miembros.stream()
+											.map(c -> c.getUsuario())
+											.collect(Collectors.toList());
+			nuevoMiembros.add(admin);
+			
+			// eliminar miembros que no estan en la nueva lista de miembros
+			for(Usuario u: this.miembros) {
+				if(!nuevoMiembros.contains(u))
+					this.deleteMiemrbo(admin, u);
+			}
+			
+			// anadir miembros que no estan en la lista
+			for(Usuario u: nuevoMiembros) {
+				if(!this.miembros.contains(u))
+					this.addMiembro(admin, u);
+			}
+			
+			return this;
+		}
+		return null;
 	}
 	
 	public List<Usuario> getMiembros() {

@@ -56,6 +56,7 @@ public class VentanaConversacion extends Ventana {
 	// POPMENU DE OPCION USUARIO
 	private JPopupMenu popupMenu;
 	private JMenuItem eliminarContacto;
+	private JMenuItem modificarGrupo;
 
 	// POPMENU EMOJI
 	private JButton btnEmoji;
@@ -108,8 +109,18 @@ public class VentanaConversacion extends Ventana {
 				//System.out.println(numMsg);
 				if (cActual.getClass() == ContactoIndividual.class)
 					cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
-				else
-					cActual = (Grupo) AdaptadorGrupoDAO.getUnicaInstancia().actualizarMensajes(cActual);
+				else {
+					
+						cActual = (Grupo) AdaptadorGrupoDAO.getUnicaInstancia().actualizarMensajes(cActual);
+							if (!((Grupo)cActual).getMiembros().contains(actual)) {
+							timer.cancel();
+							timer.purge();
+							JOptionPane.showMessageDialog(null, "Usted ha sido eliminado en el grupo: "+cActual.getNombre(), "Aviso", JOptionPane.INFORMATION_MESSAGE);
+							liberarVentana(contentPane);
+							new VentanaChat(actual);
+							return;
+						}
+				}
 				
 				if (numMsg != cActual.getMensajes().size()) {
 					actualizarPantalla();
@@ -118,7 +129,7 @@ public class VentanaConversacion extends Ventana {
 					vertical.setValue( vertical.getMaximum()-1);
 				}
 			}
-		}, 0, 1000);
+		}, 0, 2000);
 	}
 
 	@Override
@@ -159,7 +170,17 @@ public class VentanaConversacion extends Ventana {
 
 		popupMenu = new JPopupMenu();
 
-		eliminarContacto = new JMenuItem("Borrar Contacto");
+		
+		String borrar_salir = "Borrar Contacto";
+		
+		if (cActual.getClass() == Grupo.class) {
+			modificarGrupo = new JMenuItem("Modificar Grupo");
+			popupMenu.add(modificarGrupo);
+			borrar_salir = "Salir del grupo";
+			modificarGrupo.addActionListener(this);
+		}
+			
+		eliminarContacto = new JMenuItem(borrar_salir);
 		popupMenu.add(eliminarContacto);
 
 		panel_Centro = new JScrollPane();
@@ -200,6 +221,7 @@ public class VentanaConversacion extends Ventana {
 		btnEmoji.addActionListener(this);
 		btnEnviar.addActionListener(this);
 		eliminarContacto.addActionListener(this);
+		
 	}
 
 	@Override
@@ -209,6 +231,7 @@ public class VentanaConversacion extends Ventana {
 		if (e.getSource() == eliminarContacto) {
 			timer.cancel();
 			timer.purge();
+			
 			boolean eliminar = false;
 			if (cActual.getClass() == ContactoIndividual.class) 
 				eliminar = unica.deleteContactoIndividual(cActual.getNombre(), ((ContactoIndividual) cActual).getMovil());
@@ -222,6 +245,14 @@ public class VentanaConversacion extends Ventana {
 			} else 
 				JOptionPane.showMessageDialog(contentPane, "No se ha podido eliminar el contacto "+cActual.getNombre(), "Mensaje", JOptionPane.ERROR_MESSAGE);
 		} 
+		
+		if (modificarGrupo != null && e.getSource() == modificarGrupo ) {
+			
+			if (unica.isAdministrador(actual, (Grupo) cActual))
+				new VentanaGrupo(actual, (Grupo) cActual);
+			else 
+				JOptionPane.showMessageDialog(contentPane, "Usted no es el administrador del grupo", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 		if (e.getSource() == btnVolver) {
 			timer.cancel();
