@@ -1,4 +1,4 @@
-package umu.tds.persistencia;
+package umu.tds.catalogo;
 
 import java.text.ParseException;
 import java.util.HashMap;

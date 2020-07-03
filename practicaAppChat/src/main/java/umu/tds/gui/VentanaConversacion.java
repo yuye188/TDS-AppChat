@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import tds.BubbleText;
+import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorGrupoDAO;
@@ -23,7 +24,6 @@ import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Grupo;
 import umu.tds.modelo.Mensaje;
 import umu.tds.modelo.Usuario;
-import umu.tds.persistencia.CatalogoUsuario;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -39,7 +39,6 @@ import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
-import net.miginfocom.swing.MigLayout;
 
 public class VentanaConversacion extends Ventana {
 

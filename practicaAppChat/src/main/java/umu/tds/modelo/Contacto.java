@@ -2,6 +2,7 @@ package umu.tds.modelo;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import umu.tds.dao.AdaptadorMensajeDAO;
 
@@ -45,6 +46,12 @@ public abstract class Contacto {
 		return this.mensajes.get(mensajes.size()-1);
 	}
 	
+	
+	public List<Mensaje> getMensajesEnviados(Usuario usuario) {
+		return mensajes.stream()
+					   .filter(m-> m.getTlfEmisor().equals(usuario.getMovil()))
+					   .collect(Collectors.toList());
+	}
 	
 	public int getCodigo() {
 		return codigo;

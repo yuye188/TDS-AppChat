@@ -4,11 +4,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dao.IContactoDAO;
 import umu.tds.dao.IEstadoDAO;
 import umu.tds.dao.IUsuarioDAO;
+import umu.tds.diagramas.Diagrama;
+import umu.tds.diagramas.Histograma;
 import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Estado;
@@ -18,7 +21,6 @@ import umu.tds.modelo.RolUsuario;
 import umu.tds.modelo.Usuario;
 import umu.tds.modelo.UsuarioNormal;
 import umu.tds.modelo.UsuarioPremium;
-import umu.tds.persistencia.CatalogoUsuario;
 
 public class ControladorAppChat {
 
@@ -257,6 +259,14 @@ public class ControladorAppChat {
 		if (fechaInicio != null)
 			fechaInicio.setHours(fechaInicio.getHours()-24);
 		return usuarioActual.buscarMensajes(contacto, texto, fechaInicio, fechaFin, movil);
-		
+	}
+	
+	public boolean generarEstadisticas() {
+		if (usuarioActual.isPremium()) {
+			Diagrama.generarDiagrama(usuarioActual);
+			Histograma.generarHistograma(usuarioActual);
+			return true;
+		}
+		return false;
 	}
 }

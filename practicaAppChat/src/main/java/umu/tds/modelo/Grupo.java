@@ -25,7 +25,7 @@ public class Grupo extends Contacto {
 	public boolean addMiembro(Usuario admin, Usuario usuario) {
 		if (admin.getCodigo() == this.admin.getCodigo()) {
 			this.miembros.add(usuario);
-			usuario = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(usuario);
+			usuario = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarUsuario(usuario);
 			usuario.getListaGrupo().add(this);
 			modificarContacto();
 			AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(usuario);
@@ -59,6 +59,10 @@ public class Grupo extends Contacto {
 			return true;
 		}
 		return false;
+	}
+	
+	public double calcularPorcentajeMensajesDeEnvios(Usuario u) {
+		return ((double)this.getMensajesEnviados(u).size() / (double)this.getMensajes().size()) * 100.0f;
 	}
 	
 	public Grupo modificarGrupo(Usuario admin, List<ContactoIndividual> miembros) {

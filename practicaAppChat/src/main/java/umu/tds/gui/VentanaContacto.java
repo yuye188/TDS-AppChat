@@ -68,7 +68,7 @@ public class VentanaContacto extends Ventana{
 		// TODO Auto-generated constructor stub
 		System.out.println("Creando Ventana Contacto");
 		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
-		actual = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(u);
+		actual = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarUsuario(u);
 		Ventana.unica.setUsuarioActual(actual);
 		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		

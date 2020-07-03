@@ -245,6 +245,10 @@ public class VentanaSettings extends Ventana{
 		
 		if(e.getSource() == btnEsta) {
 			System.out.println("Pulsado estadistica ");
+			if (unica.generarEstadisticas())
+				JOptionPane.showMessageDialog(fSet, "Se han generado las estadisticas en la carpeta /estadistica", "Resultado",JOptionPane.INFORMATION_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(fSet, "Usted aún no es usuario premium", "Resultado",JOptionPane.ERROR_MESSAGE);
 		}
 		
 		if(e.getSource() == btnPremium) {

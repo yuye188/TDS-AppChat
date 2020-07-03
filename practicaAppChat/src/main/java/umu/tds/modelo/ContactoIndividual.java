@@ -1,8 +1,8 @@
 package umu.tds.modelo;
 
+import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
-import umu.tds.persistencia.CatalogoUsuario;
 
 public class ContactoIndividual extends Contacto{
 	
@@ -21,7 +21,7 @@ public class ContactoIndividual extends Contacto{
 		super.enviarMensaje(mensaje);
 		//ContactoIndividual receptor = (ContactoIndividual) mensaje.getReceptor();
 		Usuario emisor = CatalogoUsuario.getUnicaInstancia().getUsuario(mensaje.getTlfEmisor());
-		AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(this.usuario);
+		AdaptadorUsuarioDAO.getUnicaInstancia().actualizarUsuario(this.usuario);
 		this.usuario.recibirMensaje(emisor, mensaje);
 	}
 	

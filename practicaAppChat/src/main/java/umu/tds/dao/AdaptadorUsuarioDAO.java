@@ -263,7 +263,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 	
 	
 	// solo actualizará el de los mensajes de cada contacto (Individual o grupo)
-	public Usuario actualizarMensajes(Usuario u) {
+	public Usuario actualizarUsuario(Usuario u) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(u.getCodigo());
 		
 		String contactosIndividuales = servPersistencia.recuperarPropiedadEntidad(eUsuario, "listaContacto");

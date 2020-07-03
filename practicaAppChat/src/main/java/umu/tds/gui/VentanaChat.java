@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 
 import beans.Mensaje;
 import tds.BubbleText;
+import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorGrupoDAO;
@@ -32,7 +33,6 @@ import umu.tds.modelo.Contacto;
 import umu.tds.modelo.ContactoIndividual;
 import umu.tds.modelo.Grupo;
 import umu.tds.modelo.Usuario;
-import umu.tds.persistencia.CatalogoUsuario;
 
 import java.awt.GridBagLayout;
 
@@ -108,7 +108,7 @@ public class VentanaChat extends Ventana {
 				@Override
 				public void run() {
 					
-					actual = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarMensajes(actual);
+					actual = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarUsuario(actual);
 					
 					actualizarPantalla();
 					//ACTUALIZAR Y REVALIDAR PANEL POR CAMBIOS

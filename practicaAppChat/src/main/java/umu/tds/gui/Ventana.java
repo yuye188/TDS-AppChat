@@ -11,9 +11,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Usuario;
-import umu.tds.persistencia.CatalogoUsuario;
 
 @SuppressWarnings("serial")
 public abstract class Ventana extends JPanel implements ActionListener {

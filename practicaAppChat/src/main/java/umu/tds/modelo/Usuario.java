@@ -1,18 +1,21 @@
 package umu.tds.modelo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorEstadoDAO;
 import umu.tds.dao.AdaptadorGrupoDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.modelo.Mensaje.MsgBuilder;
-import umu.tds.persistencia.CatalogoUsuario;
 
 public class Usuario {
 
@@ -175,6 +178,42 @@ public class Usuario {
 		return estado;
 	}
 	
+	
+	public List<Grupo> ordenarGruposSegunMensajes() {
+		return this.listaGrupo.stream()
+				.map(g->(Grupo) g)
+				.sorted(Comparator.comparingInt(g -> g.getMensajesEnviados(this).size())).limit(6)
+				.collect(Collectors.toList());
+	}
+	
+	public List<Integer> calcularNumMsgPorMeses() {
+		List<Integer> listaValores = new LinkedList<Integer>();
+		
+		Calendar inicio = Calendar.getInstance();
+		Calendar fin = Calendar.getInstance();
+		
+		
+		for (int i = 0; i < 12; i++) {
+			
+			inicio.set(Calendar.MONTH, i);
+			inicio.set(Calendar.DAY_OF_MONTH, 1);
+			
+			fin.set(Calendar.MONTH, i);
+			fin.set(Calendar.DAY_OF_MONTH, fin.getMaximum(Calendar.DAY_OF_MONTH));
+			
+			Integer numMsgCI = this.listaContacto.stream()
+										.mapToInt(c->this.buscarMensajes(c, "", inicio.getTime(), fin.getTime(), "").size())
+										.sum();
+			
+			Integer numMsgGrupo = this.listaGrupo.stream()
+										.mapToInt(c->this.buscarMensajes(c, "", inicio.getTime(), fin.getTime(), "").size())
+										.sum();
+			
+			listaValores.add(numMsgCI+numMsgGrupo);
+		}
+
+		return listaValores;
+	}
 	
 	public void calcularDescuento() {
 		
