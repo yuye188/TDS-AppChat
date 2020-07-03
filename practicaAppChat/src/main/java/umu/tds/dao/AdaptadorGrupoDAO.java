@@ -190,6 +190,9 @@ public class AdaptadorGrupoDAO implements IContactoDAO {
 		// añadir ContactoIndividual al pool
 		PoolDAO.getUnicaInstancia().addObjeto(c.getCodigo(), c);
 		
+		int codigoAdmin = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eGrupo, "admin"));
+		((Grupo)c).setAdmin(AdaptadorUsuarioDAO.getUnicaInstancia().recuperarUsuario(codigoAdmin));
+		
 		String mensajes = servPersistencia.recuperarPropiedadEntidad(eGrupo, "mensajes");
 		c.setMensajes(this.obtenerMensajesDesdeCodigos(mensajes));
 		

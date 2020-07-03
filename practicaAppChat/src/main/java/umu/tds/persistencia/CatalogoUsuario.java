@@ -60,9 +60,16 @@ public class CatalogoUsuario {
 		System.out.println("Añadido usuario a Catalogo Usuario");
 	}
 	
+	public void removeUsuario(Usuario u) {
+		usuarioPorTelefono.remove(u.getMovil());
+		usuarioPorNombre.remove(u.getNombre());
+		System.out.println("Eliminado usuario a Catalogo Usuario");
+	}
 	
 	/*Recupera todos los usuarios para trabajar con ellos en memoria*/
-	private void cargarCatalogo() throws DAOException {
+	public void cargarCatalogo() throws DAOException {
+		usuarioPorTelefono.clear();
+		usuarioPorNombre.clear();
 		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosoUsuarios();
 		 for (Usuario u: usuariosBD) {
 			     usuarioPorTelefono.put(u.getMovil(),u);

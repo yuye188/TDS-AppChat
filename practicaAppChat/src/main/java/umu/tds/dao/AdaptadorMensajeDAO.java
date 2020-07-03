@@ -115,13 +115,20 @@ public class AdaptadorMensajeDAO implements IMensajeDAO {
 		// añadir el objeto al Pool
 		PoolDAO.getUnicaInstancia().addObjeto(codigo, mensaje);
 		
-		Contacto receptor;
+		Contacto receptor = null;
 		int codigoReceptor = Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "receptor"));
 		boolean isGrupo = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "isGrupo"));
 		if (isGrupo) {
 			receptor = AdaptadorGrupoDAO.getUnicaInstancia().recuperarContacto(codigoReceptor);
 		} else {
-			receptor = AdaptadorContactoIndividualDAO.getUnicaInstancia().recuperarContacto(codigoReceptor);
+			
+			try {
+				receptor = AdaptadorContactoIndividualDAO.getUnicaInstancia().recuperarContacto(codigoReceptor);
+			} catch (NullPointerException e) {
+				// puede ser que el contacto receptor ya ha sido eliminado por el otro usuario,
+				// en este caso, se mantiene el mensaje con el campo receptor = null, no hay problema
+				// ya que no se hace uso del este campo para otras funcionalidades
+			}
 		}
 		
 		mensaje.setReceptor(receptor);

@@ -4,9 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JButton;
-
-import umu.tds.dao.AdaptadorEstadoDAO;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dao.IContactoDAO;
@@ -122,6 +119,15 @@ public class ControladorAppChat {
 	}
 
 	public boolean addContactoIndividual(String nombre, String movil) {
+		
+		// puede ser que un usuario se ha borrado su cuenta durante ejecucion de este
+		// y hay q actualizar catalogo
+		try {
+			catalogoUsuarios.cargarCatalogo();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		
 		Usuario usuario = CatalogoUsuario.getUnicaInstancia().getUsuario(movil);
 		if (usuario == null || usuarioActual.getCodigo() == usuario.getCodigo())
 			return false;
@@ -130,8 +136,8 @@ public class ControladorAppChat {
 	}
 	
 	// eliminar un contacto individual
-	public boolean deleteContactoIndividual(String nombre, String movil) {
-		if( usuarioActual.deleteContactoIndividual(nombre, movil)) {
+	public boolean deleteContactoIndividual(Contacto contacto) {
+		if( usuarioActual.deleteContactoIndividual(contacto)) {
 			adaptadorUsuario.modificarUsuario(usuarioActual);
 			return true;
 		}
@@ -235,8 +241,22 @@ public class ControladorAppChat {
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 	
+	public void eliminarUsuario() {
+		usuarioActual.borrarUsuario();
+		adaptadorUsuario.borrarUsuario(usuarioActual);
+		catalogoUsuarios.removeUsuario(usuarioActual);
+	}
 	
 	public boolean isAdministrador(Usuario usuario, Grupo grupo) {
 		return usuario.getCodigo() == grupo.getAdmin().getCodigo();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public List<Mensaje> buscarMensaje(Contacto contacto, String texto, Date fechaInicio, 
+								Date fechaFin, String movil){
+		if (fechaInicio != null)
+			fechaInicio.setHours(fechaInicio.getHours()-24);
+		return usuarioActual.buscarMensajes(contacto, texto, fechaInicio, fechaFin, movil);
+		
 	}
 }

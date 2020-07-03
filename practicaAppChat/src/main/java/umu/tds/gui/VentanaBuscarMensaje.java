@@ -3,6 +3,7 @@ package umu.tds.gui;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,6 +24,7 @@ import com.toedter.calendar.JDateChooser;
 
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.modelo.Contacto;
+import umu.tds.modelo.Mensaje;
 import umu.tds.modelo.Usuario;
 
 import javax.swing.JButton;
@@ -41,6 +43,7 @@ public class VentanaBuscarMensaje extends Ventana {
 
 	private JFrame fBuscar;
 	private JTextField textMensaje;
+	private JTextField textUsuarioMovil;
 	private JTextField contacto;
 	private JDateChooser fechaIni;
 	private JDateChooser fechaFin;
@@ -50,6 +53,7 @@ public class VentanaBuscarMensaje extends Ventana {
 	private JButton btnSeleContacto;
 
 	private Usuario actual;
+	private Contacto contactoElegido= null;
 	private JPopupMenu menuContacto;
 	private List<JMenuItem> contactoSeleccionado;
 
@@ -70,7 +74,7 @@ public class VentanaBuscarMensaje extends Ventana {
 	protected void crearPantalla() {
 		// TODO Auto-generated method stub
 		fBuscar = new JFrame();
-		fBuscar.setSize(515, 400);
+		fBuscar.setSize(552, 446);
 		fBuscar.setLocationRelativeTo(null);
 		fBuscar.setTitle("Buscador Mensaje");
 		fBuscar.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -181,7 +185,7 @@ public class VentanaBuscarMensaje extends Ventana {
 		gbc_btnBuscar.fill = GridBagConstraints.BOTH;
 		gbc_btnBuscar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBuscar.gridx = 1;
-		gbc_btnBuscar.gridy = 4;
+		gbc_btnBuscar.gridy = 5;
 		panel_Central.add(btnBuscar, gbc_btnBuscar);
 
 		btnCancelar = new JButton("CANCELAR");
@@ -190,8 +194,28 @@ public class VentanaBuscarMensaje extends Ventana {
 		gbc_btnCancelar.fill = GridBagConstraints.BOTH;
 		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCancelar.gridx = 3;
-		gbc_btnCancelar.gridy = 4;
+		gbc_btnCancelar.gridy = 5;
 		panel_Central.add(btnCancelar, gbc_btnCancelar);
+		
+		JLabel lblUsuarioMovil = new JLabel("Movil del usuario a buscar:");
+		lblUsuarioMovil.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_lblUsuarioMovil = new GridBagConstraints();
+		gbc_lblUsuarioMovil.fill = GridBagConstraints.VERTICAL;
+		gbc_lblUsuarioMovil.anchor = GridBagConstraints.EAST;
+		gbc_lblUsuarioMovil.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsuarioMovil.gridx = 0;
+		gbc_lblUsuarioMovil.gridy = 4;
+		panel_Central.add(lblUsuarioMovil, gbc_lblUsuarioMovil);
+
+		textUsuarioMovil = new JTextField();
+		GridBagConstraints gbc_textUsuarioMovil = new GridBagConstraints();
+		gbc_textUsuarioMovil.gridwidth = 3;
+		gbc_textUsuarioMovil.insets = new Insets(0, 0, 5, 5);
+		gbc_textUsuarioMovil.fill = GridBagConstraints.BOTH;
+		gbc_textUsuarioMovil.gridx = 1;
+		gbc_textUsuarioMovil.gridy = 4;
+		panel_Central.add(textUsuarioMovil, gbc_textUsuarioMovil);
+		textMensaje.setColumns(10);
 
 		JLabel lblResultadoBusqueda = new JLabel("RESULTADO DE LA BUSQUEDA");
 		lblResultadoBusqueda.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -232,6 +256,13 @@ public class VentanaBuscarMensaje extends Ventana {
 			contactoSeleccionado.add(contacto);
 		}
 		
+		for(Contacto c : actual.getListaGrupo()) {
+			JMenuItem contacto = new JMenuItem(c.getNombre());
+			contacto.addActionListener(this);
+			menuContacto.add(contacto);
+			contactoSeleccionado.add(contacto);
+		}
+		
 		// AÑADIR MANEJADORES
 		btnBuscar.addActionListener(this);
 		btnCancelar.addActionListener(this);
@@ -247,6 +278,14 @@ public class VentanaBuscarMensaje extends Ventana {
 			// SI TODOS LOS CAMPOS ESTAN BIEN BUSCAMOS
 			if (checkCampos()) {
 				System.out.println("Buscando mensaje del contacto");
+				
+				List<Mensaje> mensajes = unica.buscarMensaje(contactoElegido, textMensaje.getText(), 
+								fechaIni.getDate(), fechaFin.getDate(), textUsuarioMovil.getText());
+				
+				System.out.println("total :"+mensajes.size());
+				resultadoBusqueda.setText(mensajes.stream()
+											.map(m->m.getHora().toLocaleString()+"\tmovil:"+m.getTlfEmisor()+"\ttexto:"+m.getTexto()+"\n")
+											.collect(Collectors.joining()));
 			}
 		}
 
@@ -264,12 +303,17 @@ public class VentanaBuscarMensaje extends Ventana {
 		if(contactoSeleccionado.contains(e.getSource())) {
 			System.out.println("Seleccionando contacto a buscar");
 			
-			int i = 0;
-			while (!contactoSeleccionado.get(i).equals(e.getSource())) {
-				i++;
+			int indice = 0;
+			while (!contactoSeleccionado.get(indice).equals(e.getSource())) {
+				indice++;
 			}
 			
-			String con = contactoSeleccionado.get(i).getText();
+			if (indice < actual.getListaContacto().size())
+				contactoElegido = actual.getListaContacto().get(indice);
+			else
+				contactoElegido = actual.getListaGrupo().get(indice-actual.getListaContacto().size());
+			
+			String con = contactoSeleccionado.get(indice).getText();
 			contacto.setText(con);
 		}
 		
@@ -278,6 +322,7 @@ public class VentanaBuscarMensaje extends Ventana {
 	public boolean checkCampos() {
 		
 		boolean campos = true;
+		/*
 		if (textMensaje.getText().isEmpty()) {
 			campos = false;
 			JOptionPane.showMessageDialog(fBuscar, "Mensaje a Buscar vacio", "Mensaje",
@@ -290,12 +335,16 @@ public class VentanaBuscarMensaje extends Ventana {
 					JOptionPane.WARNING_MESSAGE);
 		}
 		
-		else if (fechaIni.getDate().after(fechaFin.getDate())) {
-			campos = false;
-			JOptionPane.showMessageDialog(fBuscar, "Fecha inicio posterior a fin", "Fecha",
-					JOptionPane.WARNING_MESSAGE);
+		else */
+		if (fechaIni.getDate() != null && fechaFin.getDate() != null) {
+			long inicio = fechaIni.getDate().getTime();
+			long fin = fechaFin.getDate().getTime();
+			if (fechaIni.getDate().getTime() > fechaFin.getDate().getTime()) {
+				campos = false;
+				JOptionPane.showMessageDialog(fBuscar, "Fecha inicio posterior a fin", "Fecha",
+						JOptionPane.WARNING_MESSAGE);
+			}
 		}
-
 		else if (contacto.getText().isEmpty()) {
 			campos = false;
 			JOptionPane.showMessageDialog(fBuscar, "Seleccione un contacto", "Contacto",

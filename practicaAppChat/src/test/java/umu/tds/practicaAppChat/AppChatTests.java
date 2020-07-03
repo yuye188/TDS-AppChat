@@ -37,13 +37,17 @@ public class AppChatTests {
 	@Test
 	public void test() throws ParseException {
 		
-		Usuario yu = new Usuario("yu", sdf.parse("12/10/1996"), "123", "yu@um.es", "yu", "123", "YUYE");
-		Usuario pepe = new Usuario("pepe", sdf.parse("12/10/1997"), "456", "pepe@um.es", "pepe", "123", "PEPE");
+		Usuario yu = new Usuario("yu", sdf.parse("12/10/1996"), "123", "yu@um.es", "yu", "123", "soy YUYE");
+		Usuario pepe = new Usuario("pepe", sdf.parse("12/10/1997"), "456", "pepe@um.es", "pepe", "123", "soy PEPE");
+		Usuario juan = new Usuario("juan", sdf.parse("12/10/1997"), "789", "juan@um.es", "juan", "123", "soy JUAN");
 		
 		AdaptadorUsuarioDAO.getUnicaInstancia().registrarUsuario(yu);
 		System.out.println("Código de yu:"+ yu.getCodigo());
 		AdaptadorUsuarioDAO.getUnicaInstancia().registrarUsuario(pepe);
 		System.out.println("Código de pepe:"+ pepe.getCodigo());
+		
+		AdaptadorUsuarioDAO.getUnicaInstancia().registrarUsuario(juan);
+		System.out.println("Código de juan:"+ juan.getCodigo());
 		/*
 		yu.setCodigo(4);
 		pepe.setCodigo(20);

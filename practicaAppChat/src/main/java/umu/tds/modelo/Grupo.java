@@ -53,7 +53,7 @@ public class Grupo extends Contacto {
 			}
 			
 			if (usuario.getCodigo() == admin.getCodigo())
-				admin = this.miembros.get(0);
+				this.admin = this.miembros.get(0);		// eligir el primer miemrbo como admin
 			
 			modificarContacto();
 			return true;

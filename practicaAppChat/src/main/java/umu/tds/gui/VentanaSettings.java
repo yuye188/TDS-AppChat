@@ -208,6 +208,13 @@ public class VentanaSettings extends Ventana{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == btnBorrarCuenta) {
+			int input = JOptionPane.showConfirmDialog(fSet, "¿Seguro quieres borrar la cuenta?", "Elegir...",JOptionPane.YES_NO_CANCEL_OPTION);
+			if (input == 0) {
+				unica.eliminarUsuario();
+				liberarVentana(fSet);
+				unica.setUsuarioActual(null);
+				new VentanaLogin();
+			}
 			System.out.println("Pulsado borrar cuenta");
 		}
 		

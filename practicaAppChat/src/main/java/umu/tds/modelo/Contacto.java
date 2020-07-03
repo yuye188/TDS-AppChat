@@ -18,6 +18,8 @@ public abstract class Contacto {
 		this.nombre = nombre;
 		mensajes = new LinkedList<Mensaje>();
 	}
+	
+	public abstract void modificarContacto();
 
 	public static int compararContactosPorHora(Contacto c1, Contacto c2) {
 		return c2.mensajes.get(c2.mensajes.size()-1).getHora()
@@ -43,7 +45,6 @@ public abstract class Contacto {
 		return this.mensajes.get(mensajes.size()-1);
 	}
 	
-	public abstract void modificarContacto();
 	
 	public int getCodigo() {
 		return codigo;

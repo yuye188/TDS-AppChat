@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorEstadoDAO;
@@ -84,16 +85,27 @@ public class Usuario {
 		return false;
 	}
 	
-	public boolean deleteContactoIndividual(String nombre, String movil) {
-		for (Contacto contacto: this.getListaContacto()) {
-			ContactoIndividual individual = (ContactoIndividual) contacto;
-			if (individual.getNombre().equals(nombre) && individual.getMovil().equals(movil)) {
-				this.listaContacto.remove(contacto);
-				AdaptadorContactoIndividualDAO.getUnicaInstancia().borrarContacto(contacto);
-				return true;
-			}
-		}
+	public boolean deleteContactoIndividual(Contacto contacto) {
 		
+		if (this.listaContacto.contains(contacto)) {
+			this.listaContacto.remove(contacto);
+			AdaptadorContactoIndividualDAO.getUnicaInstancia().borrarContacto(contacto);
+			return true;
+		}
+
+		return false;
+	}
+	
+	public boolean deleteContactoIndividualPorMovil(String movil) {
+		Contacto contacto = this.listaContacto.stream()
+										.map(ContactoIndividual.class::cast)
+										.filter(c -> c.getMovil().equals(movil))
+										.findFirst().orElse(null);
+		
+		if(this.deleteContactoIndividual(contacto)) {
+			AdaptadorUsuarioDAO.getUnicaInstancia().modificarUsuario(this);
+			return true;
+		}
 		return false;
 	}
 	
@@ -193,6 +205,39 @@ public class Usuario {
 											.mapToInt(c->c.getMensajes().size())
 											.sum();
 		return total;
+	}
+	
+	
+	
+	public void borrarUsuario() {
+		for(Contacto c: this.listaContacto) {
+			((ContactoIndividual)c).getUsuario().deleteContactoIndividualPorMovil(this.movil);
+		}
+		
+		for(Contacto c:this.listaGrupo) {
+			Grupo grupo = (Grupo) c;
+			grupo.deleteMiemrbo(grupo.getAdmin(), this);
+		}
+	}
+	
+	
+	public List<Mensaje> buscarMensajes(Contacto contacto, String texto, Date fechaIni, 
+			Date fechaFin, String movil){
+		
+		if (contacto.getClass() == ContactoIndividual.class) {
+			return contacto.getMensajes().stream()
+									 .filter(m->texto.isEmpty() || m.getTexto().contains(texto))
+									 .filter(m->fechaIni==null || m.getHora().after(fechaIni))
+									 .filter(m->fechaFin==null || m.getHora().before(fechaFin))
+									 .collect(Collectors.toList());
+		}
+		
+		return contacto.getMensajes().stream()
+									 .filter(m->texto.isEmpty() || m.getTexto().contains(texto))
+									 .filter(m->fechaIni== null || m.getHora().after(fechaIni))
+									 .filter(m->fechaFin==null || m.getHora().before(fechaFin))
+									 .filter(m->movil.isEmpty() || m.getTlfEmisor().equals(movil))
+									 .collect(Collectors.toList());
 	}
 
 	public int getCodigo() {

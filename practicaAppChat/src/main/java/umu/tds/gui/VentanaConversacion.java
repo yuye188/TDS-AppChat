@@ -107,8 +107,18 @@ public class VentanaConversacion extends Ventana {
 				
 				int numMsg = cActual.getMensajes().size();
 				//System.out.println(numMsg);
-				if (cActual.getClass() == ContactoIndividual.class)
+				if (cActual.getClass() == ContactoIndividual.class) {
+					try {
 					cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
+					} catch (NullPointerException e) {
+						timer.cancel();
+						timer.purge();
+						JOptionPane.showMessageDialog(null, "El usuario "+cActual.getNombre()+" ha eliminado su cuenta", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+						liberarVentana(contentPane);
+						new VentanaChat(actual);
+						return;
+					}
+				}
 				else {
 					
 						cActual = (Grupo) AdaptadorGrupoDAO.getUnicaInstancia().actualizarMensajes(cActual);
@@ -234,7 +244,8 @@ public class VentanaConversacion extends Ventana {
 			
 			boolean eliminar = false;
 			if (cActual.getClass() == ContactoIndividual.class) 
-				eliminar = unica.deleteContactoIndividual(cActual.getNombre(), ((ContactoIndividual) cActual).getMovil());
+				//eliminar = unica.deleteContactoIndividual(cActual.getNombre(), ((ContactoIndividual) cActual).getMovil());
+				eliminar = unica.deleteContactoIndividual(cActual);
 			else
 				eliminar = unica.deleteMiembro(actual, (Grupo) cActual);
 			

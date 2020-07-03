@@ -69,8 +69,10 @@ public class AdaptadorContactoIndividualDAO implements IContactoDAO{
 
 	@Override
 	public void borrarContacto(Contacto contacto) {
-		//for (Mensaje m:contacto.getMensajes())
-			//AdaptadorMensajeDAO.getUnicaInstancia().borrarMensaje(m);
+		/*
+		for (Mensaje m:contacto.getMensajes())
+			AdaptadorMensajeDAO.getUnicaInstancia().borrarMensaje(m);
+		*/
 		
 		Entidad eContactoIndividual = servPersistencia.recuperarEntidad(contacto.getCodigo());
 		servPersistencia.borrarEntidad(eContactoIndividual);
