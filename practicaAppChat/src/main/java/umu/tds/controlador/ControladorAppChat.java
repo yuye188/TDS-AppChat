@@ -127,6 +127,7 @@ public class ControladorAppChat implements IMensajesListener{
 		
 		// puede ser que un usuario se ha borrado su cuenta durante ejecucion de este
 		// y hay q actualizar catalogo
+		
 		try {
 			catalogoUsuarios.cargarCatalogo();
 		} catch (DAOException e) {
@@ -232,18 +233,20 @@ public class ControladorAppChat implements IMensajesListener{
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 	
-	public void cambiarRolUsuario() {
+	public double cambiarRolUsuario() {
 		RolUsuario rol;
 		usuarioActual.calcularDescuento();
+		double precio=0.0;
 		
 		if (usuarioActual.isPremium()) {
 			rol = new UsuarioNormal();
-			rol.volverEnNormal(usuarioActual);
+			precio = rol.volverEnNormal(usuarioActual);
 		} else {
 			rol= new UsuarioPremium();
-			rol.convertirseEnPremium(usuarioActual);
+			precio = rol.convertirseEnPremium(usuarioActual);
 		}
 		adaptadorUsuario.modificarUsuario(usuarioActual);
+		return precio;
 	}
 	
 	public void eliminarUsuario() {

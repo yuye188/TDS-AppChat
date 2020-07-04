@@ -1,7 +1,8 @@
 package umu.tds.modelo;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,11 +11,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.lowagie.text.Anchor;
+import com.lowagie.text.Chapter;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Section;
+import com.lowagie.text.pdf.PdfWriter;
+
 import umu.tds.JavaBean.MensajeWhatsApp;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorEstadoDAO;
-import umu.tds.dao.AdaptadorGrupoDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
 import umu.tds.modelo.Mensaje.MsgBuilder;
 
@@ -281,6 +290,57 @@ public class Usuario {
 	}
 	
 	public boolean generarPDFContactos() {
+		FileOutputStream outPut;
+		
+		try {
+			
+			String path = "estadisticas/"+this.nombre+"_contactos.pdf";
+			
+			outPut = new FileOutputStream(path);
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, outPut);
+			doc.open();
+			
+			String titulo = "Contactos del usuario: " + this.nombre;
+			Anchor anchor = new Anchor(titulo);
+
+			Chapter chapter = new Chapter(new Paragraph(anchor), 1);
+
+			Paragraph subPara = new Paragraph("Contactos Individuales");
+			subPara.setAlignment(Element.ALIGN_CENTER);
+			Section subCatPart = chapter.addSection(subPara,0);
+			subCatPart.add(new Paragraph("\n"));
+			
+			for (Contacto c : this.listaContacto) {
+				subCatPart.add(new Paragraph("- Nombre: " + c.getNombre() + 
+							"   Número: " + ((ContactoIndividual)c).getMovil()));
+			}
+			
+			subPara = new Paragraph("Grupos");
+			subPara.setAlignment(Element.ALIGN_CENTER);
+			subCatPart = chapter.addSection(subPara,0);
+			subCatPart.add(new Paragraph("\n"));
+			
+			for (Contacto grupo : this.listaGrupo) {
+				Paragraph paragraph = new Paragraph("Nombre del grupo: " + grupo.getNombre());
+				subCatPart.add(paragraph);
+				subCatPart.add(new Paragraph("\n"));
+				
+				for (Usuario usuario : ((Grupo)grupo).getMiembros()) {
+					subCatPart.add(new Paragraph("- Nombre: "+usuario.getNombre()+
+							"  Número: "+usuario.getMovil()));
+				}
+				
+				subCatPart.add(new Paragraph("\n"));
+			}
+			
+			doc.add(chapter);
+			doc.close();
+			return true;
+			
+		} catch (FileNotFoundException | DocumentException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 	

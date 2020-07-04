@@ -2,19 +2,22 @@ package umu.tds.modelo;
 
 public class UsuarioNormal implements RolUsuario {
 
-	public void convertirseEnPremium(Usuario usuario) {
-		return;
+	public double convertirseEnPremium(Usuario usuario) {
+		return 0.0;
 	}
 
-	public void volverEnNormal(Usuario usuario) {
+	public double volverEnNormal(Usuario usuario) {
 		if (usuario.isPremium()) {
+			/*
 			System.out.println("La cuenta del usuario se ha vuelto a Normal recibiendo: "
 					+ usuario.getDescuento().calcularDescuento() + "euros");
+			*/
 			usuario.setPremium(false);
 			usuario.setRol(this);
+			return usuario.getDescuento().calcularDescuento();
 		}
-		else
-			System.out.println("La cuenta del usuario ya es normal");
+		
+		return 0.0;
 	}
 
 }

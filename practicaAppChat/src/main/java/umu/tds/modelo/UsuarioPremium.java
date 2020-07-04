@@ -3,21 +3,23 @@ package umu.tds.modelo;
 public class UsuarioPremium implements RolUsuario{
 
 	@Override
-	public void convertirseEnPremium(Usuario usuario) {
+	public double convertirseEnPremium(Usuario usuario) {
 		if (!usuario.isPremium()) {
+			/*
 			System.out.println("La cuenta del usuario se ha convertido a Premium pagando: "
 					+ usuario.getDescuento().calcularDescuento() + "euros");
+					*/
 			usuario.setPremium(true);
 			usuario.setRol(this);
+			return usuario.getDescuento().calcularDescuento();
 		}
-		else
-			System.out.println("La cuenta del usuario ya es Premium");
+		return 0.0;
 		
 	}
 
 	@Override
-	public void volverEnNormal(Usuario usuario) {
-		return;
+	public double volverEnNormal(Usuario usuario) {
+		return 0.0;
 	}
 
 }

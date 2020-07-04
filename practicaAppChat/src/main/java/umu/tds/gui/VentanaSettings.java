@@ -135,7 +135,7 @@ public class VentanaSettings extends Ventana{
 		panel_Central.add(btnCambiarSaludo, gbc_btnNewButton_1);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setForeground(Color.CYAN);
+		separator_1.setForeground(Color.DARK_GRAY);
 		separator_1.setBackground(Color.WHITE);
 		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
 		gbc_separator_1.gridwidth = 4;
@@ -176,7 +176,7 @@ public class VentanaSettings extends Ventana{
 		btnContactos.addActionListener(this);
 		
 		JSeparator separator = new JSeparator();
-		separator.setForeground(Color.CYAN);
+		separator.setForeground(Color.DARK_GRAY);
 		separator.setBackground(Color.WHITE);
 		GridBagConstraints gbc_separator = new GridBagConstraints();
 		gbc_separator.fill = GridBagConstraints.BOTH;
@@ -263,15 +263,23 @@ public class VentanaSettings extends Ventana{
 		}
 		
 		if (e.getSource() == btnContactos) {
-			if (unica.generarPDFContactos()) 
-				JOptionPane.showMessageDialog(fSet, "Se han generado el PDF en la carpeta /estadistica", "Resultado",JOptionPane.INFORMATION_MESSAGE);
+			if (actual.isPremium()) {
+				if (unica.generarPDFContactos()) 
+					JOptionPane.showMessageDialog(fSet, "Se han generado el PDF en la carpeta /estadistica", "Resultado",JOptionPane.INFORMATION_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(fSet, "Se ha producido un error", "Resultado",JOptionPane.ERROR_MESSAGE);
+			}
 			else
 				JOptionPane.showMessageDialog(fSet, "Usted aún no es usuario premium", "Resultado",JOptionPane.ERROR_MESSAGE);
 		}
 		
 		if(e.getSource() == btnPremium) {
 			System.out.println("Pulsado premium");
-			unica.cambiarRolUsuario();
+			double precio = unica.cambiarRolUsuario();
+			if (actual.isPremium())
+				JOptionPane.showMessageDialog(fSet, "Se ha convertido en usuario Premium pagando "+precio+" euros", "Resultado",JOptionPane.INFORMATION_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(fSet, "Se ha convertido en usuario Normal recibiendo "+precio+" euros", "Resultado",JOptionPane.INFORMATION_MESSAGE);
 		}
 		if(e.getSource() == btnSalirSesion) {
 			System.out.println("Pulsado salir sesion");
