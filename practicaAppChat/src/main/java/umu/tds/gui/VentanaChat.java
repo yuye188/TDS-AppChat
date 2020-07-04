@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +24,12 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import beans.Mensaje;
+
 import tds.BubbleText;
+import umu.tds.JavaBean.CargadorMensaje;
+import umu.tds.JavaBean.EncendidoEvent;
+import umu.tds.JavaBean.IEncendidoListener;
+import umu.tds.JavaBean.Plataforma;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
@@ -39,6 +45,8 @@ import java.awt.GridBagLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Font;
@@ -46,7 +54,7 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.BoxLayout;
 
-public class VentanaChat extends Ventana {
+public class VentanaChat extends Ventana implements IEncendidoListener{
 
 	/**
 	 * 
@@ -58,13 +66,14 @@ public class VentanaChat extends Ventana {
 	private int size = 45;
 	
 	private static Timer timer = null;
+	private CargadorMensaje pulsadorLuz;
 
 	// USUARIO Y VENTANA PRINCIPAL
 	private Usuario actual;
 	private VentanaPrincipal ventana;
 
 	// PANEL NORTE
-	private JButton btnInfoUser, btnBuscar, btnJavaBean;
+	private JButton btnInfoUser, btnBuscar;// btnJavaBean;
 	// PANEL CONTACTOS
 	private JScrollPane panel_Scroll_Contactos;
 	private JPanel panel_Contactos;
@@ -90,7 +99,12 @@ public class VentanaChat extends Ventana {
 	}
 
 	public VentanaChat(Usuario u) {
-		// TODO Auto-generated constructor stub
+		
+		// crear el pulsador y añadir los listeners
+		pulsadorLuz = new CargadorMensaje();
+		pulsadorLuz.addEncendidoListener(this);
+		pulsadorLuz.addMensajesListener(unica);
+		
 		System.out.println("Creando Ventana Chat");
 		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
@@ -156,13 +170,16 @@ public class VentanaChat extends Ventana {
 		gbc_btnInfoUser.gridy = 0;
 		panel_Norte.add(btnInfoUser, gbc_btnInfoUser);
 
-		btnJavaBean = new JButton("Ja");
+		/*
+		btnJavaBean = new JButton("Importar");
 		GridBagConstraints gbc_btnJavaBean = new GridBagConstraints();
 		gbc_btnJavaBean.fill = GridBagConstraints.BOTH;
 		gbc_btnJavaBean.insets = new Insets(0, 0, 5, 0);
 		gbc_btnJavaBean.gridx = 3;
 		gbc_btnJavaBean.gridy = 0;
 		panel_Norte.add(btnJavaBean, gbc_btnJavaBean);
+		*/
+		panel_Norte.add(pulsadorLuz);
 
 		JLabel lblConversacion = new JLabel("Conversacion Recientes");
 		lblConversacion.setHorizontalAlignment(SwingConstants.CENTER);
@@ -198,7 +215,7 @@ public class VentanaChat extends Ventana {
 
 		// AÑADIR MANEJADORES
 		btnBuscar.addActionListener(this);
-		btnJavaBean.addActionListener(this);
+		//btnJavaBean.addActionListener(this);
 		btnInfoUser.addActionListener(this);
 	}
 
@@ -216,9 +233,11 @@ public class VentanaChat extends Ventana {
 			new VentanaPerfil(actual);
 		}
 
+		/*
 		if (e.getSource() == btnJavaBean) {
 			System.out.println("Pulsado JavaBean");
 		}
+		*/
 
 		if (menuContactoBoton.contains(e.getSource())) {
 			System.out.println("Seleccionado Contacto Desde Ventana Chat");
@@ -355,5 +374,68 @@ public class VentanaChat extends Ventana {
 			timer.purge();
 			timer=null;
 		}
+	}
+
+	@Override
+	public void enteradoCambioEncendido(EventObject e) {
+		
+		String nombreContacto = JOptionPane.showInputDialog(
+		        this, 
+		        "Escribe el nombre del contacto para importar los mensajes:", 
+		        "Contacto a importar", 
+		        JOptionPane.QUESTION_MESSAGE
+		);
+		
+		if (nombreContacto == null)
+			return;
+		
+		if (!unica.existeContacto(nombreContacto)) {
+			JOptionPane.showMessageDialog(null, "Usted no tienen ningún contacto llamado "+nombreContacto, "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		EncendidoEvent evento = (EncendidoEvent) e;
+		
+		if (evento.getNewEncendido()) {
+			JFileChooser file = new JFileChooser();
+			file.showOpenDialog(this);
+			
+			if(file.getSelectedFile()!=null) {
+				
+				String formatoFecha;
+				
+				String path = file.getSelectedFile().getAbsolutePath();
+				Object[] opcionesPlataforma = { "Android", "IOS" };
+				Object[] opcionesFormatoAnio = { "2", "4" };
+				
+				int plataformaElegido = JOptionPane.showOptionDialog(this, "¿Los mensajes a importar son del formato de Android o de IOS?","Plataforma", 
+						JOptionPane.INFORMATION_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, opcionesPlataforma, opcionesPlataforma[0]);
+				
+				Plataforma plataforma;
+				
+				if (plataformaElegido == JOptionPane.YES_OPTION) {
+					plataforma = Plataforma.ANDROID;
+					int formatoAnioElegido = JOptionPane.showOptionDialog(this, "¿Los años se representan en 2 dígitos o en 4?","Formato del año", 
+							JOptionPane.INFORMATION_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, opcionesFormatoAnio, opcionesFormatoAnio[0]);
+					
+					if (formatoAnioElegido == JOptionPane.YES_OPTION) {
+						formatoFecha = "d/M/yy H:mm";
+					} 
+					else {
+						formatoFecha = "d/M/yyyy H:mm";
+					}
+					pulsadorLuz.setFichero(path, formatoFecha, plataforma, nombreContacto);
+					
+				} 
+				
+				else {
+					plataforma = Plataforma.IOS;
+					formatoFecha = "d/M/yy H:mm:ss";
+					pulsadorLuz.setFichero(path, formatoFecha, plataforma, nombreContacto);
+				}
+				
+			}
+		}
+		
 	}
 }

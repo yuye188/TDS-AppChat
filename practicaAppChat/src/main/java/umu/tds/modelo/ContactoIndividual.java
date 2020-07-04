@@ -1,8 +1,15 @@
 package umu.tds.modelo;
 
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
+import umu.tds.JavaBean.MensajeWhatsApp;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
+import umu.tds.dao.AdaptadorMensajeDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
+import umu.tds.modelo.Mensaje.MsgBuilder;
 
 public class ContactoIndividual extends Contacto{
 	
@@ -44,6 +51,25 @@ public class ContactoIndividual extends Contacto{
 	@Override
 	public void modificarContacto() {
 		AdaptadorContactoIndividualDAO.getUnicaInstancia().modificarContacto(this);
+	}
+
+	@Override
+	public int importarMensajes(List<MensajeWhatsApp> mensajes, Usuario importador) {
+		
+		int mensajesImportados = 0;
+		for (MensajeWhatsApp mensaje : mensajes) {
+			
+			if (mensaje.getAutor().equals(importador.getNombre())) {
+				this.addMensajeWhatsapp(mensaje, importador.getMovil());
+				mensajesImportados++;
+			}
+			
+			else if (mensaje.getAutor().equals(this.usuario.getNombre())) {
+				this.addMensajeWhatsapp(mensaje, this.usuario.getMovil());
+				mensajesImportados++;
+			}
+		}
+		return mensajesImportados;
 	}
 	
 	

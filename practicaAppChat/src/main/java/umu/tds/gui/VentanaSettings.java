@@ -44,7 +44,8 @@ public class VentanaSettings extends Ventana{
 	private JButton btnCambairIcono;
 	private JButton btnCambiarSaludo;
 	private JButton btnPremium;
-	private JButton btnEsta;
+	private JButton btnEstatistica;
+	private JButton btnContactos;
 	private JButton btnSalirSesion;
 	private JButton btnBorrarCuenta;
 
@@ -154,15 +155,25 @@ public class VentanaSettings extends Ventana{
 		panel_Central.add(btnPremium, gbc_btnNewButton_2);
 		btnPremium.addActionListener(this);
 		
-		btnEsta = new JButton("Mostrar Estadistica");
+		btnEstatistica = new JButton("Generar Estadistica");
 		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
 		gbc_btnNewButton_3.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton_3.gridwidth = 2;
 		gbc_btnNewButton_3.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton_3.gridx = 1;
 		gbc_btnNewButton_3.gridy = 6;
-		panel_Central.add(btnEsta, gbc_btnNewButton_3);
-		btnEsta.addActionListener(this);
+		panel_Central.add(btnEstatistica, gbc_btnNewButton_3);
+		btnEstatistica.addActionListener(this);
+		
+		btnContactos = new JButton("Generar PDF de contactos");
+		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
+		gbc_btnNewButton_4.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_4.gridwidth = 2;
+		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_4.gridx = 1;
+		gbc_btnNewButton_4.gridy = 7;
+		panel_Central.add(btnContactos, gbc_btnNewButton_4);
+		btnContactos.addActionListener(this);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.CYAN);
@@ -243,10 +254,17 @@ public class VentanaSettings extends Ventana{
 			System.out.println("El nuevo saludo para Usario: " +actual.getNombre() + "es: "+ saludo);
 		}
 		
-		if(e.getSource() == btnEsta) {
+		if(e.getSource() == btnEstatistica) {
 			System.out.println("Pulsado estadistica ");
 			if (unica.generarEstadisticas())
 				JOptionPane.showMessageDialog(fSet, "Se han generado las estadisticas en la carpeta /estadistica", "Resultado",JOptionPane.INFORMATION_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(fSet, "Usted aún no es usuario premium", "Resultado",JOptionPane.ERROR_MESSAGE);
+		}
+		
+		if (e.getSource() == btnContactos) {
+			if (unica.generarPDFContactos()) 
+				JOptionPane.showMessageDialog(fSet, "Se han generado el PDF en la carpeta /estadistica", "Resultado",JOptionPane.INFORMATION_MESSAGE);
 			else
 				JOptionPane.showMessageDialog(fSet, "Usted aún no es usuario premium", "Resultado",JOptionPane.ERROR_MESSAGE);
 		}

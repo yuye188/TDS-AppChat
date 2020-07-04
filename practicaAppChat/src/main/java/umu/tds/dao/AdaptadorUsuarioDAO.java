@@ -172,7 +172,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		
 		movil = servPersistencia.recuperarPropiedadEntidad(eUsuario, "movil");
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
-		usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
+		usuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "usuario");
 		contrasenia = servPersistencia.recuperarPropiedadEntidad(eUsuario, "contrasenia");
 		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium").equals("true");
 		msgSaludo =  servPersistencia.recuperarPropiedadEntidad(eUsuario, "msgSaludo");

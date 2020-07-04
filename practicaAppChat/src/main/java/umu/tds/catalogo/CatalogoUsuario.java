@@ -16,7 +16,7 @@ public class CatalogoUsuario {
 	private static CatalogoUsuario unicaInstancia = null;
 
 	private Map<String,Usuario> usuarioPorTelefono;
-	private Map<String,Usuario> usuarioPorNombre;
+	private Map<String,Usuario> usuarioPorUsuario;
 	
 	private FactoriaDAO dao;
 	private IUsuarioDAO adaptadorUsuario;
@@ -26,7 +26,7 @@ public class CatalogoUsuario {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 			adaptadorUsuario = dao.getUsuarioDAO();
 			usuarioPorTelefono = new HashMap<String, Usuario>();
-			usuarioPorNombre = new HashMap<String, Usuario>();
+			usuarioPorUsuario = new HashMap<String, Usuario>();
 			cargarCatalogo();
 			
 		} catch (DAOException e) {
@@ -49,31 +49,31 @@ public class CatalogoUsuario {
 	}
 	
 	//Devolver usuario por nombre de usuario
-	public Usuario getUsuarioPorNombre(String usuario) {
-		return usuarioPorNombre.get(usuario);
+	public Usuario getUsuarioPorUsuario(String usuario) {
+		return usuarioPorUsuario.get(usuario);
 	}
 	
 	
 	public void addUsuario(Usuario u) {
 		usuarioPorTelefono.put(u.getMovil(), u);
-		usuarioPorNombre.put(u.getNombre(), u);
+		usuarioPorUsuario.put(u.getUsuario(), u);
 		System.out.println("Añadido usuario a Catalogo Usuario");
 	}
 	
 	public void removeUsuario(Usuario u) {
 		usuarioPorTelefono.remove(u.getMovil());
-		usuarioPorNombre.remove(u.getNombre());
+		usuarioPorUsuario.remove(u.getUsuario());
 		System.out.println("Eliminado usuario a Catalogo Usuario");
 	}
 	
 	/*Recupera todos los usuarios para trabajar con ellos en memoria*/
 	public void cargarCatalogo() throws DAOException {
 		usuarioPorTelefono.clear();
-		usuarioPorNombre.clear();
+		usuarioPorUsuario.clear();
 		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosoUsuarios();
 		 for (Usuario u: usuariosBD) {
 			     usuarioPorTelefono.put(u.getMovil(),u);
-			     usuarioPorNombre.put(u.getNombre(), u);
+			     usuarioPorUsuario.put(u.getUsuario(), u);
 		 }
 	}
 

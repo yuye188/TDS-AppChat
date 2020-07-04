@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import umu.tds.JavaBean.MensajeWhatsApp;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorEstadoDAO;
@@ -277,6 +278,48 @@ public class Usuario {
 									 .filter(m->fechaFin==null || m.getHora().before(fechaFin))
 									 .filter(m->movil.isEmpty() || m.getTlfEmisor().equals(movil))
 									 .collect(Collectors.toList());
+	}
+	
+	public boolean generarPDFContactos() {
+		return false;
+	}
+	
+	
+	public boolean existeContacto(String nombreContacto) {
+		boolean existeCI = this.listaContacto.stream()
+									.anyMatch(c -> c.getNombre().equals(nombreContacto));
+		
+		if (existeCI)
+			return true;
+		else
+			return this.listaGrupo.stream()
+									.anyMatch(c -> c.getNombre().equals(nombreContacto));
+	}
+	
+	
+	public Contacto buscarContacto(String nombreContacto) {
+		Contacto contacto = this.listaContacto.stream()
+								.filter(c -> c.getNombre().equals(nombreContacto))
+								.findFirst()
+								.orElse(null);
+		
+		if (contacto != null)
+			return contacto;
+		else
+			return this.listaGrupo.stream()
+								.filter(c -> c.getNombre().equals(nombreContacto))
+								.findFirst()
+								.orElse(null);
+	}
+	
+	public int importarMensajes(List<MensajeWhatsApp> mensajesWhatsApp, String nombreContacto) {
+		
+		Contacto contacto = this.buscarContacto(nombreContacto);
+		if (contacto == null)
+			return 0;
+		
+		return contacto.importarMensajes(mensajesWhatsApp,this);
+
 	}
 
 	public int getCodigo() {

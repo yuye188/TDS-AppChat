@@ -1,9 +1,12 @@
 package umu.tds.controlador;
 
 import java.util.Date;
+import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import umu.tds.JavaBean.IMensajesListener;
+import umu.tds.JavaBean.MensajeEvent;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
@@ -22,7 +25,7 @@ import umu.tds.modelo.Usuario;
 import umu.tds.modelo.UsuarioNormal;
 import umu.tds.modelo.UsuarioPremium;
 
-public class ControladorAppChat {
+public class ControladorAppChat implements IMensajesListener{
 
 	private static ControladorAppChat unicaInstancia;
 
@@ -107,7 +110,7 @@ public class ControladorAppChat {
 
 	public Usuario loginUsuario(String usuario, String clave) {
 
-		Usuario u = CatalogoUsuario.getUnicaInstancia().getUsuarioPorNombre(usuario);
+		Usuario u = CatalogoUsuario.getUnicaInstancia().getUsuarioPorUsuario(usuario);
 		if (u != null && u.getContrasenia().equals(clave)) {
 			usuarioActual = u;
 			return u;
@@ -268,5 +271,19 @@ public class ControladorAppChat {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean generarPDFContactos() {
+		return usuarioActual.generarPDFContactos();
+	}
+
+	public boolean existeContacto(String nombreContacto) {
+		return usuarioActual.existeContacto(nombreContacto);
+	}
+	
+	@Override
+	public void nuevosMensajes(EventObject mensajeEvent) {
+		MensajeEvent evento = (MensajeEvent) mensajeEvent;
+		usuarioActual.importarMensajes(evento.getMensajesWhatsApp(), evento.getNombreContacto());	
 	}
 }

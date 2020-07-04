@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import umu.tds.JavaBean.MensajeWhatsApp;
 import umu.tds.dao.AdaptadorGrupoDAO;
 import umu.tds.dao.AdaptadorUsuarioDAO;
 
@@ -120,6 +121,19 @@ public class Grupo extends Contacto {
 	@Override
 	public void modificarContacto() {
 		AdaptadorGrupoDAO.getUnicaInstancia().modificarContacto(this);
+	}
+
+	@Override
+	public int importarMensajes(List<MensajeWhatsApp> mensajes, Usuario importador) {
+		int mensajesImportados = 0;
+		for (MensajeWhatsApp mensaje: mensajes)
+			for(Usuario u:this.getMiembros()) 
+				if (u.getNombre().equals(mensaje.getAutor())) {
+					this.addMensajeWhatsapp(mensaje, u.getMovil());
+					mensajesImportados++;
+				}
+			
+		return mensajesImportados;
 	}
 
 }

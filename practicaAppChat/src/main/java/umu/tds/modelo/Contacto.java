@@ -1,10 +1,14 @@
 package umu.tds.modelo;
 
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import umu.tds.JavaBean.MensajeWhatsApp;
 import umu.tds.dao.AdaptadorMensajeDAO;
+import umu.tds.modelo.Mensaje.MsgBuilder;
 
 
 
@@ -21,6 +25,8 @@ public abstract class Contacto {
 	}
 	
 	public abstract void modificarContacto();
+	
+	public abstract int importarMensajes(List<MensajeWhatsApp> mensajes, Usuario importador);
 
 	public static int compararContactosPorHora(Contacto c1, Contacto c2) {
 		return c2.mensajes.get(c2.mensajes.size()-1).getHora()
@@ -51,6 +57,15 @@ public abstract class Contacto {
 		return mensajes.stream()
 					   .filter(m-> m.getTlfEmisor().equals(usuario.getMovil()))
 					   .collect(Collectors.toList());
+	}
+	
+	public void addMensajeWhatsapp(MensajeWhatsApp m, String movil) {
+		Mensaje msg = MsgBuilder.createBuilder(movil, this)
+				.setTexto(m.getTexto())
+				.setHora(Date.from(m.getFecha().atZone(ZoneId.systemDefault()).toInstant()))
+				.build();
+		AdaptadorMensajeDAO.getUnicaInstancia().registrarMensaje(msg);
+		this.addNuevoMensaje(msg);
 	}
 	
 	public int getCodigo() {
