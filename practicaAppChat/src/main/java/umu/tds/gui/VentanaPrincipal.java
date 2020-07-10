@@ -28,7 +28,6 @@ public class VentanaPrincipal{
 	}
 
 	public void mostrarVentana(int valor) {
-		System.out.println("Aqui llego mostrar pantalla " + valor);
 
 		if (valor == VENTANA_LOGIN) {
 			//vLogin = new VentanaLogin(this);
@@ -42,22 +41,16 @@ public class VentanaPrincipal{
 	}
 	
 	public void mostrarVentanaChat(VentanaPrincipal v, Usuario u) {
-		System.out.println("Mostrar Ventana Chat");
 		Ventana vChat = new VentanaChat(v, u);
 		
 	}
 	
 	public void mostrarVentanaEstado() {
-		System.out.println("Mostrar Ventana Estado");
 	}
 	
 	public void mostrarContacto(VentanaPrincipal v, Usuario u) {
-		System.out.println("Mostrar Ventana Contacto");
 		VentanaContacto c = new VentanaContacto();
 	}
 	
-	/*public void mostrarVentanaEstado() {
-		System.out.println("Mostrar Ventana Estado");
-	}*/
 	
 }

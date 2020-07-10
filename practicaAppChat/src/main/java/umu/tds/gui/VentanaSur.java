@@ -37,11 +37,8 @@ public class VentanaSur extends Ventana implements ActionListener {
 	 */
 	public VentanaSur(JFrame frame, Usuario u) {
 		
-		System.out.println("Creando Ventana Sur");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
 		fActual = frame;
 		
@@ -112,7 +109,6 @@ public class VentanaSur extends Ventana implements ActionListener {
 		// TODO Auto-generated method stub
 		
 		if(e.getSource() == btnChat) {
-			System.out.println("Pulsado Chat Sur");
 			
 			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);
@@ -120,7 +116,6 @@ public class VentanaSur extends Ventana implements ActionListener {
 		}
 		
 		if(e.getSource() == btnEstado) {
-			System.out.println("Pulsado Estado Sur");
 			
 			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);
@@ -128,13 +123,11 @@ public class VentanaSur extends Ventana implements ActionListener {
 		}
 		
 		if(e.getSource() == btnFoto) {
-			System.out.println("Pulsado Foto Sur");
 			JOptionPane.showMessageDialog(fActual, "NO SE PUEDE HACER FOTO AUN", "AppChat Foto",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		if(e.getSource() == btnContacto) {
-			System.out.println("Pulsado Agenda Contacto Sur");
 			
 			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);
@@ -142,7 +135,6 @@ public class VentanaSur extends Ventana implements ActionListener {
 		}
 		
 		if(e.getSource() == btnSetting) {
-			System.out.println("Pulsado Setting Sur");
 			
 			VentanaChat.cancelarTimer();
 			liberarVentana(fActual);

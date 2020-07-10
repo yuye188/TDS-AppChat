@@ -51,12 +51,9 @@ public class VentanaAddContacto extends Ventana {
 	 * @wbp.parser.constructor
 	 */
 	public VentanaAddContacto(Usuario u) {
-		// TODO Auto-generated constructor stub
-		System.out.println("Creando Ventana Add Contacto");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
+		
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
 		crearPantalla();
 		mostrarVentana(frameAdd);
@@ -64,7 +61,6 @@ public class VentanaAddContacto extends Ventana {
 
 	@Override
 	protected void crearPantalla() {
-		// TODO Auto-generated method stub
 		frameAdd = new JFrame();
 		frameAdd.setTitle("AppChat");
 		frameAdd.setSize(300, 255);
@@ -162,7 +158,6 @@ public class VentanaAddContacto extends Ventana {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == btnAceptar) {
-			System.out.println("Pulsado Aceptar");
 			if(nombre.getText().isEmpty() || tel.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(frameAdd, "Nombre o Telefono Vacio", "User Add",
 						JOptionPane.INFORMATION_MESSAGE);

@@ -74,10 +74,7 @@ public class ControladorAppChat implements IMensajesListener{
 	
 	public void setUsuarioActual(Usuario u) {
 			usuarioActual = u;
-			if(usuarioActual!=null)
-			System.out.println("El usuario actual para controlador es: "+ usuarioActual.getNombre());
-			else 
-			System.out.println("Has salido de sesion AppChat");
+
 	}
 
 	public Contacto getContactoActual() {
@@ -86,7 +83,6 @@ public class ControladorAppChat implements IMensajesListener{
 	
 	public void setContactoActual(Contacto u) {
 			contactoActual = u;
-			System.out.println("El contacto actual para controlador es: "+ contactoActual.getNombre());
 	}
 	
 	// TODO
@@ -94,7 +90,6 @@ public class ControladorAppChat implements IMensajesListener{
 			String contrasenia, String msgSaludo) {
 
 		if (esUsuarioRegisrado(movil)) {
-			System.out.println("Telefono Registrado");
 			return null;
 		}
 

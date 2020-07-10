@@ -65,12 +65,8 @@ public class VentanaContacto extends Ventana{
 	}
 
 	public VentanaContacto(Usuario u) {
-		// TODO Auto-generated constructor stub
-		System.out.println("Creando Ventana Contacto");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = AdaptadorUsuarioDAO.getUnicaInstancia().actualizarUsuario(u);
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
 		crearPantalla();
 		actualizarPantalla();
@@ -168,31 +164,23 @@ public class VentanaContacto extends Ventana{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == btnAñadirContacto) {
-			System.out.println("Pulsado Añadir Contacto");
 			liberarVentana(frameContacto);
 			VentanaAddContacto v = new VentanaAddContacto(actual);
 		}
 		
 		if(e.getSource() == btnAadirGrupo) {
-			System.out.println("Pulsado Añadir Grupo");
 			//liberarVentana(frameContacto);
 			new VentanaGrupo(actual, null);
 			actualizarPantalla();
 		}
-		/*
-		if(e.getSource() == btnModificar) {
-			System.out.println("Modificar Grupo");
-			
-		}*/
+		
 				
 		if(menuContactoBoton.contains(e.getSource())) {
-			System.out.println("Seleccionado Contacto");
 			
 			int i=0;
 			while(!menuContactoBoton.get(i).equals(e.getSource())) {
 				i++;
 			}
-			System.out.println("Seleccionado Contacto de la posicion :" + i);
 			
 			
 			Contacto contacto;
@@ -201,18 +189,12 @@ public class VentanaContacto extends Ventana{
 			else
 				contacto = actual.getListaGrupo().get(i-actual.getListaContacto().size());
 			
-			System.out.println("El contacto actual a mandar mensaje: "+ contacto.getNombre());
-			
 			liberarVentana(frameContacto);
 			new VentanaConversacion(actual,contacto);
 		}
 	}
 	
 	public void actualizarPantalla() {
-		
-		System.out.println("Cargando Lista Contacto" );
-		System.out.println("El usuario actual " + actual.getUsuario() +" tiene "+  
-				actual.getListaContacto().size() + " contactos");
 		
 		panel_ListaContacto.removeAll();
 		//menuContacto = new ArrayList<JMenuItem>();
@@ -230,9 +212,6 @@ public class VentanaContacto extends Ventana{
 			crearContactoPanel(user, nombre, saludo, boton);		
 		}
 		
-		System.out.println("Cargando Lista Grupo" );
-		System.out.println("El usuario actual " + actual.getUsuario() +" tiene "+  
-				actual.getListaGrupo().size() + " grupos");
 		
 		for(Contacto c: actual.getListaGrupo()){
 			

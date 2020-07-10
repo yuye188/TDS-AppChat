@@ -45,7 +45,6 @@ public class VentanaLogin extends Ventana {
 	}
 
 	public VentanaLogin() {
-		System.out.println("Pantalla login");
 		crearPantalla();
 		mostrarVentana(frmLoginAppChat);
 	}
@@ -164,12 +163,10 @@ public class VentanaLogin extends Ventana {
 		if(e.getSource() == btnRegistro) {
 			liberarVentana(frmLoginAppChat);
 			new VentanaRegistro();
-			//ventana.mostrarVentana(VentanaPrincipal.VENTANA_REGISTRO);
 		}
 
 		if(e.getSource() == btnSalir) {
 			liberarVentana(frmLoginAppChat);
-			System.out.println("Cerrando AppChat");
 			System.exit(0);
 		}
 	}	

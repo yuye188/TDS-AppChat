@@ -49,11 +49,8 @@ public class VentanaEstado extends Ventana {
 
 	public VentanaEstado(Usuario u) {
 
-		System.out.println("Creando Ventana Estado");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		crearPantalla();
 		mostrarVentana(frameEstado);
 	}
@@ -163,18 +160,15 @@ public class VentanaEstado extends Ventana {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnCrearEstado) {
-			System.out.println("Pulsado crear estado");
 			liberarVentana(frameEstado);
 			new VentanaCrearEstado(actual);
 		}
 
 		if (e.getSource() == btnVerestado) {
-			System.out.println("Pulsado ver estado");
 			
 			crearEstadoPanel();
 			
 			List<Contacto> c = actual.getListaContacto();
-			System.out.println("El usuario actual tiene: " +actual.getNombre() +" tiene contactos: " +c.size());
  			if(c.size() != 0) {
 				for(Contacto cont: actual.getListaContacto()) {
 					if(cont instanceof ContactoIndividual) {
@@ -190,7 +184,6 @@ public class VentanaEstado extends Ventana {
 
 	public void crearEstadoPanel(ContactoIndividual contacto) {
 		
-		System.out.println("Creando pantalla estado para contactos");
 		
 		Icon icono = getImagenIcon(contacto.getUsuario().getPathImg(), size, size);
 		String nombre = contacto.getNombre(); 
@@ -363,7 +356,6 @@ public class VentanaEstado extends Ventana {
 	
 	//CREAR PANEL CUANDO LOS CONTACTOS NO TIENE ESTADO NUEVO
 	public void crearPanelNoNuevoEstado() {
-		System.out.println("Creando Pantalla No estado nuevo");
 		JPanel panel = new JPanel();
 		panel_Estado.add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();

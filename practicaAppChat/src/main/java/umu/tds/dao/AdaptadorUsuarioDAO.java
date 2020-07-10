@@ -68,7 +68,6 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		eUsuario.setNombre("Usuario"); 
 	
 		String f = sdf.format(usuario.getFechaNacimiento().getTime());
-		System.out.println(f);
 		
 		eUsuario.setPropiedades(
 				new ArrayList<Propiedad>(Arrays.asList(
@@ -165,7 +164,7 @@ public class AdaptadorUsuarioDAO implements IUsuarioDAO{
 		
 		try {
 			fechaNacimiento = sdf.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
-			System.out.println(fechaNacimiento.toString());
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

@@ -55,12 +55,9 @@ public class VentanaGrupo extends Ventana {
 	private List<JMenuItem> menuitemDer;
 
 	public VentanaGrupo(Usuario u, Grupo g) {
-		System.out.println("Creando Ventana Grupo");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		gActual = g;
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		crearPantalla();
 		mostrarVentana(fGrupo);
 	}
@@ -247,7 +244,6 @@ public class VentanaGrupo extends Ventana {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnAceptar) {
-			System.out.println("Pulsado Crear Grupo");
 			if (nombreGrupo.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(fGrupo, "Nombre Grupo Vacio", "Nombre Grupo",
 						JOptionPane.WARNING_MESSAGE);
@@ -256,11 +252,9 @@ public class VentanaGrupo extends Ventana {
 			}else {
 				if(gActual == null) {
 					Grupo g = unica.crearGrupo(nombreGrupo.getText(),listaContactoDer);
-					System.out.println("Creado Grupo: "+ g.getNombre());
 					liberarVentana(fGrupo);
 				}
 				else {
-					System.out.println("Modificando Grupo");
 					Grupo g = unica.modificarGrupo(gActual,listaContactoDer);
 					if (g != null)
 						JOptionPane.showMessageDialog(fGrupo, "Grupo modificado", "Resultado",
@@ -277,20 +271,14 @@ public class VentanaGrupo extends Ventana {
 		//PANEL IZQUIERDA
 		if (menuitemIz.contains(e.getSource())) {
 
-			System.out.println("Seleccionando Contacto de Panel Izquierda");
-			System.out.println("Item size Iz:" + menuitemIz.size() +" lista size Iz: " +listaContactoIz.size());
-			System.out.println("Item size Der:" + menuitemDer.size() +" lista size Der: " +listaContactoDer.size());
-			
 			int i = 0;
 			while (!menuitemIz.get(i).equals(e.getSource())) {
 				i++;
 			}
 			
-			System.out.println("Seleccionado Contacto de la posicion :" + i);
 			ContactoIndividual m = listaContactoIz.get(i);
 			JMenuItem item = menuitemIz.get(i);
 			//item.addActionListener(this);
-			System.out.println("El contacto actual a añadir al grupo : " + m.getNombre());
 
 			// AÑADIRLO A LA LISTA DE MIEMBRO GRUPO
 			listaContactoDer.add(m);
@@ -312,26 +300,18 @@ public class VentanaGrupo extends Ventana {
 			
 			panel_Derecha.revalidate();
 			panel_Derecha.repaint();
-			
-			System.out.println("Item size Iz:" + menuitemIz.size() +" lista size Iz: " +listaContactoIz.size());
-			System.out.println("Item size Der:" + menuitemDer.size() +" lista size Der: " +listaContactoDer.size());
 		}
 
 		else if (menuitemDer.contains(e.getSource())) {
 
-			System.out.println("Seleccionando Contacto de Panel Derecha");
-			System.out.println("Item size Iz:" + menuitemIz.size() +" lista size Iz: " +listaContactoIz.size());
-			System.out.println("Item size Der:" + menuitemDer.size() +" lista size Der: " +listaContactoDer.size());
+			
 			int i = 0;
 			while (!menuitemDer.get(i).equals(e.getSource())) {
 				i++;
 			}
 
-			System.out.println("Seleccionado Contacto de la posicion :" + i);
 			ContactoIndividual m = listaContactoDer.get(i);
 			JMenuItem item = menuitemDer.get(i);
-			//item.addActionListener(this);
-			System.out.println("El contacto actual a eliminar del grupo : " + m.getNombre());
 
 			// AÑADIRLO A LA LISTA DE MIEMBRO GRUPO
 			listaContactoIz.add(m);
@@ -353,12 +333,10 @@ public class VentanaGrupo extends Ventana {
 			panel_Derecha.revalidate();
 			panel_Derecha.repaint();
 			
-			System.out.println("Item size Iz:" + menuitemIz.size() +" lista size Iz: " +listaContactoIz.size());
-			System.out.println("Item size Der:" + menuitemDer.size() +" lista size Der: " +listaContactoDer.size());
+			
 		}
 
 		if (e.getSource() == btnCancelar) {
-			System.out.println("Pulsado Cancelar Creacion Grupo");
 			liberarVentana(fGrupo);
 		}
 

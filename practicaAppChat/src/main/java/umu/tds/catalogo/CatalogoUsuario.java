@@ -57,13 +57,11 @@ public class CatalogoUsuario {
 	public void addUsuario(Usuario u) {
 		usuarioPorTelefono.put(u.getMovil(), u);
 		usuarioPorUsuario.put(u.getUsuario(), u);
-		System.out.println("Añadido usuario a Catalogo Usuario");
 	}
 	
 	public void removeUsuario(Usuario u) {
 		usuarioPorTelefono.remove(u.getMovil());
 		usuarioPorUsuario.remove(u.getUsuario());
-		System.out.println("Eliminado usuario a Catalogo Usuario");
 	}
 	
 	/*Recupera todos los usuarios para trabajar con ellos en memoria*/

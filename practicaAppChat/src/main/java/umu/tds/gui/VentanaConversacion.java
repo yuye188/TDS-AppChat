@@ -27,6 +27,7 @@ import umu.tds.modelo.Usuario;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.ScrollPaneConstants;
 
@@ -35,6 +36,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+
 import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
@@ -82,21 +85,18 @@ public class VentanaConversacion extends Ventana {
 
 	public VentanaConversacion(Usuario u, Contacto m) {
 		
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
 		if (m.getClass() == ContactoIndividual.class)
 			cActual = (ContactoIndividual) m;
 		else cActual = (Grupo) m;
 		
-		//System.out.println("El contacto actual a enviar mensaje: " + cActual.getUsuario().getNombre());
-		System.out.println("Tamaño de lista mensaje: "+cActual.getMensajes().size());
 		crearPantalla();
+
+		mostrarVentana(contentPane);
 		actualizarPantalla();
 		//contentPane.setResizable(false);
-		mostrarVentana(contentPane);
 		
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -105,7 +105,6 @@ public class VentanaConversacion extends Ventana {
 			public void run() {
 				
 				int numMsg = cActual.getMensajes().size();
-				//System.out.println(numMsg);
 				if (cActual.getClass() == ContactoIndividual.class) {
 					try {
 					cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
@@ -133,10 +132,12 @@ public class VentanaConversacion extends Ventana {
 				
 				if (numMsg != cActual.getMensajes().size()) {
 					actualizarPantalla();
-
+					
 					JScrollBar vertical = panel_Centro.getVerticalScrollBar();
 					vertical.setValue( vertical.getMaximum()-1);
+					
 				}
+				
 			}
 		}, 0, 2000);
 	}
@@ -144,11 +145,10 @@ public class VentanaConversacion extends Ventana {
 	@Override
 	protected void crearPantalla() {
 		
-		// TODO Auto-generated method stub
 		contentPane = new JFrame();
 		contentPane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane.setSize(355, 565);
-		//contentPane.setResizable(false);
+		contentPane.setResizable(false);
 		contentPane.setTitle("Conversacion");
 		contentPane.setLocationRelativeTo(null);
 		contentPane.getContentPane().setLayout(new BorderLayout());
@@ -193,12 +193,19 @@ public class VentanaConversacion extends Ventana {
 		popupMenu.add(eliminarContacto);
 
 		panel_Centro = new JScrollPane();
+		
+		panel_Centro.setMinimumSize(new Dimension(340, 565));
+		panel_Centro.setPreferredSize(new Dimension(340, 565));
+		panel_Centro.setMaximumSize(new Dimension(340, 565));
+		panel_Centro.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		panel_Centro.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		contentPane.getContentPane().add(panel_Centro, BorderLayout.CENTER);
 
 		panel_Chat = new JPanel();
-		panel_Chat.setLayout(new GridLayout(0, 1, 0, 0));
+		panel_Chat.setMinimumSize(new Dimension(320, 565));
+		//panel_Chat.setPreferredSize(new Dimension(340, 565));
 		panel_Centro.setViewportView(panel_Chat);
+		panel_Chat.setLayout(new BoxLayout(panel_Chat, BoxLayout.Y_AXIS));
 
 				
 		JPanel panel_Sur = new JPanel();
@@ -235,7 +242,6 @@ public class VentanaConversacion extends Ventana {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 		if (e.getSource() == eliminarContacto) {
 			timer.cancel();
@@ -243,7 +249,6 @@ public class VentanaConversacion extends Ventana {
 			
 			boolean eliminar = false;
 			if (cActual.getClass() == ContactoIndividual.class) 
-				//eliminar = unica.deleteContactoIndividual(cActual.getNombre(), ((ContactoIndividual) cActual).getMovil());
 				eliminar = unica.deleteContactoIndividual(cActual);
 			else
 				eliminar = unica.deleteMiembro(actual, (Grupo) cActual);
@@ -267,22 +272,22 @@ public class VentanaConversacion extends Ventana {
 		if (e.getSource() == btnVolver) {
 			timer.cancel();
 			timer.purge();
-			System.out.println("Pulsado Volver");
 			liberarVentana(contentPane);
 			new VentanaChat(actual);
 		}
 
 		if (e.getSource() == btnInfoUser) {
-			System.out.println("Pulsado InfoUser");
+			if (cActual.getClass() == ContactoIndividual.class)
+				new VentanaPerfil(((ContactoIndividual)cActual).getUsuario());
+			else
+				new VentanaPerfilGrupo(cActual);
 		}
 
 		if (e.getSource() == btnMore) {
-			System.out.println("Pulsado MenuMore");
 			popupMenu.show(btnMore, 0, 45);
 		}
 
 		if (e.getSource() == btnEmoji) {
-			System.out.println("Pulsado Emoji");
 			menuEmoji.pack(); // .pack para ocupar el tamaño minimo necesario
 			// MOSTRAR EMOTICONOS AL LADO DE SU BOTON
 			menuEmoji.show(btnEmoji, btnEmoji.getX() - 335, btnEmoji.getY() - 203);
@@ -290,12 +295,10 @@ public class VentanaConversacion extends Ventana {
 
 		// ENVIAR MENSAJE NORMAL
 		if (e.getSource() == btnEnviar) {
-			System.out.println("Pulsado Enviar");
 
 			if (mensaje.getText().isEmpty()) {
 				JOptionPane.showMessageDialog(contentPane, "Mensaje Vacio", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				System.out.println("Mandar mensaje a: " + cActual.getNombre());
 				unica.enviarMensaje(cActual, mensaje.getText(), -1);
 				mensaje.setText("");
 				actualizarPantalla();
@@ -304,13 +307,10 @@ public class VentanaConversacion extends Ventana {
 
 		// ENVIAR EMOJI
 		if (emojiSeleccionado.contains(e.getSource())) {
-			System.out.println("Seleccionando emoji");
 			int i = 0;
 			while (!emojiSeleccionado.get(i).equals(e.getSource())) {
 				i++;
 			}
-			System.out.println("Contacto a enviar: " + cActual.getNombre());
-			System.out.println("Seleccionado emoji: " + i);
 			unica.enviarMensaje(cActual, "", i);
 			actualizarPantalla();
 		}
@@ -318,10 +318,7 @@ public class VentanaConversacion extends Ventana {
 
 	public void actualizarPantalla() {
 		
-		//cActual = (ContactoIndividual) AdaptadorContactoIndividualDAO.getUnicaInstancia().actualizarMensajes(cActual);
 		panel_Chat.removeAll();
-		System.out.println("Repintando Pantalla Conversacion");
-		System.out.println("Contacto actual a mostrar mensaje: " + cActual.getNombre());
 		
 		int sentOrecive;
 		Color colorMensaje;
@@ -336,18 +333,9 @@ public class VentanaConversacion extends Ventana {
 			} else {
 				sentOrecive = BubbleText.RECEIVED;
 				colorMensaje = Color.WHITE;
-				// if(cActual instanceof Grupo) {
-
-				// }else {
-				/*
-				if (cActual.getNombre() == null) {
-					nombre = cActual.getMovil();
-				} else {
-					nombre = cActual.getNombre();
-				}*/
-				//nombre = cActual.getNombre();
+				
 				nombre = CatalogoUsuario.getUnicaInstancia().getUsuario(m.getTlfEmisor()).getNombre();
-				// }
+				
 			}
 			BubbleText b = null;
 			if (m.getEmoticon() != -1) {
@@ -359,10 +347,13 @@ public class VentanaConversacion extends Ventana {
 				t = m.getTexto();
 			}	
 		}
+		
 		//ACTUALIZAR Y REVALIDAR PANEL POR CAMBIOS
 		panel_Chat.revalidate();
 		panel_Chat.repaint();
 		
+		// dibujar rectangle en el inferior derecho
+		panel_Chat.scrollRectToVisible(new Rectangle(0, panel_Chat.getHeight(), 2, 2));
 	}
 
 	private void cargarEmoji() {
@@ -374,9 +365,5 @@ public class VentanaConversacion extends Ventana {
 			emojiSeleccionado.add(jmi);
 		}
 	}
-/*
-	public static void main(String[] args) {
-		VentanaConversacion v = new VentanaConversacion();
-	}
-	*/
+
 }

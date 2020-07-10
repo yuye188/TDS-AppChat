@@ -60,11 +60,8 @@ public class VentanaBuscarMensaje extends Ventana {
 
 	public VentanaBuscarMensaje(Usuario u) {
 
-		System.out.println("Creando Ventana Busqueda");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 
 		crearPantalla();
 		mostrarVentana(fBuscar);
@@ -274,15 +271,12 @@ public class VentanaBuscarMensaje extends Ventana {
 		// TODO Auto-generated method stub
 		if (e.getSource() == btnBuscar) {
 
-			System.out.println("Pulsado Busacando");
 			// SI TODOS LOS CAMPOS ESTAN BIEN BUSCAMOS
 			if (checkCampos()) {
-				System.out.println("Buscando mensaje del contacto");
 				
 				List<Mensaje> mensajes = unica.buscarMensaje(contactoElegido, textMensaje.getText(), 
 								fechaIni.getDate(), fechaFin.getDate(), textUsuarioMovil.getText());
 				
-				System.out.println("total :"+mensajes.size());
 				resultadoBusqueda.setText(mensajes.stream()
 											.map(m->m.getHora().toLocaleString()+"\tmovil:"+m.getTlfEmisor()+"\ttexto:"+m.getTexto()+"\n")
 											.collect(Collectors.joining()));
@@ -290,18 +284,15 @@ public class VentanaBuscarMensaje extends Ventana {
 		}
 
 		if (e.getSource() == btnCancelar) {
-			System.out.println("Pulsado Cancelando");
 			liberarVentana(fBuscar);
 		}
 
 		if (e.getSource() == btnSeleContacto) {
-			System.out.println("Pulsado Seleccionando contacto a buscar");
 			menuContacto.pack();
 			menuContacto.show(btnSeleContacto, (int)btnSeleContacto.getSize().getWidth(), 0);
 		}
 
 		if(contactoSeleccionado.contains(e.getSource())) {
-			System.out.println("Seleccionando contacto a buscar");
 			
 			int indice = 0;
 			while (!contactoSeleccionado.get(indice).equals(e.getSource())) {
@@ -337,8 +328,7 @@ public class VentanaBuscarMensaje extends Ventana {
 		
 		else */
 		if (fechaIni.getDate() != null && fechaFin.getDate() != null) {
-			long inicio = fechaIni.getDate().getTime();
-			long fin = fechaFin.getDate().getTime();
+			
 			if (fechaIni.getDate().getTime() > fechaFin.getDate().getTime()) {
 				campos = false;
 				JOptionPane.showMessageDialog(fBuscar, "Fecha inicio posterior a fin", "Fecha",

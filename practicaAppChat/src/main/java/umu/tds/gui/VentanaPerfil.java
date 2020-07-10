@@ -36,11 +36,7 @@ public class VentanaPerfil extends Ventana{
 	 * Create the frame.
 	 */
 	public VentanaPerfil(Usuario u) {
-		System.out.println("Creando Ventana Perfil Usuario");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
-		//Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		crearPantalla();
 		mostrarVentana(fPerfil);
 	}
@@ -49,7 +45,6 @@ public class VentanaPerfil extends Ventana{
 
 	@Override
 	protected void crearPantalla() {
-		// TODO Auto-generated method stub
 		fPerfil = new JFrame();
 		fPerfil.setTitle("Perfil Usuario");
 		fPerfil.setSize(450, 250);

@@ -40,11 +40,8 @@ public class VentanaCrearEstado extends Ventana {
 
 	public VentanaCrearEstado(Usuario u) {
 		
-		System.out.println("Creando Ventana Para Creacion Nuevo Estado");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
 		crearPantalla();
 		mostrarVentana(cEstado);
@@ -146,7 +143,6 @@ public class VentanaCrearEstado extends Ventana {
 		
 		if(e.getSource() == btnSeleFoto) {
 			
-			System.out.println("Pulsado Seleccionando Foto");
 			JFileChooser file = new JFileChooser();
 			file.showOpenDialog(cEstado);
 			File archivo = file.getSelectedFile();
@@ -160,9 +156,7 @@ public class VentanaCrearEstado extends Ventana {
 		}
 		
 		if(e.getSource() == btnCrearEstado) {
-			System.out.println("Pulsado Crear Estado");
 			if(pathImage != null && fraseEstado.getText() != null) {
-				System.out.println("Creando Nuevo Estado para Usuario actual: "+ actual.getNombre());
 				unica.crearEstado(fraseEstado.getText(), pathImage);
 				liberarVentana(cEstado);
 				new VentanaEstado(actual);
@@ -170,7 +164,6 @@ public class VentanaCrearEstado extends Ventana {
 		}
 		
 		if(e.getSource() == btnCancelar) {
-			System.out.println("Pulsado Cancelar");
 			liberarVentana(cEstado);
 			new VentanaEstado(actual);
 		}

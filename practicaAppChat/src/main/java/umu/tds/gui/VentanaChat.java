@@ -92,7 +92,6 @@ public class VentanaChat extends Ventana implements IEncendidoListener{
 	}
 
 	public VentanaChat() {
-		System.out.println();
 		actual = null;
 		crearPantalla();
 		mostrarVentana(frameChat);
@@ -105,18 +104,15 @@ public class VentanaChat extends Ventana implements IEncendidoListener{
 		pulsadorLuz.addEncendidoListener(this);
 		pulsadorLuz.addMensajesListener(unica);
 		
-		System.out.println("Creando Ventana Chat");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		Ventana.unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
+		
 		crearPantalla();
 		actualizarPantalla();
 		mostrarVentana(frameChat);
 		
 		if (timer == null) {
 			timer = new Timer();
-			System.out.println("nuevo timer");
 			timer.schedule(new TimerTask() {
 				
 				@Override
@@ -221,34 +217,23 @@ public class VentanaChat extends Ventana implements IEncendidoListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
 		if (e.getSource() == btnBuscar) {
-			System.out.println("Pulsado Buscar");
 			new VentanaBuscarMensaje(actual);
 		}
 
 		if (e.getSource() == btnInfoUser) {
-			System.out.println("Pulsado InfoUser");
 			new VentanaPerfil(actual);
 		}
 
-		/*
-		if (e.getSource() == btnJavaBean) {
-			System.out.println("Pulsado JavaBean");
-		}
-		*/
 
 		if (menuContactoBoton.contains(e.getSource())) {
-			System.out.println("Seleccionado Contacto Desde Ventana Chat");
 
 			int i = 0;
 			while (!menuContactoBoton.get(i).equals(e.getSource())) {
 				i++;
 			}
-			System.out.println("Seleccionado Contacto de la posicion :" + i);
 			Contacto m = actual.getContactosOrdenadosPorHora().get(i);
-			System.out.println("El contacto actual a mandar mensaje: " + m.getNombre());
 
 			cancelarTimer();
 			
@@ -259,9 +244,6 @@ public class VentanaChat extends Ventana implements IEncendidoListener{
 	}
 
 	public void actualizarPantalla() {
-		//System.out.println("Cargando Lista Conversacion reciente");
-		//System.out.println("El usuario actual " + actual.getUsuario() + " tiene " + actual.getListaContacto().size()
-		//		+ " contactos");
 
 		panel_Contactos.removeAll();
 		menuContactoBoton = new ArrayList<JButton>();
@@ -274,12 +256,7 @@ public class VentanaChat extends Ventana implements IEncendidoListener{
 			Icon user = getImagenIcon(unica.getImageContacto(c), size, size);
 			Icon boton = getImagenIcon("imgs/iconomensaje.png", size, size);
 			String nombre = "";
-			/*
-			if(c instanceof Grupo) {
-				nombre = ((ContactoIndividual)c).getNombre();
-			}else {
-				nombre = c.getNombre();
-			}*/
+			
 			nombre = c.getNombre();
 			
 			String fecha = "";
@@ -364,7 +341,6 @@ public class VentanaChat extends Ventana implements IEncendidoListener{
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Prueba Ventana Chat");
 		VentanaChat ventana = new VentanaChat(Ventana.actual);
 	}
 

@@ -51,11 +51,8 @@ public class VentanaSettings extends Ventana{
 
 	public VentanaSettings(Usuario u) {
 	
-		System.out.println("Creando Ventana Setting");
-		System.out.println("El usuario anterior es:" + unica.getUsuarioActual().getNombre());
 		actual = u;
 		unica.setUsuarioActual(actual);
-		System.out.println("El usuario actual es:" + unica.getUsuarioActual().getNombre());
 		
 		crearPantalla();
 		mostrarVentana(fSet);
@@ -226,11 +223,9 @@ public class VentanaSettings extends Ventana{
 				unica.setUsuarioActual(null);
 				new VentanaLogin();
 			}
-			System.out.println("Pulsado borrar cuenta");
 		}
 		
 		if(e.getSource() == btnCambairIcono) {
-			System.out.println("Pulsado cambiar icono");
 			JFileChooser file = new JFileChooser();
 			
 			file.showOpenDialog(fSet);
@@ -247,15 +242,13 @@ public class VentanaSettings extends Ventana{
 		}
 		
 		if(e.getSource() == btnCambiarSaludo) {
-			System.out.println("Pulsado cambiar saludo");
 			String saludo = JOptionPane.showInputDialog(fSet, "Modifica tu mensaje de saludo", "Moficacion" ,JOptionPane.QUESTION_MESSAGE);
 			unica.cambiarMsgSaludo(saludo);
 			JOptionPane.showMessageDialog(fSet, "Se ha cambiado su mensaje de saludo a:"+saludo, "Resultado",JOptionPane.INFORMATION_MESSAGE);
-			System.out.println("El nuevo saludo para Usario: " +actual.getNombre() + "es: "+ saludo);
+		
 		}
 		
 		if(e.getSource() == btnEstatistica) {
-			System.out.println("Pulsado estadistica ");
 			if (unica.generarEstadisticas())
 				JOptionPane.showMessageDialog(fSet, "Se han generado las estadisticas en la carpeta /estadistica", "Resultado",JOptionPane.INFORMATION_MESSAGE);
 			else
@@ -274,7 +267,6 @@ public class VentanaSettings extends Ventana{
 		}
 		
 		if(e.getSource() == btnPremium) {
-			System.out.println("Pulsado premium");
 			double precio = unica.cambiarRolUsuario();
 			if (actual.isPremium())
 				JOptionPane.showMessageDialog(fSet, "Se ha convertido en usuario Premium pagando "+precio+" euros", "Resultado",JOptionPane.INFORMATION_MESSAGE);
@@ -282,7 +274,6 @@ public class VentanaSettings extends Ventana{
 				JOptionPane.showMessageDialog(fSet, "Se ha convertido en usuario Normal recibiendo "+precio+" euros", "Resultado",JOptionPane.INFORMATION_MESSAGE);
 		}
 		if(e.getSource() == btnSalirSesion) {
-			System.out.println("Pulsado salir sesion");
 			liberarVentana(fSet);
 			unica.setUsuarioActual(null);
 			new VentanaLogin();
