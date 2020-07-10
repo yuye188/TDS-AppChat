@@ -20,7 +20,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Section;
 import com.lowagie.text.pdf.PdfWriter;
 
-import umu.tds.JavaBean.MensajeWhatsApp;
+import pulsadorLuz.MensajeWhatsApp;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorEstadoDAO;
@@ -225,6 +225,7 @@ public class Usuario {
 		return listaValores;
 	}
 	
+	// comprueba todas las clases de descuentos disponibles, si cumple la condicion, lo añade
 	public void calcularDescuento() {
 		
 		this.descuento = new DescuentoCompuesto();
@@ -268,7 +269,6 @@ public class Usuario {
 			grupo.deleteMiemrbo(grupo.getAdmin(), this);
 		}
 	}
-	
 	
 	public List<Mensaje> buscarMensajes(Contacto contacto, String texto, Date fechaIni, 
 			Date fechaFin, String movil){

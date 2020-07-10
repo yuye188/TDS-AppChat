@@ -1,4 +1,4 @@
-package umu.tds.JavaBean;
+package pulsadorLuz;
 
 import java.time.LocalDateTime;
 

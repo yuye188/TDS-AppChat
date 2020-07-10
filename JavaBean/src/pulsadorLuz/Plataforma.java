@@ -1,4 +1,4 @@
-package umu.tds.JavaBean;
+package pulsadorLuz;
 
 public enum Plataforma {
 	IOS, ANDROID

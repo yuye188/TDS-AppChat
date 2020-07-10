@@ -1,4 +1,4 @@
-package umu.tds.JavaBean;
+package pulsadorLuz;
 
 import java.util.EventObject;
 import java.util.List;

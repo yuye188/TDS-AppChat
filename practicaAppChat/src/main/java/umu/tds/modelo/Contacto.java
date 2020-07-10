@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import umu.tds.JavaBean.MensajeWhatsApp;
+import pulsadorLuz.MensajeWhatsApp;
 import umu.tds.dao.AdaptadorMensajeDAO;
 import umu.tds.modelo.Mensaje.MsgBuilder;
 

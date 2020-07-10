@@ -45,15 +45,16 @@ public class AppChatTests {
 			adaptadorUsuario.borrarUsuario(pepe);
 		if(riki.getCodigo() != 0)
 			adaptadorUsuario.borrarUsuario(riki);
-		
 	}
 
+	// test para el registro del usuario
 	@Test
 	public void testRegistrarUsuario() {
 		assertTrue(adaptadorUsuario.registrarUsuario(yu));
 		assertNotEquals(0, yu.getCodigo());
 	}
 	
+	// test para el registro del usuario repetido
 	@Test
 	public void testRegistroUsuarioRepetido() {
 		adaptadorUsuario.registrarUsuario(yu);
@@ -61,6 +62,7 @@ public class AppChatTests {
 	}
 	
 
+	// test para añadir un contacto individual
 	@Test
 	public void testAddContactoIndividual() {
 		adaptadorUsuario.registrarUsuario(yu);
@@ -69,6 +71,7 @@ public class AppChatTests {
 		assertEquals(1, yu.getListaContacto().size());
 	}
 	
+	// test para añadir un contacto individual repetido
 	@Test
 	public void testAddContactoRepetido() {
 		adaptadorUsuario.registrarUsuario(yu);
@@ -77,6 +80,7 @@ public class AppChatTests {
 		assertFalse(yu.addContactoIndividual(riki.getNombre(), riki.getMovil(), riki));
 	}
 	
+	// test para eliminar un contacto individual
 	@Test
 	public void testDeleteContactoIndividual() {
 		adaptadorUsuario.registrarUsuario(yu);
@@ -86,6 +90,7 @@ public class AppChatTests {
 		assertEquals(0, yu.getListaContacto().size());
 	}
 	
+	// test para eliminar un contacto individual no añadido
 	@Test
 	public void testDeleteContactoIndividualNoExistente() {
 		adaptadorUsuario.registrarUsuario(yu);
@@ -95,8 +100,9 @@ public class AppChatTests {
 		));
 	}
 	
+	// test para eliminar (salir) de un grupo
 	@Test
-	public void testDeleteGrupo() {		// salir del grupo
+	public void testDeleteGrupo() {		
 		// registrar usuarios
 		adaptadorUsuario.registrarUsuario(yu);
 		adaptadorUsuario.registrarUsuario(riki);
@@ -126,6 +132,7 @@ public class AppChatTests {
 		assertEquals(2, grupo.getMiembros().size());
 	}
 	
+	// test para enviar un mensaje a un contacto individual
 	@Test
 	public void testEnviarMensajeAContactoIndividual() {
 		
@@ -156,6 +163,7 @@ public class AppChatTests {
 		assertEquals(texto, msg.getTexto());
 	}
 	
+	// test para enviar un mensaje a un grupo
 	@Test
 	public void testEnviarMensajeAGrupo() {
 		// registrar usuarios
@@ -204,6 +212,7 @@ public class AppChatTests {
 		assertEquals(texto, msg.getTexto());
 	}
 	
+	// test para crear un estado
 	@Test
 	public void testCrearEstado() {
 		adaptadorUsuario.registrarUsuario(yu);
@@ -215,7 +224,7 @@ public class AppChatTests {
 		assertEquals(pathImg, yu.getEstado().getPathImg());
 	}
 	
-	
+	// test para borrar un usuario
 	@Test
 	public void testBorrarUsuario() {
 		

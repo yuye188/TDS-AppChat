@@ -4,7 +4,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import umu.tds.JavaBean.MensajeWhatsApp;
+import pulsadorLuz.MensajeWhatsApp;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;
 import umu.tds.dao.AdaptadorMensajeDAO;

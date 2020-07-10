@@ -1,4 +1,4 @@
-package umu.tds.JavaBean;
+package pulsadorLuz;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

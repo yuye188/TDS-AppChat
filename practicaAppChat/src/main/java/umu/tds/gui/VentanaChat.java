@@ -24,12 +24,12 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import beans.Mensaje;
-
+import pulsadorLuz.CargadorMensaje;
+import pulsadorLuz.EncendidoEvent;
+import pulsadorLuz.IEncendidoListener;
+import pulsadorLuz.Plataforma;
 import tds.BubbleText;
-import umu.tds.JavaBean.CargadorMensaje;
-import umu.tds.JavaBean.EncendidoEvent;
-import umu.tds.JavaBean.IEncendidoListener;
-import umu.tds.JavaBean.Plataforma;
+
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.controlador.ControladorAppChat;
 import umu.tds.dao.AdaptadorContactoIndividualDAO;

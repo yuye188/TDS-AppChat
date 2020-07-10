@@ -5,8 +5,8 @@ import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import umu.tds.JavaBean.IMensajesListener;
-import umu.tds.JavaBean.MensajeEvent;
+import pulsadorLuz.IMensajesListener;
+import pulsadorLuz.MensajeEvent;
 import umu.tds.catalogo.CatalogoUsuario;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
@@ -85,7 +85,7 @@ public class ControladorAppChat implements IMensajesListener{
 			contactoActual = u;
 	}
 	
-	// TODO
+	// registrar el usuario, si ya existe devuelve null
 	public Usuario registrarUsuario(String nombre, Date fechaNacimiento, String movil, String email, String usuario,
 			String contrasenia, String msgSaludo) {
 
@@ -113,7 +113,6 @@ public class ControladorAppChat implements IMensajesListener{
 		return null;
 	}
 
-	// TODO
 	public boolean esUsuarioRegisrado(String movil) {
 		return CatalogoUsuario.getUnicaInstancia().getUsuario(movil) != null;
 	}
@@ -211,7 +210,6 @@ public class ControladorAppChat implements IMensajesListener{
 	
 	//RETORNAR EL ULTIMO MENSAJE DE CONTACTO 
 	public Mensaje getUltimoMensaje(Contacto c) {
-		// TODO Auto-generated method stub
 		if(c.getLastMensaje() == null) return null;
 		return c.getLastMensaje();
 	}
